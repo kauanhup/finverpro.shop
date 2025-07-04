@@ -1,0 +1,64 @@
+[2025-06-19 18:57:33] 🚀 INICIANDO DEBUG PIXUP COM CREDENCIAIS DO BANCO
+[2025-06-19 18:57:33] ❌ Método não é POST
+[2025-06-19 18:57:33] 🔧 Para testar, use: curl -X POST http://localhost/gate/pixup_debug.php -H 'Content-Type: application/json' -d '{"id":"SEU_TRANSACTION_ID"}'
+[2025-06-19 18:57:33] 🏁 DEBUG FINALIZADO
+[2025-06-19 18:59:15] 🚀 INICIANDO DEBUG PIXUP COM CREDENCIAIS DO BANCO
+[2025-06-19 18:59:15] 🔍 USANDO TRANSACTION ID: 4a2adf6ffbd99744cbfdmc3qihq24bx7
+[2025-06-19 18:59:15] ✅ Credenciais PixUp encontradas no banco
+[2025-06-19 18:59:15]    - Client ID: Fernanda2025_59...
+[2025-06-19 18:59:15]    - Client Secret: 51747b29e33b296...
+[2025-06-19 18:59:15] 🔐 Autenticando no PixUp...
+[2025-06-19 18:59:15] 📡 HTTP CODE AUTH: 200
+[2025-06-19 18:59:15] 📡 RESPOSTA AUTH: {"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIyMmUyOTRjOWJiYjUzMjdkZDFjZGU1YjRjNWM2YzUwMCIsInN1YiI6ImM1NDQxZDA5NDdlMWIxNWMxOTJiNzEzNTdjZGQzYjRlIiwiaWF0IjoxNzUwMzU4OTI5LCJleHAiOjE3NTAzNjA3Mjl9.qvbi2nOMy60IAT41lsHVgHqUx-x8O_rVKFao5AoJ070","expires_in":1173}
+[2025-06-19 18:59:15] ✅ TOKEN OBTIDO: eyJ0eXAiOiJKV1QiLCJh...
+[2025-06-19 18:59:15] 🔍 CONSULTANDO: https://api.pixupbr.com/v2/pix/4a2adf6ffbd99744cbfdmc3qihq24bx7
+[2025-06-19 18:59:15] 📡 HTTP CODE CONSULTA: 405
+[2025-06-19 18:59:15] 📡 RESPOSTA COMPLETA DA API PIXUP:
+[2025-06-19 18:59:15] === INÍCIO DA RESPOSTA ===
+[2025-06-19 18:59:15] <html>
+<head><title>405 Not Allowed</title></head>
+<body>
+<center><h1>405 Not Allowed</h1></center>
+<hr><center>nginx/1.24.0 (Ubuntu)</center>
+</body>
+</html>
+
+[2025-06-19 18:59:15] === FIM DA RESPOSTA ===
+[2025-06-19 18:59:15] ❌ ERRO AO DECODIFICAR JSON DA CONSULTA
+[2025-06-19 18:59:15] ❌ JSON ERROR: Syntax error
+[2025-06-19 18:59:15] 🏁 DEBUG FINALIZADO
+[2025-06-19 19:01:56] 🚀 INICIANDO TESTE DE URLs PIXUP
+[2025-06-19 19:01:56] 🔍 USANDO TRANSACTION ID: 4a2adf6ffbd99744cbfdmc3qihq24bx7
+[2025-06-19 19:01:56] 🔐 Autenticando...
+[2025-06-19 19:01:57] ✅ Token obtido!
+[2025-06-19 19:01:57] 🧪 TESTANDO: GET /v2/pix/
+[2025-06-19 19:01:57]    URL: https://api.pixupbr.com/v2/pix/4a2adf6ffbd99744cbfdmc3qihq24bx7
+[2025-06-19 19:01:57]    📡 HTTP Code: 405
+[2025-06-19 19:01:57]    ❌ 405 - Método não permitido
+[2025-06-19 19:01:57] 🧪 TESTANDO: GET /v2/transaction/
+[2025-06-19 19:01:57]    URL: https://api.pixupbr.com/v2/transaction/4a2adf6ffbd99744cbfdmc3qihq24bx7
+[2025-06-19 19:01:57]    📡 HTTP Code: 405
+[2025-06-19 19:01:57]    ❌ 405 - Método não permitido
+[2025-06-19 19:01:57] 🧪 TESTANDO: GET /v2/transactions/
+[2025-06-19 19:01:57]    URL: https://api.pixupbr.com/v2/transactions/4a2adf6ffbd99744cbfdmc3qihq24bx7
+[2025-06-19 19:01:57]    📡 HTTP Code: 405
+[2025-06-19 19:01:57]    ❌ 405 - Método não permitido
+[2025-06-19 19:01:57] 🧪 TESTANDO: GET /v2/payment/
+[2025-06-19 19:01:57]    URL: https://api.pixupbr.com/v2/payment/4a2adf6ffbd99744cbfdmc3qihq24bx7
+[2025-06-19 19:01:57]    📡 HTTP Code: 405
+[2025-06-19 19:01:57]    ❌ 405 - Método não permitido
+[2025-06-19 19:01:57] 🧪 TESTANDO: GET /v2/qrcode/
+[2025-06-19 19:01:57]    URL: https://api.pixupbr.com/v2/qrcode/4a2adf6ffbd99744cbfdmc3qihq24bx7
+[2025-06-19 19:01:58]    📡 HTTP Code: 405
+[2025-06-19 19:01:58]    ❌ 405 - Método não permitido
+[2025-06-19 19:01:58] 🧪 TESTANDO: POST /v2/pix/status
+[2025-06-19 19:01:58]    URL: https://api.pixupbr.com/v2/pix/status
+[2025-06-19 19:01:58]    📡 HTTP Code: 404
+[2025-06-19 19:01:58]    ❌ 404 - Endpoint não existe
+[2025-06-19 19:01:58] 🧪 TESTANDO: POST /v2/transaction/status
+[2025-06-19 19:01:58]    URL: https://api.pixupbr.com/v2/transaction/status
+[2025-06-19 19:01:58]    📡 HTTP Code: 404
+[2025-06-19 19:01:58]    ❌ 404 - Endpoint não existe
+[2025-06-19 19:01:58] 📚 VERIFICANDO DOCUMENTAÇÃO PIXUP...
+[2025-06-19 19:01:58]    Acesse: https://docs.pixupbr.com/ para ver endpoints corretos
+[2025-06-19 19:01:58] 🏁 DEBUG FINALIZADO

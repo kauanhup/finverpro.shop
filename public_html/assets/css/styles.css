@@ -1,0 +1,246 @@
+:root {
+    --background-color: #121A1E; /* Cor de fundo */
+    --text-color: white; /* Cor do texto */
+    --primary-color: #152731; /* Cor primária */
+    --secondary-color: #335D67; /* Cor secundária */
+    --dark-background: #152731; /* Cor de fundo escuro */
+    --font-family: Arial, sans-serif; /* Fonte padrão */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 6px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.welcome-message {
+    background-color: var(--primary-color);
+    padding: 1px;
+    border-radius: 8px;
+    display: flex; /* Alinha o ícone e o texto em uma linha */
+    align-items: center; /* Centraliza verticalmente */
+    overflow: hidden; /* Oculta o excesso de texto */
+    position: relative; /* Necessário para o efeito de animação */
+    margin-bottom: 25px;
+}
+
+.news-icon {
+    font-size: 20px; /* Tamanho do ícone */
+    margin-right: 10px; /* Espaço entre o ícone e o texto */
+    color: var(--text-color); /* Cor do ícone */
+}
+
+.marquee {
+    display: inline-block; /* Para permitir o movimento do texto */
+    white-space: nowrap; /* Impede a quebra de linha */
+    animation: marquee 10s linear infinite; /* Animação contínua */
+}
+
+.marquee p {
+    margin-top: 10px; /* Ajuste o valor conforme necessário */
+    margin-bottom: 10px;
+}
+
+/* @keyframes marquee {
+    0% { transform: translateX(100%); } 
+    100% { transform: translateX(-100%); } 
+} */
+
+.image-banner img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+    text-decoration: none;
+    padding: 0px;
+    background-color: var(--dark-background); /* Cor de fundo para a área de ações */
+    border-radius: 10px; /* Bordas arredondadas para o contêiner */
+    margin-bottom: 20px;
+    white-space: nowrap; /* Impede a quebra de linha */
+}
+
+.action-btn {
+    background-color: transparent; /* Sem fundo individual para os botões */
+    border: none;
+    color: var(--text-color);
+    padding: 10px;
+    display: flex;
+    text-decoration: none;
+    flex-direction: column; /* Empilha ícone e texto verticalmente */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 1; /* Garante que os botões ocupem largura igual */
+    text-align: center;
+}
+
+.action-btn i {
+    font-size: 24px; /* Tamanho do ícone */
+    margin-bottom: 5px; /* Espaço entre ícone e texto */
+}
+
+.action-btn span {
+    font-size: 14px;
+}
+
+.investment-card {
+    background-color: var(--dark-background); /* Cor de fundo do cartão */
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px; /* Margem entre os cartões */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.investment-card:last-child {
+    margin-bottom: 100px; /* Aumente a margem inferior do último cartão */
+}
+
+
+.investment-image {
+    width: 100px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.investment-details {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.investment-card h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.investment-card p {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.invest-btn {
+    background-color: var(--secondary-color);
+    border: none;
+    color: var(--text-color);
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+}
+
+
+
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--primary-color);
+    padding: 10px;
+    width: 100%;  /* Garante que a nav ocupe a largura total */
+    position: fixed; /* Fixa a nav na parte inferior */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0; /* Remove borda arredondada para largura total */
+}
+
+.logo-container {
+    text-align: center; /* Centraliza o conteúdo */
+    margin-bottom: 20px; /* Espaço inferior */
+}
+
+.logo-img {
+    max-width: 190px; /* Tamanho máximo da logo */
+    height: auto; /* Mantém a proporção da imagem */
+    padding-bottom: 15px;
+    padding-top: 12px;
+}
+
+.stats-cards {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 10px; /* Espaçamento entre os cards */
+}
+
+.stats-card {
+    background-color: var(--dark-background);
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stats-card i {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
+.stats-card p {
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.stats-card span {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+
+
+.bottom-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1; /* Garante que cada link ocupe espaço igual */
+}
+
+.bottom-nav a i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.mobile-only {
+    display: block; /* Exibe o conteúdo por padrão */
+}
+
+/* Oculta o conteúdo em telas maiores que 768px */
+@media (min-width: 768px) {
+    .mobile-only {
+        display: none; /* Oculta o conteúdo em telas maiores */
+    }
+}

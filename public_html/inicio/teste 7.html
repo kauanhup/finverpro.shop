@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinverPro - Dashboard</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-sidebar: #1E293B;
+            --bg-card: #FFFFFF;
+            --bg-header: #FFFFFF;
+            
+            --primary: #0F172A;
+            --primary-light: #334155;
+            --accent: #3B82F6;
+            --success: #059669;
+            --warning: #D97706;
+            --danger: #DC2626;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --text-white: #FFFFFF;
+            
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-sidebar: #0F172A;
+            --bg-card: #1E293B;
+            --bg-header: #1E293B;
+            
+            --primary: #F8FAFC;
+            --primary-light: #E2E8F0;
+            --accent: #3B82F6;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --text-white: #FFFFFF;
+            
+            --border: #334155;
+            --border-light: #475569;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Fixed Header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hamburger {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .language-selector {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .language-btn:hover {
+            background: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .language-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .language-option:hover {
+            background: var(--bg-primary);
+        }
+
+        .language-option.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            color: var(--text-white);
+            padding: 0;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 72px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding: 0 24px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-white);
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+            border-right-color: #3B82F6;
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-footer .nav-item {
+            padding: 12px 0;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-footer .nav-item:last-child {
+            margin-bottom: 0;
+            color: #EF4444;
+        }
+
+        .sidebar-footer .nav-item:last-child:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .theme-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-switch.dark {
+            background: var(--accent);
+        }
+
+        .theme-switch::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-switch.dark::before {
+            transform: translateX(26px);
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            margin-top: 72px;
+            padding: 32px;
+            max-width: calc(100vw - 280px);
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .header-left p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Balance section */
+        .balance-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .balance-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .actions-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .actions-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .action-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            background: #2563EB;
+            transform: translateY(-1px);
+        }
+
+        .action-btn.secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .action-btn.secondary:hover {
+            background: #F1F5F9;
+        }
+
+        /* Investments */
+        .investments-section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .view-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .investments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .investment-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .investment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent);
+        }
+
+        .investment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .investment-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .investment-return {
+            background: var(--success);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .investment-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .investment-details {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .investment-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent);
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+        }
+
+        .service-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .service-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 96px;
+            right: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+            min-width: 300px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100vw;
+                padding: 20px;
+            }
+            
+            .balance-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fixed Header -->
+    <header class="fixed-header">
+        <div class="header-left">
+            <button class="hamburger" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-title">FinverPro</div>
+        </div>
+        
+        <div class="language-selector">
+            <button class="language-btn" onclick="toggleLanguageDropdown()">
+                <i class="fas fa-globe"></i>
+                <span id="current-language">Português</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            
+            <div class="language-dropdown" id="language-dropdown">
+                <div class="language-option active" onclick="changeLanguage('pt', 'Português')">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iMiIgZmlsbD0iIzAwOTczOSIvPgo8cmVjdCB5PSI4IiB3aWR0aD0iMjQiIGhlaWdodD0iOCIgZmlsbD0iI0ZGRkYwMCIvPgo8Y2lyY2xlIGN4PSI5IiBjeT0iMTIiIHI9IjMuNSIgZmlsbD0iIzAwMjc2OCIvPgo8L3N2Zz4=" alt="PT" width="20" height="14">
+                    Português
+                </div>
+                <div class="language-option" onclick="changeLanguage('en', 'English')">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iMiIgZmlsbD0iIzAwNTJCNCIvPgo8cmVjdCB5PSI5IiB3aWR0aD0iMjQiIGhlaWdodD0iMS41IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjEzLjUiIHdpZHRoPSIyNCIgaGVpZ2h0PSIxLjUiIGZpbGw9IiNGRkZGRkYiLz4KPC9zdmc+" alt="EN" width="20" height="14">
+                    English
+                </div>
+                <div class="language-option" onclick="changeLanguage('es', 'Español')">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iMiIgZmlsbD0iI0FBMTUyQSIvPgo8cmVjdCB5PSI2IiB3aWR0aD0iMjQiIGhlaWdodD0iMTIiIGZpbGw9IiNGRkM0MDAiLz4KPC9zdmc+" alt="ES" width="20" height="14">
+                    Español
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="nav-section">
+                <div class="nav-section-title">Básico</div>
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    Início
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    Equipe
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Salários
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    Perfil
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Investimentos</div>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-coins"></i>
+                    Renda Fixa
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    Renda Variável
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Estatísticas</div>
+                <a href="#" class="nav-item">
+                    <i class="fab fa-discord"></i>
+                    Discord
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="theme-toggle">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-moon"></i>
+                    <span>Modo Escuro</span>
+                </div>
+                <div class="theme-switch" id="theme-switch" onclick="toggleTheme()"></div>
+            </div>
+            
+            <a href="#" class="nav-item" onclick="showToast('Abrindo configurações...', 'info')">
+                <i class="fas fa-cog"></i>
+                Configurações
+            </a>
+            <a href="#" class="nav-item" onclick="showToast('Desconectando...', 'info')">
+                <i class="fas fa-sign-out-alt"></i>
+                Sair
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>Dashboard</h1>
+                <p>Bem-vindo de volta, João Silva</p>
+            </div>
+        </div>
+
+        <!-- Balance Section -->
+        <section class="balance-section">
+            <div class="balance-card">
+                <div class="balance-label">Patrimônio Total</div>
+                <div class="balance-amount">R$ 127.548,92</div>
+                <div class="balance-subtitle">Disponível para investir: R$ 12.547,89</div>
+            </div>
+            
+            <div class="actions-card">
+                <h3 class="actions-title">Ações Rápidas</h3>
+                <button class="action-btn" onclick="showToast('Redirecionando para depósito...', 'info')">
+                    <i class="fas fa-plus"></i>
+                    Depositar
+                </button>
+                <button class="action-btn secondary" onclick="showToast('Redirecionando para saque...', 'info')">
+                    <i class="fas fa-minus"></i>
+                    Sacar
+                </button>
+            </div>
+        </section>
+
+        <!-- Investments Section -->
+        <section class="investments-section">
+            <div class="section-header">
+                <h2 class="section-title">Investimentos em Destaque</h2>
+                <a href="#" class="view-all">Ver todos</a>
+            </div>
+            
+            <div class="investments-grid">
+                <div class="investment-card" onclick="showToast('Abrindo detalhes da Renda Fixa Premium...', 'info')">
+                    <div class="investment-header">
+                        <div class="investment-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="investment-return">15.2% a.a.</div>
+                    </div>
+                    <div class="investment-name">Renda Fixa Premium</div>
+                    <div class="investment-details">Investimento mínimo: R$ 1.000</div>
+                    <div class="investment-amount">Valor atual: R$ 1.152</div>
+                </div>
+
+                <div class="investment-card" onclick="showToast('Abrindo detalhes do Multi Plus...', 'info')">
+                    <div class="investment-header">
+                        <div class="investment-icon">
+                            <i class="fas fa-trending-up"></i>
+                        </div>
+                        <div class="investment-return">18.7% a.a.</div>
+                    </div>
+                    <div class="investment-name">Multi Plus</div>
+                    <div class="investment-details">Investimento mínimo: R$ 5.000</div>
+                    <div class="investment-amount">Valor atual: R$ 5.935</div>
+                </div>
+
+                <div class="investment-card" onclick="showToast('Abrindo detalhes do Elite Invest...', 'info')">
+                    <div class="investment-header">
+                        <div class="investment-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="investment-return">22.1% a.a.</div>
+                    </div>
+                    <div class="investment-name">Elite Invest</div>
+                    <div class="investment-details">Investimento mínimo: R$ 10.000</div>
+                    <div class="investment-amount">Valor atual: R$ 12.210</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="investments-section">
+            <div class="section-header">
+                <h2 class="section-title">Serviços</h2>
+                <a href="#" class="view-all">Ver todos</a>
+            </div>
+            
+            <div class="services-grid">
+                <a href="#" class="service-card" onclick="showToast('Abrindo calculadora...', 'info')">
+                    <div class="service-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="service-title">Calculadora</div>
+                    <div class="service-description">Simule seus investimentos</div>
+                </a>
+
+                <a href="#" class="service-card" onclick="showToast('Abrindo relatórios...', 'info')">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="service-title">Relatórios</div>
+                    <div class="service-description">Análise detalhada</div>
+                </a>
+
+                <a href="#" class="service-card" onclick="showToast('Abrindo suporte...', 'info')">
+                    <div class="service-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="service-title">Suporte</div>
+                    <div class="service-description">Atendimento especializado</div>
+                </a>
+
+                <a href="#" class="service-card" onclick="showToast('Abrindo educação...', 'info')">
+                    <div class="service-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="service-title">Educação</div>
+                    <div class="service-description">Aprenda a investir</div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Language data
+        const languages = {
+            pt: {
+                dashboard: 'Dashboard',
+                welcome: 'Bem-vindo de volta, João Silva',
+                totalPatrimony: 'Patrimônio Total',
+                availableToInvest: 'Disponível para investir',
+                quickActions: 'Ações Rápidas',
+                deposit: 'Depositar',
+                withdraw: 'Sacar',
+                featuredInvestments: 'Investimentos em Destaque',
+                viewAll: 'Ver todos',
+                services: 'Serviços',
+                minInvestment: 'Investimento mínimo',
+                currentValue: 'Valor atual',
+                calculator: 'Calculadora',
+                simulateInvestments: 'Simule seus investimentos',
+                reports: 'Relatórios',
+                detailedAnalysis: 'Análise detalhada',
+                support: 'Suporte',
+                specializedService: 'Atendimento especializado',
+                education: 'Educação',
+                learnToInvest: 'Aprenda a investir',
+                home: 'Início',
+                team: 'Equipe',
+                salaries: 'Salários',
+                profile: 'Perfil',
+                fixedIncome: 'Renda Fixa',
+                variableIncome: 'Renda Variável',
+                discord: 'Discord',
+                darkMode: 'Modo Escuro',
+                settings: 'Configurações',
+                logout: 'Sair'
+            },
+            en: {
+                dashboard: 'Dashboard',
+                welcome: 'Welcome back, John Silva',
+                totalPatrimony: 'Total Assets',
+                availableToInvest: 'Available to invest',
+                quickActions: 'Quick Actions',
+                deposit: 'Deposit',
+                withdraw: 'Withdraw',
+                featuredInvestments: 'Featured Investments',
+                viewAll: 'View all',
+                services: 'Services',
+                minInvestment: 'Minimum investment',
+                currentValue: 'Current value',
+                calculator: 'Calculator',
+                simulateInvestments: 'Simulate your investments',
+                reports: 'Reports',
+                detailedAnalysis: 'Detailed analysis',
+                support: 'Support',
+                specializedService: 'Specialized service',
+                education: 'Education',
+                learnToInvest: 'Learn to invest',
+                home: 'Home',
+                team: 'Team',
+                salaries: 'Salaries',
+                profile: 'Profile',
+                fixedIncome: 'Fixed Income',
+                variableIncome: 'Variable Income',
+                discord: 'Discord',
+                darkMode: 'Dark Mode',
+                settings: 'Settings',
+                logout: 'Logout'
+            },
+            es: {
+                dashboard: 'Panel',
+                welcome: 'Bienvenido de vuelta, João Silva',
+                totalPatrimony: 'Patrimonio Total',
+                availableToInvest: 'Disponible para invertir',
+                quickActions: 'Acciones Rápidas',
+                deposit: 'Depositar',
+                withdraw: 'Retirar',
+                featuredInvestments: 'Inversiones Destacadas',
+                viewAll: 'Ver todos',
+                services: 'Servicios',
+                minInvestment: 'Inversión mínima',
+                currentValue: 'Valor actual',
+                calculator: 'Calculadora',
+                simulateInvestments: 'Simula tus inversiones',
+                reports: 'Informes',
+                detailedAnalysis: 'Análisis detallado',
+                support: 'Soporte',
+                specializedService: 'Servicio especializado',
+                education: 'Educación',
+                learnToInvest: 'Aprende a invertir',
+                home: 'Inicio',
+                team: 'Equipo',
+                salaries: 'Salarios',
+                profile: 'Perfil',
+                fixedIncome: 'Renta Fija',
+                variableIncome: 'Renta Variable',
+                discord: 'Discord',
+                darkMode: 'Modo Oscuro',
+                settings: 'Configuraciones',
+                logout: 'Salir'
+            }
+        };
+
+        let currentLanguage = 'pt';
+        let isDarkMode = false;
+
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+            
+            // Close sidebar when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!sidebar.contains(e.target) && !e.target.closest('.hamburger')) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
+
+        // Toggle language dropdown
+        function toggleLanguageDropdown() {
+            const dropdown = document.getElementById('language-dropdown');
+            dropdown.classList.toggle('show');
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.language-selector')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        }
+
+        // Change language
+        function changeLanguage(lang, langName) {
+            currentLanguage = lang;
+            document.getElementById('current-language').textContent = langName;
+            
+            // Update active language option
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            event.target.closest('.language-option').classList.add('active');
+            
+            // Update page content
+            updatePageContent();
+            
+            // Close dropdown
+            document.getElementById('language-dropdown').classList.remove('show');
+            
+            showToast(`Idioma alterado para ${langName}`, 'success');
+        }
+
+        // Update page content based on language
+        function updatePageContent() {
+            const texts = languages[currentLanguage];
+            
+            // Update main content
+            document.querySelector('.header h1').textContent = texts.dashboard;
+            document.querySelector('.header p').textContent = texts.welcome;
+            document.querySelector('.balance-label').textContent = texts.totalPatrimony;
+            document.querySelector('.balance-subtitle').textContent = `${texts.availableToInvest}: R$ 12.547,89`;
+            document.querySelector('.actions-title').textContent = texts.quickActions;
+            document.querySelector('.action-btn').innerHTML = `<i class="fas fa-plus"></i>${texts.deposit}`;
+            document.querySelector('.action-btn.secondary').innerHTML = `<i class="fas fa-minus"></i>${texts.withdraw}`;
+            
+            // Update sections
+            document.querySelectorAll('.section-title')[0].textContent = texts.featuredInvestments;
+            document.querySelectorAll('.section-title')[1].textContent = texts.services;
+            document.querySelectorAll('.view-all').forEach(link => {
+                link.textContent = texts.viewAll;
+            });
+            
+            // Update investment cards
+            document.querySelectorAll('.investment-details').forEach(detail => {
+                const amount = detail.textContent.split(': ')[1];
+                detail.textContent = `${texts.minInvestment}: ${amount}`;
+            });
+            
+            document.querySelectorAll('.investment-amount').forEach(amount => {
+                const value = amount.textContent.split(': ')[1];
+                amount.textContent = `${texts.currentValue}: ${value}`;
+            });
+            
+            // Update service cards
+            const serviceCards = document.querySelectorAll('.service-card');
+            const serviceData = [
+                { title: texts.calculator, desc: texts.simulateInvestments },
+                { title: texts.reports, desc: texts.detailedAnalysis },
+                { title: texts.support, desc: texts.specializedService },
+                { title: texts.education, desc: texts.learnToInvest }
+            ];
+            
+            serviceCards.forEach((card, index) => {
+                if (serviceData[index]) {
+                    card.querySelector('.service-title').textContent = serviceData[index].title;
+                    card.querySelector('.service-description').textContent = serviceData[index].desc;
+                }
+            });
+            
+            // Update sidebar
+            const navItems = document.querySelectorAll('.nav-item');
+            const navTexts = [
+                texts.home, texts.team, texts.salaries, texts.profile,
+                texts.fixedIncome, texts.variableIncome, texts.discord,
+                texts.reports, texts.settings, texts.logout
+            ];
+            
+            navItems.forEach((item, index) => {
+                if (navTexts[index] && item.querySelector('span')) {
+                    item.querySelector('span').textContent = navTexts[index];
+                } else if (navTexts[index]) {
+                    const text = item.textContent.trim();
+                    if (text !== 'FinverPro') {
+                        item.innerHTML = item.innerHTML.replace(text, navTexts[index]);
+                    }
+                }
+            });
+            
+            // Update theme toggle
+            document.querySelector('.theme-toggle span').textContent = texts.darkMode;
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            const themeSwitch = document.getElementById('theme-switch');
+            
+            if (isDarkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeSwitch.classList.add('dark');
+                showToast('Modo escuro ativado', 'info');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeSwitch.classList.remove('dark');
+                showToast('Modo claro ativado', 'info');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-${getToastIcon(type)}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            // Hide and remove toast
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Get toast icon based on type
+        function getToastIcon(type) {
+            switch (type) {
+                case 'success': return 'check-circle';
+                case 'error': return 'exclamation-circle';
+                case 'warning': return 'exclamation-triangle';
+                default: return 'info-circle';
+            }
+        }
+
+        // Animate balance on load
+        function animateBalance() {
+            const balanceElement = document.querySelector('.balance-amount');
+            const finalValue = 127548.92;
+            let currentValue = 0;
+            const increment = finalValue / 100;
+            const duration = 2000; // 2 seconds
+            const intervalTime = duration / 100;
+            
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= finalValue) {
+                    currentValue = finalValue;
+                    clearInterval(timer);
+                }
+                balanceElement.textContent = `R$ ${currentValue.toLocaleString('pt-BR', { 
+                    minimumFractionDigits: 2, 
+                    maximumFractionDigits: 2 
+                })}`;
+            }, intervalTime);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate balance
+            animateBalance();
+            
+            // Show welcome toast
+            setTimeout(() => {
+                showToast('Bem-vindo ao FinverPro!', 'success');
+            }, 1000);
+            
+            // Add click handlers for nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (!this.href || this.href === '#') {
+                        e.preventDefault();
+                        
+                        // Remove active class from all nav items
+                        document.querySelectorAll('.nav-item').forEach(nav => {
+                            nav.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked item
+                        this.classList.add('active');
+                        
+                        // Show toast for navigation
+                        const itemText = this.textContent.trim();
+                        if (itemText !== 'Sair' && itemText !== 'Logout') {
+                            showToast(`Navegando para ${itemText}...`, 'info');
+                        }
+                    }
+                });
+            });
+            
+            // Add investment card animations
+            const investmentCards = document.querySelectorAll('.investment-card');
+            investmentCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 * index);
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.language-selector')) {
+                document.getElementById('language-dropdown').classList.remove('show');
+            }
+        });
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "9248d391-2045-413f-a45f-4f0813ba8000",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/63fce924-8488-4656-8379-08450d0f6bcb5204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***630407CE",
+    "idTransaction": "efd3758e-ce6d-4e07-b7fc-a26a55b01b7d",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC82M2ZjZTkyNC04NDg4LTQ2NTYtODM3OS0wODQ1MGQwZjZiY2I1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNDA3Q0U=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "69f399d6-af5b-4d0c-8f40-fcc6efc71b15",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/809c98e8-7ab0-4925-bdc0-dc96dc0868ec5204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***63046B6B",
+    "idTransaction": "1a542190-dc12-4997-b8ea-098beb5dba8d",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC84MDljOThlOC03YWIwLTQ5MjUtYmRjMC1kYzk2ZGMwODY4ZWM1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNDZCNkI=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "f2021c5a-4de3-4b18-a922-874a531e7ba6",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/6875e3e3-2e31-4df0-aecb-f4ebdd2f526d5204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***6304CB18",
+    "idTransaction": "2630dff6-4ff1-4400-b44d-67d3e99a62c1",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC82ODc1ZTNlMy0yZTMxLTRkZjAtYWVjYi1mNGViZGQyZjUyNmQ1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNENCMTg=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "384cd8e1-5da8-4a1f-b7de-764bb290fd30",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/fdd08b71-84f9-4e06-ae9d-60ffe4249ff65204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***6304C54B",
+    "idTransaction": "2ec3c42a-6bd1-4338-9ca1-dc92ea6bf070",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC9mZGQwOGI3MS04NGY5LTRlMDYtYWU5ZC02MGZmZTQyNDlmZjY1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNEM1NEI=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "fff4c4a7-69d6-49a4-9bd7-c11998f6a74a",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/8905cc7a-0550-46aa-b6ea-2040031c4d8d5204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***63048273",
+    "idTransaction": "d5255810-d8dc-4cd8-a5b0-aee0d38f1e23",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC84OTA1Y2M3YS0wNTUwLTQ2YWEtYjZlYS0yMDQwMDMxYzRkOGQ1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNDgyNzM=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "624b2d1b-2844-46ff-b0da-6f6eb9e4888b",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/9362199b-c7ae-4281-b5f5-b20695dc83b05204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***6304270B",
+    "idTransaction": "721aa14f-4b81-437f-b3ff-f7d7b5641680",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC85MzYyMTk5Yi1jN2FlLTQyODEtYjVmNS1iMjA2OTVkYzgzYjA1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNDI3MEI=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "69ab416f-ac72-4961-8e3c-eed322588f78",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/84858adb-46ef-4752-bf6e-6284740a05795204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***63040683",
+    "idTransaction": "65b05f9c-9eef-45e8-894d-3abfd074230e",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC84NDg1OGFkYi00NmVmLTQ3NTItYmY2ZS02Mjg0NzQwYTA1Nzk1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNDA2ODM=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "54e370eb-4f0e-4865-8ddf-538929884eff",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/84b43008-39a2-4758-8955-a9f761e427eb5204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***63046475",
+    "idTransaction": "7a8ae46e-df5c-4ad9-9cb9-66608cc659d9",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC84NGI0MzAwOC0zOWEyLTQ3NTgtODk1NS1hOWY3NjFlNDI3ZWI1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNDY0NzU=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "17a2076e-8522-4a9a-95d6-f45d4c75b1a7",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/98d64ab8-94e2-431f-817b-12bfd6878e915204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***6304D7A6",
+    "idTransaction": "c21187f6-775c-438d-aecb-d18c43c6e9a0",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC85OGQ2NGFiOC05NGUyLTQzMWYtODE3Yi0xMmJmZDY4NzhlOTE1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNEQ3QTY=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
+{
+    "status": "success",
+    "message": "ok",
+    "client_id": "70e4a2d5-a0fd-4831-a68d-8d86d9e82e00",
+    "paymentCode": "00020126850014br.gov.bcb.pix2563pix.voluti.com.br/qr/v3/at/2d89594b-864d-484f-bc1a-3a7fe7230e1c5204000053039865802BR5925PAGPIX_SOLUCAO_EM_PAGAMEN6014SAO_BERNARDO_D62070503***6304D9A5",
+    "idTransaction": "aeedac88-48ea-4213-b2a9-0472b1cbabf1",
+    "paymentCodeBase64": "MDAwMjAxMjY4NTAwMTRici5nb3YuYmNiLnBpeDI1NjNwaXgudm9sdXRpLmNvbS5ici9xci92My9hdC8yZDg5NTk0Yi04NjRkLTQ4NGYtYmMxYS0zYTdmZTcyMzBlMWM1MjA0MDAwMDUzMDM5ODY1ODAyQlI1OTI1UEFHUElYX1NPTFVDQU9fRU1fUEFHQU1FTjYwMTRTQU9fQkVSTkFSRE9fRDYyMDcwNTAzKioqNjMwNEQ5QTU=",
+    "urlWebHook": "https://btmoney.site/gate/webhook.php"
+}
