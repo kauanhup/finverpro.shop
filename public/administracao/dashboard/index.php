@@ -498,64 +498,71 @@ logAdminAction('dashboard.access', 'Acesso ao dashboard administrativo');
 <body>
     <div class="admin-layout">
         <!-- Sidebar -->
-        <nav class="sidebar">
+        <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-shield-alt"></i>
                 </div>
                 <h2 class="sidebar-title">Admin Panel</h2>
                 <p class="sidebar-subtitle">Finver Pro</p>
             </div>
             
-            <ul class="sidebar-nav">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active">
-                        <i class="fas fa-tachometer-alt"></i>
-                        Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../usuarios/" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        Usuários
-                        <span class="nav-badge"><?= $usuariosHoje ?></span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../produtos/" class="nav-link">
-                        <i class="fas fa-robot"></i>
-                        Produtos/Robôs
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../saques/" class="nav-link">
-                        <i class="fas fa-money-bill-wave"></i>
-                        Saques
-                        <?php if ($saquesPendentes > 0): ?>
-                            <span class="nav-badge"><?= $saquesPendentes ?></span>
-                        <?php endif; ?>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../pagamentos/" class="nav-link">
-                        <i class="fas fa-credit-card"></i>
-                        Pagamentos
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../relatorios/" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        Relatórios
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../configuracoes/" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        Configurações
-                    </a>
-                </li>
-            </ul>
-        </nav>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="./" class="nav-link active">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../usuarios/" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Usuários</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../afiliados/" class="nav-link">
+                            <i class="fas fa-user-friends"></i>
+                            <span>Afiliados</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../produtos/" class="nav-link">
+                            <i class="fas fa-robot"></i>
+                            <span>Produtos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../saques/" class="nav-link">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Saques</span>
+                            <?php if($saquesPendentes > 0): ?>
+                                <span class="nav-badge"><?= $saquesPendentes ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../pagamentos/" class="nav-link">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Pagamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../relatorios/" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Relatórios</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../configuracoes/" class="nav-link">
+                            <i class="fas fa-cogs"></i>
+                            <span>Configurações</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
         
         <!-- Main Content -->
         <main class="main-content">
@@ -564,11 +571,11 @@ logAdminAction('dashboard.access', 'Acesso ao dashboard administrativo');
                 <div class="page-actions">
                     <div class="admin-info">
                         <div class="admin-avatar">
-                            <?= strtoupper(substr($admin['nome'] ?? 'A', 0, 1)) ?>
+                            <?= strtoupper(substr($admin['nome'], 0, 1)) ?>
                         </div>
                         <div>
-                            <div style="font-weight: 500;"><?= htmlspecialchars($admin['nome'] ?? 'Administrador') ?></div>
-                            <div style="font-size: 0.875rem; color: rgba(255,255,255,0.7);"><?= htmlspecialchars($admin['nivel'] ?? 'admin') ?></div>
+                            <strong><?= htmlspecialchars($admin['nome']) ?></strong>
+                            <small><?= htmlspecialchars($admin['email']) ?></small>
                         </div>
                     </div>
                     <a href="../logout.php" class="logout-btn">
@@ -588,10 +595,7 @@ logAdminAction('dashboard.access', 'Acesso ao dashboard administrativo');
                     </div>
                     <div class="stat-value"><?= number_format($totalUsuarios) ?></div>
                     <div class="stat-label">Total de Usuários</div>
-                    <div class="stat-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        +<?= $usuariosHoje ?> hoje
-                    </div>
+                    <div class="stat-change positive">+<?= $usuariosHoje ?> hoje</div>
                 </div>
                 
                 <div class="stat-card info">
@@ -602,162 +606,125 @@ logAdminAction('dashboard.access', 'Acesso ao dashboard administrativo');
                     </div>
                     <div class="stat-value"><?= number_format($totalInvestimentos) ?></div>
                     <div class="stat-label">Investimentos Ativos</div>
-                    <div class="stat-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        +<?= $investimentosHoje ?> hoje
-                    </div>
+                    <div class="stat-change positive">+<?= $investimentosHoje ?> hoje</div>
                 </div>
                 
                 <div class="stat-card warning">
                     <div class="stat-header">
                         <div class="stat-icon warning">
-                            <i class="fas fa-money-bill-wave"></i>
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
                     </div>
-                    <div class="stat-value"><?= $saquesPendentes ?></div>
+                    <div class="stat-value"><?= number_format($saquesPendentes) ?></div>
                     <div class="stat-label">Saques Pendentes</div>
-                    <div class="stat-change">
-                        R$ <?= number_format($valorSaquesPendentes, 2, ',', '.') ?>
-                    </div>
+                    <div class="stat-change">R$ <?= number_format($valorSaquesPendentes, 2, ',', '.') ?></div>
                 </div>
                 
                 <div class="stat-card error">
                     <div class="stat-header">
                         <div class="stat-icon error">
-                            <i class="fas fa-coins"></i>
+                            <i class="fas fa-dollar-sign"></i>
                         </div>
                     </div>
-                    <div class="stat-value">R$ <?= number_format($valorTotalInvestido, 0, ',', '.') ?></div>
-                    <div class="stat-label">Valor Total Investido</div>
-                    <div class="stat-change positive">
-                        R$ <?= number_format($depositosHoje, 2, ',', '.') ?> hoje
-                    </div>
+                    <div class="stat-value">R$ <?= number_format($valorTotalInvestido, 2, ',', '.') ?></div>
+                    <div class="stat-label">Total Investido</div>
+                    <div class="stat-change">Volume geral</div>
                 </div>
             </div>
             
             <!-- Seções de Dados -->
             <div class="data-grid">
-                <!-- Últimos Usuários -->
                 <div class="data-section">
                     <div class="section-header">
                         <h3 class="section-title">Últimos Usuários</h3>
                         <a href="../usuarios/" class="section-link">Ver todos</a>
                     </div>
-                    
                     <ul class="data-list">
                         <?php foreach ($ultimosUsuarios as $usuario): ?>
-                            <li class="data-item">
-                                <div class="item-info">
-                                    <h4><?= htmlspecialchars($usuario['nome'] ?: 'Usuário') ?></h4>
-                                    <p><?= htmlspecialchars($usuario['telefone']) ?></p>
+                        <li class="data-item">
+                            <div class="item-info">
+                                <h4><?= htmlspecialchars($usuario['nome'] ?: 'Usuário #' . $usuario['id']) ?></h4>
+                                <p><?= htmlspecialchars($usuario['telefone']) ?></p>
+                            </div>
+                            <div class="item-value">
+                                <div class="value"><?= date('d/m/Y', strtotime($usuario['created_at'])) ?></div>
+                                <div class="label">
+                                    <span class="status-badge <?= $usuario['status'] ?>">
+                                        <?= ucfirst($usuario['status']) ?>
+                                    </span>
                                 </div>
-                                <div class="item-value">
-                                    <div class="value">
-                                        <span class="status-badge <?= $usuario['status'] ?>">
-                                            <?= ucfirst($usuario['status']) ?>
-                                        </span>
-                                    </div>
-                                    <div class="label"><?= date('d/m/Y H:i', strtotime($usuario['created_at'])) ?></div>
-                                </div>
-                            </li>
+                            </div>
+                        </li>
                         <?php endforeach; ?>
-                        
-                        <?php if (empty($ultimosUsuarios)): ?>
-                            <li class="data-item">
-                                <div class="item-info">
-                                    <p style="color: rgba(255,255,255,0.6);">Nenhum usuário encontrado</p>
-                                </div>
-                            </li>
-                        <?php endif; ?>
                     </ul>
                 </div>
                 
-                <!-- Saques Pendentes -->
                 <div class="data-section">
                     <div class="section-header">
                         <h3 class="section-title">Saques Pendentes</h3>
                         <a href="../saques/" class="section-link">Ver todos</a>
                     </div>
-                    
                     <ul class="data-list">
                         <?php foreach ($ultimosSaques as $saque): ?>
-                            <li class="data-item">
-                                <div class="item-info">
-                                    <h4><?= htmlspecialchars($saque['nome'] ?: 'Usuário') ?></h4>
-                                    <p><?= htmlspecialchars(substr($saque['chave_pix'], 0, 20)) ?>...</p>
-                                </div>
-                                <div class="item-value">
-                                    <div class="value">R$ <?= number_format($saque['valor_bruto'], 2, ',', '.') ?></div>
-                                    <div class="label"><?= date('d/m/Y H:i', strtotime($saque['created_at'])) ?></div>
-                                </div>
-                            </li>
+                        <li class="data-item">
+                            <div class="item-info">
+                                <h4><?= htmlspecialchars($saque['nome'] ?: 'Usuário') ?></h4>
+                                <p><?= htmlspecialchars($saque['chave_pix']) ?></p>
+                            </div>
+                            <div class="item-value">
+                                <div class="value">R$ <?= number_format($saque['valor_bruto'], 2, ',', '.') ?></div>
+                                <div class="label"><?= date('d/m/Y', strtotime($saque['created_at'])) ?></div>
+                            </div>
+                        </li>
                         <?php endforeach; ?>
-                        
-                        <?php if (empty($ultimosSaques)): ?>
-                            <li class="data-item">
-                                <div class="item-info">
-                                    <p style="color: rgba(255,255,255,0.6);">Nenhum saque pendente</p>
-                                </div>
-                            </li>
-                        <?php endif; ?>
                     </ul>
                 </div>
-                
-                <!-- Produtos Populares -->
-                <div class="data-section">
-                    <div class="section-header">
-                        <h3 class="section-title">Produtos Populares</h3>
-                        <a href="../produtos/" class="section-link">Ver todos</a>
-                    </div>
-                    
-                    <ul class="data-list">
-                        <?php foreach ($produtosPopulares as $produto): ?>
-                            <li class="data-item">
-                                <div class="item-info">
-                                    <h4><?= htmlspecialchars($produto['titulo']) ?></h4>
-                                    <p><?= $produto['total_investimentos'] ?> investimentos</p>
-                                </div>
-                                <div class="item-value">
-                                    <div class="value">R$ <?= number_format($produto['valor_total'] ?? 0, 0, ',', '.') ?></div>
-                                    <div class="label">Total investido</div>
-                                </div>
-                            </li>
-                        <?php endforeach; ?>
-                        
-                        <?php if (empty($produtosPopulares)): ?>
-                            <li class="data-item">
-                                <div class="item-info">
-                                    <p style="color: rgba(255,255,255,0.6);">Nenhum produto encontrado</p>
-                                </div>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
+            </div>
+            
+            <!-- Produtos Populares -->
+            <div class="data-section">
+                <div class="section-header">
+                    <h3 class="section-title">Produtos Mais Populares</h3>
+                    <a href="../produtos/" class="section-link">Ver todos</a>
                 </div>
+                <ul class="data-list">
+                    <?php foreach ($produtosPopulares as $produto): ?>
+                    <li class="data-item">
+                        <div class="item-info">
+                            <h4><?= htmlspecialchars($produto['titulo']) ?></h4>
+                            <p><?= $produto['total_investimentos'] ?> investimentos</p>
+                        </div>
+                        <div class="item-value">
+                            <div class="value">R$ <?= number_format($produto['valor_total'], 2, ',', '.') ?></div>
+                            <div class="label">Volume total</div>
+                        </div>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
         </main>
     </div>
     
     <script>
-        // Auto-refresh do dashboard a cada 30 segundos
-        setInterval(() => {
-            // Recarregar apenas os dados dinâmicos via AJAX
-            // Por enquanto, deixamos assim para simplicidade
+        // Atualizar estatísticas a cada 30 segundos
+        setInterval(function() {
+            fetch('ajax/stats.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Atualizar valores na interface
+                        document.querySelectorAll('.stat-value').forEach((element, index) => {
+                            switch(index) {
+                                case 0: element.textContent = data.totalUsuarios; break;
+                                case 1: element.textContent = data.totalInvestimentos; break;
+                                case 2: element.textContent = data.saquesPendentes; break;
+                                case 3: element.textContent = 'R$ ' + data.valorTotalInvestido; break;
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.error('Erro ao atualizar estatísticas:', error));
         }, 30000);
-        
-        // Toggle sidebar em mobile
-        function toggleSidebar() {
-            document.querySelector('.sidebar').classList.toggle('open');
-        }
-        
-        // Adicionar botão de menu para mobile
-        if (window.innerWidth <= 1024) {
-            const pageHeader = document.querySelector('.page-header');
-            const menuBtn = document.createElement('button');
-            menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-            menuBtn.style.cssText = 'background: var(--primary-color); border: none; color: white; padding: 0.5rem; border-radius: 6px; cursor: pointer;';
-            menuBtn.onclick = toggleSidebar;
-            pageHeader.insertBefore(menuBtn, pageHeader.firstChild);
-        }
     </script>
 </body>
 </html>
