@@ -524,15 +524,39 @@ logAdminAction('dashboard.access', 'Acesso ao dashboard administrativo');
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="../relatorios/" class="nav-link">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Relatórios</span>
+                        <a href="../roleta/" class="nav-link">
+                            <i class="fas fa-dice"></i>
+                            <span>Roleta</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../checklist/" class="nav-link">
+                            <i class="fas fa-tasks"></i>
+                            <span>Checklist</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../codigos/" class="nav-link">
+                            <i class="fas fa-gift"></i>
+                            <span>Códigos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../gateways/" class="nav-link">
+                            <i class="fas fa-plug"></i>
+                            <span>Gateways</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="../configuracoes/" class="nav-link">
-                            <i class="fas fa-cogs"></i>
+                            <i class="fas fa-cog"></i>
                             <span>Configurações</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../relatorios/" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Relatórios</span>
                         </a>
                     </li>
                 </ul>

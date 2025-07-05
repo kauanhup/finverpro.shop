@@ -168,6 +168,94 @@ try {
         
         .stat-value { font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--success-color); }
         .stat-label { color: rgba(255, 255, 255, 0.7); font-size: 0.875rem; }
+        
+        .filters {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-select {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            color: var(--text-color);
+            font-size: 0.875rem;
+        }
+        
+        .btn-filter {
+            padding: 0.5rem 1rem;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .payments-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .payments-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .payments-table th,
+        .payments-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .payments-table th {
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
     </style>
 </head>
 <body>
@@ -260,10 +348,58 @@ try {
                 </div>
             </div>
             
-            <div class="coming-soon">
-                <i class="fas fa-credit-card"></i>
-                <h3>Módulo de Pagamentos</h3>
-                <p>Este módulo está sendo desenvolvido e em breve estará disponível com funcionalidades completas para gestão de pagamentos, gateways e transações financeiras.</p>
+            <!-- Filtros -->
+            <div class="filters">
+                <form method="GET" style="display: flex; gap: 1rem; align-items: center;">
+                    <select name="status" class="filter-select">
+                        <option value="">Todos os Status</option>
+                        <option value="pendente" <?= ($_GET['status'] ?? '') === 'pendente' ? 'selected' : '' ?>>Pendente</option>
+                        <option value="aprovado" <?= ($_GET['status'] ?? '') === 'aprovado' ? 'selected' : '' ?>>Aprovado</option>
+                        <option value="rejeitado" <?= ($_GET['status'] ?? '') === 'rejeitado' ? 'selected' : '' ?>>Rejeitado</option>
+                        <option value="cancelado" <?= ($_GET['status'] ?? '') === 'cancelado' ? 'selected' : '' ?>>Cancelado</option>
+                    </select>
+                    <select name="gateway" class="filter-select">
+                        <option value="">Todos os Gateways</option>
+                        <option value="PIXUP" <?= ($_GET['gateway'] ?? '') === 'PIXUP' ? 'selected' : '' ?>>PixUP</option>
+                        <option value="SUITPAY" <?= ($_GET['gateway'] ?? '') === 'SUITPAY' ? 'selected' : '' ?>>SuitPay</option>
+                        <option value="MANUAL" <?= ($_GET['gateway'] ?? '') === 'MANUAL' ? 'selected' : '' ?>>Manual</option>
+                    </select>
+                    <button type="submit" class="btn-filter">Filtrar</button>
+                </form>
+            </div>
+
+            <!-- Lista de Pagamentos -->
+            <div class="payments-section">
+                <div class="section-header">
+                    <h3>Pagamentos Recentes</h3>
+                    <button class="btn btn-primary" onclick="showAddModal()">
+                        <i class="fas fa-plus"></i>
+                        Novo Pagamento Manual
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="payments-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuário</th>
+                                <th>Gateway</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.6);">
+                                    Nenhum pagamento encontrado
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
