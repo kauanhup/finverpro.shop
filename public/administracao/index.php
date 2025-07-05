@@ -107,35 +107,16 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="assets/css/admin.css">
+    
     <style>
-        :root {
-            --primary-color: <?= htmlspecialchars($cores['cor_3']) ?>;
-            --secondary-color: <?= htmlspecialchars($cores['cor_4']) ?>;
-            --background-color: <?= htmlspecialchars($cores['cor_1']) ?>;
-            --text-color: <?= htmlspecialchars($cores['cor_2']) ?>;
-            --accent-color: <?= htmlspecialchars($cores['cor_5']) ?>;
-            --success-color: #10B981;
-            --error-color: #EF4444;
-            --warning-color: #F59E0B;
-            --border-radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        /* Estilos específicos para a página de login */
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--background-color) 0%, var(--accent-color) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-color);
             padding: 20px;
         }
         
@@ -150,6 +131,7 @@ try {
             box-shadow: var(--shadow-lg);
             position: relative;
             overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
         }
         
         .login-container::before {
@@ -159,7 +141,7 @@ try {
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--success-color), var(--secondary-color), var(--warning-color));
+            background: linear-gradient(90deg, var(--success), var(--accent), var(--warning));
         }
         
         .logo-section {
@@ -170,7 +152,7 @@ try {
         .logo {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -178,57 +160,22 @@ try {
             margin: 0 auto 1.5rem;
             font-size: 2rem;
             color: white;
-            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-lg);
         }
         
         .title {
             font-size: 1.75rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--text-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
         .subtitle {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-secondary);
             font-size: 0.875rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 0.875rem 1rem 0.875rem 3rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--border-radius);
-            color: var(--text-color);
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-        }
-        
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
         }
         
         .input-icon {
@@ -236,28 +183,32 @@ try {
             left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-muted);
             margin-top: 0.75rem;
+        }
+        
+        .form-input {
+            padding-left: 3rem;
         }
         
         .btn-login {
             width: 100%;
             padding: 0.875rem;
-            background: linear-gradient(135deg, var(--success-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--success), var(--accent));
             border: none;
             border-radius: var(--border-radius);
             color: white;
             font-weight: 600;
             font-size: 0.875rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
         }
         
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-lg);
         }
         
         .btn-login:active {
@@ -274,48 +225,32 @@ try {
         
         .alert-error {
             background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #FEE2E2;
+            border: 1px solid var(--danger);
+            color: var(--danger-light);
         }
         
         .alert-success {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #D1FAE5;
+            background: rgba(56, 161, 105, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success-light);
         }
         
         .footer-links {
             text-align: center;
             margin-top: 2rem;
             padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--border-color);
         }
         
         .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.875rem;
-            transition: color 0.3s ease;
+            transition: var(--transition);
         }
         
         .footer-links a:hover {
-            color: var(--secondary-color);
-        }
-        
-        /* Animações */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .login-container {
-            animation: fadeInUp 0.6s ease-out;
+            color: var(--accent-light);
         }
         
         /* Responsividade */

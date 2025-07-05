@@ -2,7 +2,7 @@
 /**
  * ========================================
  * FINVER PRO - DASHBOARD ADMINISTRATIVO
- * Painel Principal de Controle
+ * Painel Principal Moderno e Responsivo
  * ========================================
  */
 
@@ -15,12 +15,52 @@ requireAdmin();
 $admin = getAdminData();
 $db = Database::getInstance();
 
-// Obter estatísticas usando métodos otimizados
+// Configurar meta dados da página
+$page_title = 'Dashboard';
+$page_subtitle = 'Visão geral do sistema';
+$page_icon = 'fas fa-tachometer-alt';
+
 try {
-    // Usar método otimizado da classe Database
+    // Obter estatísticas principais
     $stats = $db->getDashboardStats();
     
-    // Extrair estatísticas
+    // Últimos usuários
+    $ultimosUsuarios = $db->getLatestUsers(5);
+    
+    // Últimos saques pendentes
+    $ultimosSaques = $db->getLatestPendingWithdrawals(5);
+    
+    // Produtos populares
+    $produtosPopulares = $db->getPopularProducts(5);
+    
+    // Transações recentes (últimas 10)
+    $transacoesRecentes = $db->fetchAll("
+        SELECT t.*, u.nome as usuario_nome, u.telefone as usuario_telefone
+        FROM transacoes t 
+        LEFT JOIN usuarios u ON t.usuario_id = u.id
+        ORDER BY t.created_at DESC 
+        LIMIT 10
+    ");
+    
+    // Gráfico de crescimento (últimos 7 dias)
+    $dadosGrafico = [];
+    for ($i = 6; $i >= 0; $i--) {
+        $data = date('Y-m-d', strtotime("-$i days"));
+        $dataFormatada = date('d/m', strtotime("-$i days"));
+        
+        $usuarios = $db->fetchOne("SELECT COUNT(*) as count FROM usuarios WHERE DATE(created_at) = ?", [$data])['count'] ?? 0;
+        $investimentos = $db->fetchOne("SELECT COUNT(*) as count FROM investimentos WHERE DATE(created_at) = ?", [$data])['count'] ?? 0;
+        $saques = $db->fetchOne("SELECT COUNT(*) as count FROM saques WHERE DATE(created_at) = ?", [$data])['count'] ?? 0;
+        
+        $dadosGrafico[] = [
+            'data' => $dataFormatada,
+            'usuarios' => $usuarios,
+            'investimentos' => $investimentos,
+            'saques' => $saques
+        ];
+    }
+    
+    // Estatísticas para cards
     $totalUsuarios = $stats['usuarios']['total'] ?? 0;
     $usuariosHoje = $stats['usuarios']['hoje'] ?? 0;
     $usuariosAtivos = $stats['usuarios']['ativos'] ?? 0;
@@ -39,691 +79,435 @@ try {
     $comissoesPendentes = $stats['comissoes']['pendentes'] ?? 0;
     $valorComissoesPendentes = $stats['comissoes']['valor_pendente'] ?? 0;
     
-    // Usar métodos otimizados para listas
-    $ultimosUsuarios = $db->getLatestUsers(5);
-    $ultimosSaques = $db->getLatestPendingWithdrawals(5);
-    $produtosPopulares = $db->getPopularProducts(5);
-    
 } catch (Exception $e) {
     error_log("Erro ao carregar dashboard: " . $e->getMessage());
+    // Definir valores padrão em caso de erro
     $totalUsuarios = $usuariosHoje = $usuariosAtivos = 0;
     $totalInvestimentos = $valorTotalInvestido = $investimentosHoje = 0;
     $saquesPendentes = $valorSaquesPendentes = $saquesHoje = 0;
     $transacoesHoje = $depositosHoje = 0;
     $comissoesPendentes = $valorComissoesPendentes = 0;
-    $ultimosUsuarios = $ultimosSaques = $produtosPopulares = [];
+    $ultimosUsuarios = $ultimosSaques = $produtosPopulares = $transacoesRecentes = [];
+    $dadosGrafico = [];
 }
 
 // Registrar acesso ao dashboard
 logAdminAction('dashboard.access', 'Acesso ao dashboard administrativo');
+
+// Conteúdo da página
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Administrativo - Finver Pro</title>
-    
-    <!-- Fonts & Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary-color: #152731;
-            --secondary-color: #335D67;
-            --background-color: #121A1E;
-            --text-color: #FFFFFF;
-            --accent-color: #152731;
-            --success-color: #10B981;
-            --error-color: #EF4444;
-            --warning-color: #F59E0B;
-            --info-color: #3B82F6;
-            --border-radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --sidebar-width: 280px;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        
-        /* Layout Principal */
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            width: var(--sidebar-width);
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-            padding: 1.5rem;
-            box-shadow: var(--shadow-lg);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .sidebar-logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--success-color), var(--info-color));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.5rem;
-            color: white;
-        }
-        
-        .sidebar-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-        
-        .sidebar-subtitle {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .sidebar-nav {
-            list-style: none;
-        }
-        
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-        
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0.875rem 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            border-radius: var(--border-radius);
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            transform: translateX(5px);
-        }
-        
-        .nav-link i {
-            margin-right: 0.75rem;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .nav-badge {
-            margin-left: auto;
-            background: var(--error-color);
-            color: white;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-        
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: var(--sidebar-width);
-            padding: 2rem;
-        }
-        
-        .page-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--text-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .page-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.75rem 1rem;
-            border-radius: var(--border-radius);
-        }
-        
-        .admin-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--info-color), var(--secondary-color));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-        
-        .logout-btn {
-            background: var(--error-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .logout-btn:hover {
-            background: #DC2626;
-            transform: translateY(-2px);
-        }
-        
-        /* Cards de Estatísticas */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--accent-color);
-        }
-        
-        .stat-card.success::before { background: var(--success-color); }
-        .stat-card.warning::before { background: var(--warning-color); }
-        .stat-card.error::before { background: var(--error-color); }
-        .stat-card.info::before { background: var(--info-color); }
-        
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
-        
-        .stat-icon.success { background: var(--success-color); }
-        .stat-icon.warning { background: var(--warning-color); }
-        .stat-icon.error { background: var(--error-color); }
-        .stat-icon.info { background: var(--info-color); }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-        
-        .stat-label {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-change {
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-        
-        .stat-change.positive { color: var(--success-color); }
-        .stat-change.negative { color: var(--error-color); }
-        
-        /* Seções de Dados */
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .data-section {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .section-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-        
-        .section-link {
-            color: var(--info-color);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-        
-        .section-link:hover {
-            text-decoration: underline;
-        }
-        
-        .data-list {
-            list-style: none;
-        }
-        
-        .data-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .data-item:last-child {
-            border-bottom: none;
-        }
-        
-        .item-info h4 {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-        
-        .item-info p {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .item-value {
-            text-align: right;
-        }
-        
-        .item-value .value {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .item-value .label {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .status-badge.ativo { background: rgba(16, 185, 129, 0.2); color: #10B981; }
-        .status-badge.pendente { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
-        .status-badge.inativo { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
-        
-        /* Responsividade */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            }
-            
-            .data-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 1rem;
-            }
-            
-            .page-header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-            
-            .page-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="admin-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h2 class="sidebar-title">Admin Panel</h2>
-                <p class="sidebar-subtitle">Finver Pro</p>
+
+<!-- Cards de Estatísticas -->
+<div class="stats-grid">
+    <!-- Total de Usuários -->
+    <div class="stat-card success animate-fadeIn">
+        <div class="stat-header">
+            <div class="stat-icon success">
+                <i class="fas fa-users"></i>
             </div>
-            
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="nav-item">
-                        <a href="./" class="nav-link active">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../usuarios/" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Usuários</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../afiliados/" class="nav-link">
-                            <i class="fas fa-user-friends"></i>
-                            <span>Afiliados</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../produtos/" class="nav-link">
-                            <i class="fas fa-robot"></i>
-                            <span>Produtos</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../saques/" class="nav-link">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span>Saques</span>
-                            <?php if($saquesPendentes > 0): ?>
-                                <span class="nav-badge"><?= $saquesPendentes ?></span>
-                            <?php endif; ?>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../pagamentos/" class="nav-link">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Pagamentos</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../roleta/" class="nav-link">
-                            <i class="fas fa-dice"></i>
-                            <span>Roleta</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../checklist/" class="nav-link">
-                            <i class="fas fa-tasks"></i>
-                            <span>Checklist</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../codigos/" class="nav-link">
-                            <i class="fas fa-gift"></i>
-                            <span>Códigos</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../gateways/" class="nav-link">
-                            <i class="fas fa-plug"></i>
-                            <span>Gateways</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../configuracoes/" class="nav-link">
-                            <i class="fas fa-cog"></i>
-                            <span>Configurações</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../relatorios/" class="nav-link">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Relatórios</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-        
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="page-header">
-                <h1 class="page-title">Dashboard</h1>
-                <div class="page-actions">
-                    <div class="admin-info">
-                        <div class="admin-avatar">
-                            <?= strtoupper(substr($admin['nome'], 0, 1)) ?>
-                        </div>
-                        <div>
-                            <strong><?= htmlspecialchars($admin['nome']) ?></strong>
-                            <small><?= htmlspecialchars($admin['email']) ?></small>
-                        </div>
-                    </div>
-                    <a href="../logout.php" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sair
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Cards de Estatísticas -->
-            <div class="stats-grid">
-                <div class="stat-card success">
-                    <div class="stat-header">
-                        <div class="stat-icon success">
-                            <i class="fas fa-users"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value"><?= number_format($totalUsuarios) ?></div>
-                    <div class="stat-label">Total de Usuários</div>
-                    <div class="stat-change positive">+<?= $usuariosHoje ?> hoje</div>
-                </div>
-                
-                <div class="stat-card info">
-                    <div class="stat-header">
-                        <div class="stat-icon info">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value"><?= number_format($totalInvestimentos) ?></div>
-                    <div class="stat-label">Investimentos Ativos</div>
-                    <div class="stat-change positive">+<?= $investimentosHoje ?> hoje</div>
-                </div>
-                
-                <div class="stat-card warning">
-                    <div class="stat-header">
-                        <div class="stat-icon warning">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value"><?= number_format($saquesPendentes) ?></div>
-                    <div class="stat-label">Saques Pendentes</div>
-                    <div class="stat-change">R$ <?= number_format($valorSaquesPendentes, 2, ',', '.') ?></div>
-                </div>
-                
-                <div class="stat-card error">
-                    <div class="stat-header">
-                        <div class="stat-icon error">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value">R$ <?= number_format($valorTotalInvestido, 2, ',', '.') ?></div>
-                    <div class="stat-label">Total Investido</div>
-                    <div class="stat-change">Volume geral</div>
-                </div>
-            </div>
-            
-            <!-- Seções de Dados -->
-            <div class="data-grid">
-                <div class="data-section">
-                    <div class="section-header">
-                        <h3 class="section-title">Últimos Usuários</h3>
-                        <a href="../usuarios/" class="section-link">Ver todos</a>
-                    </div>
-                    <ul class="data-list">
-                        <?php foreach ($ultimosUsuarios as $usuario): ?>
-                        <li class="data-item">
-                            <div class="item-info">
-                                <h4><?= htmlspecialchars($usuario['nome'] ?: 'Usuário #' . $usuario['id']) ?></h4>
-                                <p><?= htmlspecialchars($usuario['telefone']) ?></p>
-                            </div>
-                            <div class="item-value">
-                                <div class="value"><?= date('d/m/Y', strtotime($usuario['created_at'])) ?></div>
-                                <div class="label">
-                                    <span class="status-badge <?= $usuario['status'] ?>">
-                                        <?= ucfirst($usuario['status']) ?>
-                                    </span>
-                                </div>
-                            </div>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-                
-                <div class="data-section">
-                    <div class="section-header">
-                        <h3 class="section-title">Saques Pendentes</h3>
-                        <a href="../saques/" class="section-link">Ver todos</a>
-                    </div>
-                    <ul class="data-list">
-                        <?php foreach ($ultimosSaques as $saque): ?>
-                        <li class="data-item">
-                            <div class="item-info">
-                                <h4><?= htmlspecialchars($saque['nome'] ?: 'Usuário') ?></h4>
-                                <p><?= htmlspecialchars($saque['chave_pix']) ?></p>
-                            </div>
-                            <div class="item-value">
-                                <div class="value">R$ <?= number_format($saque['valor_bruto'], 2, ',', '.') ?></div>
-                                <div class="label"><?= date('d/m/Y', strtotime($saque['created_at'])) ?></div>
-                            </div>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Produtos Populares -->
-            <div class="data-section">
-                <div class="section-header">
-                    <h3 class="section-title">Produtos Mais Populares</h3>
-                    <a href="../produtos/" class="section-link">Ver todos</a>
-                </div>
-                <ul class="data-list">
-                    <?php foreach ($produtosPopulares as $produto): ?>
-                    <li class="data-item">
-                        <div class="item-info">
-                            <h4><?= htmlspecialchars($produto['titulo']) ?></h4>
-                            <p><?= $produto['total_investimentos'] ?> investimentos</p>
-                        </div>
-                        <div class="item-value">
-                            <div class="value">R$ <?= number_format($produto['valor_total'], 2, ',', '.') ?></div>
-                            <div class="label">Volume total</div>
-                        </div>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </main>
+        </div>
+        <div class="stat-value" data-stat="totalUsuarios"><?= number_format($totalUsuarios) ?></div>
+        <div class="stat-label">Total de Usuários</div>
+        <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            +<?= $usuariosHoje ?> hoje
+        </div>
     </div>
     
-    <script>
-        // Atualizar estatísticas a cada 30 segundos
-        setInterval(function() {
-            fetch('ajax/stats.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Atualizar valores na interface
-                        document.querySelectorAll('.stat-value').forEach((element, index) => {
-                            switch(index) {
-                                case 0: element.textContent = data.totalUsuarios; break;
-                                case 1: element.textContent = data.totalInvestimentos; break;
-                                case 2: element.textContent = data.saquesPendentes; break;
-                                case 3: element.textContent = 'R$ ' + data.valorTotalInvestido; break;
-                            }
-                        });
+    <!-- Investimentos Ativos -->
+    <div class="stat-card info animate-fadeIn" style="animation-delay: 0.1s;">
+        <div class="stat-header">
+            <div class="stat-icon info">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+        <div class="stat-value" data-stat="totalInvestimentos"><?= number_format($totalInvestimentos) ?></div>
+        <div class="stat-label">Investimentos Ativos</div>
+        <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            +<?= $investimentosHoje ?> hoje
+        </div>
+    </div>
+    
+    <!-- Saques Pendentes -->
+    <div class="stat-card warning animate-fadeIn" style="animation-delay: 0.2s;">
+        <div class="stat-header">
+            <div class="stat-icon warning">
+                <i class="fas fa-clock"></i>
+            </div>
+        </div>
+        <div class="stat-value" data-stat="saquesPendentes"><?= number_format($saquesPendentes) ?></div>
+        <div class="stat-label">Saques Pendentes</div>
+        <div class="stat-change">
+            <i class="fas fa-money-bill-wave"></i>
+            R$ <?= number_format($valorSaquesPendentes, 2, ',', '.') ?>
+        </div>
+    </div>
+    
+    <!-- Volume Total -->
+    <div class="stat-card danger animate-fadeIn" style="animation-delay: 0.3s;">
+        <div class="stat-header">
+            <div class="stat-icon danger">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+        <div class="stat-value" data-stat="valorTotalInvestido">R$ <?= number_format($valorTotalInvestido, 0, ',', '.') ?></div>
+        <div class="stat-label">Volume Total Investido</div>
+        <div class="stat-change">
+            <i class="fas fa-chart-bar"></i>
+            Volume geral
+        </div>
+    </div>
+</div>
+
+<!-- Gráfico de Atividade -->
+<div class="table-container animate-fadeIn" style="animation-delay: 0.4s;">
+    <div class="table-header">
+        <h3 class="table-title">
+            <i class="fas fa-chart-area"></i>
+            Atividade dos Últimos 7 Dias
+        </h3>
+        <div class="table-actions">
+            <select class="form-select" id="chartPeriod" onchange="updateChart()">
+                <option value="7">7 dias</option>
+                <option value="30">30 dias</option>
+                <option value="90">90 dias</option>
+            </select>
+        </div>
+    </div>
+    
+    <div style="padding: 2rem;">
+        <canvas id="activityChart" width="400" height="100"></canvas>
+    </div>
+</div>
+
+<!-- Grid de Informações -->
+<div class="data-grid">
+    <!-- Últimos Usuários -->
+    <div class="table-container animate-fadeIn" style="animation-delay: 0.5s;">
+        <div class="table-header">
+            <h3 class="table-title">
+                <i class="fas fa-user-plus"></i>
+                Últimos Usuários
+            </h3>
+            <a href="../usuarios/" class="btn btn-sm btn-primary">
+                Ver Todos <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($ultimosUsuarios)): ?>
+                        <tr>
+                            <td colspan="4" class="text-center">Nenhum usuário encontrado</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($ultimosUsuarios as $usuario): ?>
+                            <tr>
+                                <td>
+                                    <div class="d-flex items-center gap-3">
+                                        <div class="admin-avatar" style="width: 32px; height: 32px; font-size: 0.75rem;">
+                                            <?= strtoupper(substr($usuario['nome'] ?: $usuario['telefone'], 0, 1)) ?>
+                                        </div>
+                                        <div>
+                                            <div class="font-weight-600"><?= htmlspecialchars($usuario['nome'] ?: 'Usuário #' . $usuario['id']) ?></div>
+                                            <div class="text-muted"><?= htmlspecialchars($usuario['telefone']) ?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-<?= $usuario['status'] === 'ativo' ? 'success' : ($usuario['status'] === 'inativo' ? 'danger' : 'warning') ?>">
+                                        <?= ucfirst($usuario['status']) ?>
+                                    </span>
+                                </td>
+                                <td><?= date('d/m/Y H:i', strtotime($usuario['created_at'])) ?></td>
+                                <td>
+                                    <a href="../usuarios/?id=<?= $usuario['id'] ?>" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Saques Pendentes -->
+    <div class="table-container animate-fadeIn" style="animation-delay: 0.6s;">
+        <div class="table-header">
+            <h3 class="table-title">
+                <i class="fas fa-exclamation-triangle"></i>
+                Saques Pendentes
+            </h3>
+            <a href="../saques/" class="btn btn-sm btn-warning">
+                Gerenciar <i class="fas fa-cog"></i>
+            </a>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($ultimosSaques)): ?>
+                        <tr>
+                            <td colspan="4" class="text-center">Nenhum saque pendente</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($ultimosSaques as $saque): ?>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <div class="font-weight-600"><?= htmlspecialchars($saque['nome'] ?: 'Usuário') ?></div>
+                                        <div class="text-muted" style="font-size: 0.8125rem;"><?= htmlspecialchars($saque['chave_pix'] ?? 'N/A') ?></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="font-weight-600">R$ <?= number_format($saque['valor_bruto'], 2, ',', '.') ?></span>
+                                </td>
+                                <td><?= date('d/m/Y H:i', strtotime($saque['created_at'])) ?></td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-sm btn-success" onclick="processWithdrawal(<?= $saque['id'] ?>, 'approve')" title="Aprovar">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="processWithdrawal(<?= $saque['id'] ?>, 'reject')" title="Rejeitar">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Produtos Populares e Transações -->
+<div class="data-grid">
+    <!-- Produtos Populares -->
+    <div class="table-container animate-fadeIn" style="animation-delay: 0.7s;">
+        <div class="table-header">
+            <h3 class="table-title">
+                <i class="fas fa-star"></i>
+                Produtos Populares
+            </h3>
+            <a href="../produtos/" class="btn btn-sm btn-secondary">
+                Ver Todos <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Investimentos</th>
+                        <th>Volume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($produtosPopulares)): ?>
+                        <tr>
+                            <td colspan="3" class="text-center">Nenhum produto encontrado</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($produtosPopulares as $produto): ?>
+                            <tr>
+                                <td>
+                                    <div class="font-weight-600"><?= htmlspecialchars($produto['titulo']) ?></div>
+                                    <div class="text-muted"><?= htmlspecialchars($produto['codigo_robo'] ?? '') ?></div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-info"><?= $produto['total_investimentos'] ?? 0 ?></span>
+                                </td>
+                                <td>
+                                    <span class="font-weight-600">R$ <?= number_format($produto['valor_total'] ?? 0, 2, ',', '.') ?></span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Transações Recentes -->
+    <div class="table-container animate-fadeIn" style="animation-delay: 0.8s;">
+        <div class="table-header">
+            <h3 class="table-title">
+                <i class="fas fa-exchange-alt"></i>
+                Transações Recentes
+            </h3>
+            <a href="../relatorios/" class="btn btn-sm btn-secondary">
+                Relatório <i class="fas fa-chart-bar"></i>
+            </a>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Usuário</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($transacoesRecentes)): ?>
+                        <tr>
+                            <td colspan="4" class="text-center">Nenhuma transação encontrada</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach (array_slice($transacoesRecentes, 0, 5) as $transacao): ?>
+                            <tr>
+                                <td>
+                                    <span class="badge badge-<?= $transacao['tipo'] === 'deposito' ? 'success' : ($transacao['tipo'] === 'saque' ? 'warning' : 'info') ?>">
+                                        <?= ucfirst($transacao['tipo']) ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div>
+                                        <div class="font-weight-500"><?= htmlspecialchars($transacao['usuario_nome'] ?: 'Sistema') ?></div>
+                                        <div class="text-muted" style="font-size: 0.8125rem;"><?= htmlspecialchars($transacao['usuario_telefone'] ?? '') ?></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="font-weight-600">R$ <?= number_format($transacao['valor'], 2, ',', '.') ?></span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-<?= $transacao['status'] === 'concluido' ? 'success' : ($transacao['status'] === 'pendente' ? 'warning' : 'danger') ?>">
+                                        <?= ucfirst($transacao['status']) ?>
+                                    </span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts para gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dados do gráfico
+    const chartData = <?= json_encode($dadosGrafico) ?>;
+    
+    // Configurar gráfico
+    const ctx = document.getElementById('activityChart').getContext('2d');
+    const activityChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.map(d => d.data),
+            datasets: [
+                {
+                    label: 'Usuários',
+                    data: chartData.map(d => d.usuarios),
+                    borderColor: '#38a169',
+                    backgroundColor: 'rgba(56, 161, 105, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Investimentos',
+                    data: chartData.map(d => d.investimentos),
+                    borderColor: '#3182ce',
+                    backgroundColor: 'rgba(49, 130, 206, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Saques',
+                    data: chartData.map(d => d.saques),
+                    borderColor: '#d69e2e',
+                    backgroundColor: 'rgba(214, 158, 46, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff',
+                        usePointStyle: true
                     }
-                })
-                .catch(error => console.error('Erro ao atualizar estatísticas:', error));
-        }, 30000);
-    </script>
-</body>
-</html>
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#ffffff' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                },
+                y: {
+                    ticks: { color: '#ffffff' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                }
+            }
+        }
+    });
+    
+    // Função para atualizar período do gráfico
+    function updateChart() {
+        const period = document.getElementById('chartPeriod').value;
+        finverAdmin.showToast('Info', `Carregando dados de ${period} dias...`, 'info', 2000);
+        
+        // Aqui você pode implementar uma requisição AJAX para buscar novos dados
+        // Por enquanto, só mostra a notificação
+    }
+    
+    // Atualizar estatísticas a cada 30 segundos
+    setInterval(() => {
+        fetch('../api/stats.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Atualizar valores com animação
+                    document.querySelectorAll('[data-stat]').forEach(element => {
+                        const statType = element.dataset.stat;
+                        if (data[statType] !== undefined) {
+                            finverAdmin.animateValue(
+                                element, 
+                                parseFloat(element.textContent.replace(/[^\d.-]/g, '')), 
+                                data[statType]
+                            );
+                        }
+                    });
+                }
+            })
+            .catch(error => console.warn('Erro ao atualizar estatísticas:', error));
+    }, 30000);
+</script>
+
+<?php
+$page_content = ob_get_clean();
+
+// Incluir o layout
+require_once '../layouts/admin_layout.php';
+?>
