@@ -1,0 +1,124 @@
+:root {
+    --background-color: #121A1E;
+    --text-color: white;
+    --primary-color: #152731;
+    --secondary-color: #335D67;
+    --dark-background: #152731;
+    --font-family: Arial, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.logo-img {
+    max-width: 190px; /* Tamanho máximo da logo */
+    height: auto; /* Mantém a proporção da imagem */
+    padding-bottom: 15px;
+    padding-top: 12px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Estilo das abas */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex: 1;
+    padding: 10px;
+    color: var(--text-color);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+}
+
+.tab.active {
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+}
+
+/* Estilo do conteúdo das abas */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Estilo dos cartões de registro */
+.record-card {
+    background-color: var(--dark-background);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.record-card p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+strong {
+    color: var(--secondary-color);
+}
+
+.bottom-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1; /* Garante que cada link ocupe espaço igual */
+}
+
+.bottom-nav a i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--primary-color);
+    padding: 10px;
+    width: 100%;  /* Garante que a nav ocupe a largura total */
+    position: fixed; /* Fixa a nav na parte inferior */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0; /* Remove borda arredondada para largura total */
+}

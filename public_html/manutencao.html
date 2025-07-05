@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple - Aviso de Manutenção</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* O CSS fornecido pelo usuário */
+        :root {
+            --background-color: #121A1E; /* Cor de fundo */
+            --text-color: white; /* Cor do texto */
+            --primary-color: #152731; /* Cor primária */
+            --secondary-color: #335D67; /* Cor secundária */
+            --dark-background: #152731; /* Cor de fundo escuro */
+            --font-family: Arial, sans-serif; /* Fonte padrão */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--primary-color);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .maintenance-message {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        .coffee-message {
+            font-size: 16px;
+            margin: 10px 0;
+            color: var(--secondary-color);
+        }
+
+        .actions {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: var(--dark-background);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 10px 20px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .action-btn i {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Estamos em Manutenção!</h1>
+        <p>Pedimos desculpas pela inconveniência.</p>
+    </header>
+
+    <div class="maintenance-message">
+        <p>Enquanto isso, tome um cafezinho e aguarde um momento.</p>
+    </div>
+
+    <div class="coffee-message">
+        
+    <p>Aproveite e entre em nosso grupo para trocar um papo!</p>
+    </div>
+
+    <div class="actions">
+        <!-- A tag <a> com o link adicionado -->
+        <a href="https://t.me/applesuporte" class="action-btn">
+        
+            ENTRAR NO GRUPO
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

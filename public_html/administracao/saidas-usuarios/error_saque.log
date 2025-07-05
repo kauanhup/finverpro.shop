@@ -1,0 +1,11 @@
+[2025-06-16 13:17:42] ERROR: Saque PixUp não implementado ainda. ID: 3
+[2025-06-16 13:19:37] ERROR: Saque PixUp não implementado ainda. ID: 3
+[2025-06-16 14:02:33] ERROR: Saque PixUp não implementado ainda. ID: 3
+[2025-06-16 14:06:48] ERROR: Erro no saque PixUp. ID: 3, Resposta: <html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.24.0 (Ubuntu)</center>
+</body>
+</html>
+
