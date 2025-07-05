@@ -1,0 +1,313 @@
+======================================================================
+FINVER PRO - ARQUIVOS AFETADOS PELA REESTRUTURAÇÃO DO BANCO DE DADOS
+======================================================================
+
+📁 PASTA: /public_html/
+=======================
+
+🔧 ARQUIVO: index.php (Linha 111)
+   MUDANÇA: Tabela 'usuarios' reestruturada
+   ALTERAÇÃO NECESSÁRIA: 
+   - Campo 'cargo' foi substituído por 'tipo_usuario' (enum: 'usuario','admin','moderador')
+   - Adicionar campo 'status' nas verificações
+   - Query: "SELECT id, telefone, senha, tipo_usuario, status FROM usuarios WHERE telefone = :telefone"
+
+📁 PASTA: /public_html/team/
+============================
+
+🔧 ARQUIVO: processar_transferencia.php (Linhas 40, 61)
+   MUDANÇA: Sistema financeiro unificado - nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Substituir atualizações diretas em 'usuarios.saldo' por 'carteiras.saldo_principal'
+   - Queries: "UPDATE carteiras SET saldo_principal = saldo_principal + ? WHERE usuario_id = ?"
+   - Queries: "SELECT saldo_principal FROM carteiras WHERE usuario_id = ?"
+
+🔧 ARQUIVO: verificar.php (Linhas 19, 30, 58, 97)
+   MUDANÇA: Tabela 'usuarios' reestruturada + nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Campo 'codigo_referencia' mantido
+   - Campo 'referencia_convite' mudou para 'referenciado_por'
+   - Saldo de comissão agora em 'carteiras.saldo_comissao'
+   - Queries: "SELECT codigo_referencia FROM usuarios WHERE id = ?"
+   - Queries: "SELECT id, codigo_referencia FROM usuarios WHERE referenciado_por = ?"
+   - Queries: "UPDATE carteiras SET saldo_comissao = ? WHERE usuario_id = ?"
+
+🔧 ARQUIVO: index.php (Linhas 46, 113, 118)
+   MUDANÇA: Tabela 'usuarios' reestruturada
+   ALTERAÇÃO NECESSÁRIA:
+   - Subconsultas para buscar indicados agora usam 'referenciado_por'
+   - Query: "SELECT u2.id FROM usuarios u1 JOIN usuarios u2 ON u2.referenciado_por = u1.id"
+
+🔧 ARQUIVO: salary/index.php (Linhas 176, 301)
+   MUDANÇA: Nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Atualizações de saldo agora em tabela 'carteiras'
+   - Query: "UPDATE carteiras SET saldo_principal = saldo_principal + ? WHERE usuario_id = ?"
+   - Query: "SELECT nome, email, c.saldo_principal, c.saldo_comissao FROM usuarios u JOIN carteiras c ON u.id = c.usuario_id WHERE u.id = ?"
+
+📁 PASTA: /public_html/retirar/dinheiro/
+=======================================
+
+🔧 ARQUIVO: index.php (Linhas 202, 300)
+   MUDANÇA: Nova tabela 'carteiras' + nova tabela 'operacoes_financeiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Buscar saldo em 'carteiras.saldo_principal'
+   - Criar registro em 'operacoes_financeiras' em vez de 'saques'
+   - Query: "SELECT c.saldo_principal, u.nome, u.telefone FROM usuarios u JOIN carteiras c ON u.id = c.usuario_id WHERE u.id = ?"
+   - Query: "UPDATE carteiras SET saldo_principal = ? WHERE usuario_id = ?"
+   - Inserir em 'operacoes_financeiras' com tipo='saque'
+
+📁 PASTA: /public_html/relatorios/
+==================================
+
+🔧 ARQUIVO: index.php (Linhas 62, 80, 68)
+   MUDANÇA: Tabela 'usuarios' reestruturada + nova tabela 'operacoes_financeiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Campo 'referencia_convite' mudou para 'referenciado_por'
+   - Tabela 'pagamentos' unificada em 'operacoes_financeiras'
+   - Query: "SELECT telefone, data_cadastro, c.total_depositado FROM usuarios u JOIN carteiras c ON u.id = c.usuario_id WHERE u.referenciado_por = :user_id"
+   - Query: "SELECT status, data_processamento, valor_liquido FROM operacoes_financeiras WHERE usuario_id = :user_id AND tipo = 'deposito'"
+
+📁 PASTA: /public_html/perfil/alterar-foto/
+==========================================
+
+🔧 ARQUIVOS: upload_foto.php, remove_foto.php, get_current_photo.php
+   MUDANÇA: Tabela 'usuarios' mantida, sem alterações necessárias
+   ALTERAÇÃO NECESSÁRIA: Nenhuma (campos mantidos)
+
+📁 PASTA: /public_html/investimentos/
+====================================
+
+🔧 ARQUIVO: processar_ciclo.php (Linhas 180, 222, 257, 187, 227, 261)
+   MUDANÇA: Nova tabela 'carteiras' + tabela 'investimentos' reestruturada
+   ALTERAÇÃO NECESSÁRIA:
+   - Atualizações de saldo em 'carteiras.saldo_principal'
+   - Campo 'renda_total' mudou para 'rendimento_acumulado'
+   - Query: "UPDATE carteiras SET saldo_principal = saldo_principal + ? WHERE usuario_id = ?"
+   - Query: "UPDATE investimentos SET rendimento_acumulado = rendimento_acumulado + ? WHERE id = ?"
+
+🔧 ARQUIVO: processar_investimento.php (Linhas 84, 109, 140, 334, 392, 69, 117, 136)
+   MUDANÇA: Nova tabela 'carteiras' + nova estrutura de comissões + nova tabela 'investimentos'
+   ALTERAÇÃO NECESSÁRIA:
+   - Buscar saldo em 'carteiras.saldo_principal'
+   - Debitar saldo de 'carteiras.saldo_principal'
+   - Campo 'referenciado_por' em vez de buscar por 'referencia_convite'
+   - Atualizar 'produtos.vendidos'
+   - Inserir em nova estrutura de 'investimentos'
+   - Sistema de comissões pela nova tabela 'comissoes'
+
+🔧 ARQUIVO: index.php (Linhas 98, 103)
+   MUDANÇA: Tabela 'investimentos' reestruturada
+   ALTERAÇÃO NECESSÁRIA:
+   - Subconsultas agora usam nova estrutura de 'investimentos'
+   - Verificar relação com 'usuario_id' em vez de 'id_usuario'
+
+📁 PASTA: /public_html/inicio/
+==============================
+
+🔧 ARQUIVO: index.php (Linha 92)
+   MUDANÇA: Tabela 'usuarios' reestruturada
+   ALTERAÇÃO NECESSÁRIA:
+   - Campos mantidos, possível adição de novos campos na consulta
+   - Query: "SELECT *, tipo_usuario, status FROM usuarios WHERE id = :user_id"
+
+📁 PASTA: /public_html/gate/
+============================
+
+🔧 ARQUIVO: api.php (Linhas 397, 435, 443)
+   MUDANÇA: Nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Buscar e atualizar saldo em 'carteiras.saldo_principal'
+   - Query: "SELECT u.telefone FROM usuarios u WHERE u.id = :user_id"
+   - Query: "SELECT saldo_principal FROM carteiras WHERE usuario_id = :user_id"
+   - Query: "UPDATE carteiras SET saldo_principal = :newBalance WHERE usuario_id = :user_id"
+
+🔧 ARQUIVO: webhook.php (Linhas 283, 296, 167, 264)
+   MUDANÇA: Nova tabela 'carteiras' + nova tabela 'operacoes_financeiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Atualizar 'carteiras.saldo_principal'
+   - Buscar pagamentos em 'operacoes_financeiras' com tipo='deposito'
+   - Query: "SELECT usuario_id, valor_liquido, status FROM operacoes_financeiras WHERE codigo_referencia = :id AND tipo = 'deposito'"
+   - Query: "UPDATE operacoes_financeiras SET status = :status, data_processamento = :data WHERE codigo_referencia = :idTransaction"
+
+🔧 ARQUIVO: verificar.php (Linhas 69, 437, 457, 465)
+   MUDANÇA: Nova tabela 'operacoes_financeiras' + nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Buscar em 'operacoes_financeiras' em vez de 'pagamentos'
+   - Atualizar saldo em 'carteiras'
+   - Query: "SELECT * FROM operacoes_financeiras WHERE codigo_referencia = :ref AND tipo = 'deposito'"
+   - Query: "UPDATE operacoes_financeiras SET status = :status, data_processamento = :data WHERE codigo_referencia = :idTransaction"
+
+📁 PASTA: /public_html/detalhes/investimento/
+============================================
+
+🔧 ARQUIVO: concluir.php (Linhas 34, 45, 62)
+   MUDANÇA: Nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Buscar e atualizar saldo em 'carteiras'
+   - Campo 'valor_investimento' agora em 'carteiras.total_investido'
+   - Query: "SELECT c.saldo_principal, c.total_investido FROM carteiras c WHERE c.usuario_id = :user_id"
+   - Query: "UPDATE carteiras SET saldo_principal = :new_saldo, total_investido = :new_valor_investimento WHERE usuario_id = :user_id"
+
+🔧 ARQUIVO: index.php (Linha 86)
+   MUDANÇA: Tabela 'produtos' reestruturada
+   ALTERAÇÃO NECESSÁRIA:
+   - Campos renomeados: 'valor_investimento' -> 'valor_minimo', 'renda_diaria' -> 'rendimento_diario'
+   - Query: "SELECT *, valor_minimo, rendimento_diario FROM produtos WHERE id = :id"
+
+📁 PASTA: /public_html/checklist/
+=================================
+
+🔧 ARQUIVO: index.php (Linhas 63, 76)
+   MUDANÇA: Nova tabela 'checklist_diario'
+   ALTERAÇÃO NECESSÁRIA:
+   - Migrar para nova estrutura de checklist
+   - Query: "SELECT dia_consecutivo, ultimo_checkin FROM checklist_diario WHERE usuario_id = :id"
+   - Query: "UPDATE checklist_diario SET dia_consecutivo = 0, ultimo_checkin = NULL WHERE usuario_id = :id"
+
+🔧 ARQUIVO: checklist.php (Linhas 65, 87, 132)
+   MUDANÇA: Nova tabela 'carteiras' + nova tabela 'checklist_diario'
+   ALTERAÇÃO NECESSÁRIA:
+   - Buscar saldo em 'carteiras'
+   - Usar nova estrutura de checklist
+   - Query: "SELECT c.saldo_principal, ch.dia_consecutivo, ch.ultimo_checkin FROM carteiras c JOIN checklist_diario ch ON c.usuario_id = ch.usuario_id WHERE c.usuario_id = :id"
+   - Query: "UPDATE carteiras SET saldo_principal = :saldo WHERE usuario_id = :id"
+
+📁 PASTA: /public_html/bonus/
+=============================
+
+🔧 ARQUIVO: verifica.php (Linhas 69, 83)
+   MUDANÇA: Nova tabela 'carteiras' + nova tabela 'bonus_utilizados'
+   ALTERAÇÃO NECESSÁRIA:
+   - Buscar e atualizar saldo em 'carteiras.saldo_bonus'
+   - Registrar uso em 'bonus_utilizados'
+   - Query: "SELECT saldo_bonus FROM carteiras WHERE usuario_id = ?"
+   - Query: "UPDATE carteiras SET saldo_bonus = ? WHERE usuario_id = ?"
+
+🔧 ARQUIVO: index.php (Linha 109)
+   MUDANÇA: Nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Query: "SELECT saldo_bonus FROM carteiras WHERE usuario_id = ?"
+
+📁 PASTA: /public_html/cadastro/
+===============================
+
+🔧 ARQUIVO: send_sms.php (Linha 53)
+   MUDANÇA: Tabela 'usuarios' mantida
+   ALTERAÇÃO NECESSÁRIA: Nenhuma
+
+🔧 ARQUIVO: autentificacao.php (Linhas 94, 102, 114, 169, 182, 222, 239)
+   MUDANÇA: Tabela 'usuarios' reestruturada + nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Verificações mantidas
+   - Campo 'referencia_convite' mudou para 'referenciado_por'
+   - Criar registro em 'carteiras' para novos usuários
+   - Atualizar saldo em 'carteiras' para bônus
+   - Query: "INSERT INTO carteiras (usuario_id, saldo_bonus) VALUES (?, ?)"
+   - Query: "UPDATE carteiras SET saldo_bonus = saldo_bonus + ? WHERE usuario_id = ?"
+
+📁 PASTA: /public_html/administracao/
+====================================
+
+🔧 ARQUIVO: transacao-investidores/index.php (Linha 22)
+   MUDANÇA: Campo 'cargo' mudou para 'tipo_usuario'
+   ALTERAÇÃO NECESSÁRIA:
+   - Query: "SELECT tipo_usuario FROM usuarios WHERE id = :user_id"
+
+🔧 ARQUIVO: usuarios/index.php (Linhas 23, 46, 47, 48, 49)
+   MUDANÇA: Múltiplas tabelas reestruturadas
+   ALTERAÇÃO NECESSÁRIA:
+   - Campo 'cargo' -> 'tipo_usuario'
+   - Tabela 'investidores' -> 'investimentos'
+   - Tabela 'pagamentos' -> 'operacoes_financeiras'
+   - Saldo em 'carteiras'
+   - Query: "SELECT tipo_usuario FROM usuarios WHERE id = :user_id"
+   - Subconsultas: "SELECT COUNT(*) FROM usuarios WHERE referenciado_por = u.codigo_referencia"
+   - Subconsultas: "SELECT SUM(valor_investido) FROM investimentos WHERE usuario_id = u.id"
+   - Subconsultas: "SELECT SUM(valor_liquido) FROM operacoes_financeiras WHERE usuario_id = u.id AND tipo = 'deposito' AND status = 'aprovado'"
+
+🔧 ARQUIVO: usuarios/editar.php (Linhas 35, 36, 37, 38)
+   MUDANÇA: Mesmas alterações do arquivo anterior
+   ALTERAÇÃO NECESSÁRIA: Mesmas queries atualizadas
+
+🔧 ARQUIVO: usuarios/atualizar.php (Linha 28)
+   MUDANÇA: Tabela 'usuarios' mantida estrutura básica
+   ALTERAÇÃO NECESSÁRIA: Nenhuma para UPDATE básico
+
+🔧 ARQUIVO: saidas-usuarios/index.php (Linhas 18, 137)
+   MUDANÇA: Campo 'cargo' -> 'tipo_usuario' + nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Query: "SELECT tipo_usuario FROM usuarios WHERE id = :user_id"
+   - Query: "UPDATE carteiras SET saldo_principal = saldo_principal + :valor WHERE usuario_id = :user_id"
+
+🔧 ARQUIVO: entradas-geral/index.php (Linhas 20, 48, 39, 52, 107)
+   MUDANÇA: Campo 'cargo' -> 'tipo_usuario' + nova tabela 'operacoes_financeiras' + nova tabela 'carteiras'
+   ALTERAÇÃO NECESSÁRIA:
+   - Query: "SELECT tipo_usuario FROM usuarios WHERE id = :user_id"
+   - Query: "SELECT usuario_id, valor_liquido FROM operacoes_financeiras WHERE id = :id AND status = 'pendente' AND tipo = 'deposito'"
+   - Query: "UPDATE operacoes_financeiras SET status = 'aprovado' WHERE id = :id"
+   - Query: "SELECT id, usuario_id, valor_liquido, codigo_referencia, status, data_processamento FROM operacoes_financeiras WHERE tipo = 'deposito'"
+
+🔧 ARQUIVO: dashboard/index.php (Linhas 24, 55, 99, 113, 125, 130, 135, 140)
+   MUDANÇA: Múltiplas tabelas reestruturadas
+   ALTERAÇÃO NECESSÁRIA:
+   - Campo 'cargo' -> 'tipo_usuario'
+   - Tabela 'pagamentos' -> 'operacoes_financeiras'
+   - Query: "SELECT tipo_usuario FROM usuarios WHERE id = :user_id"
+   - Query: "SELECT data_processamento, valor_liquido FROM operacoes_financeiras WHERE status = 'aprovado' AND tipo = 'deposito'"
+   - Query: "SELECT MONTH(data_processamento) AS mes, SUM(valor_liquido) AS total FROM operacoes_financeiras WHERE status = 'aprovado' AND tipo = 'deposito'"
+
+🔧 MÚLTIPLOS ARQUIVOS em /configuracao-produtos/, /configuracoes_sistema/, etc.
+   MUDANÇA: Campo 'cargo' -> 'tipo_usuario'
+   ALTERAÇÃO NECESSÁRIA:
+   - Substituir "SELECT cargo FROM usuarios" por "SELECT tipo_usuario FROM usuarios"
+
+📁 PASTA: /public/bank/
+======================
+
+🔧 ARQUIVO: database.php (Linhas 378, 381, 384, 389, 392, 395, 595)
+   MUDANÇA: Múltiplas tabelas reestruturadas
+   ALTERAÇÃO NECESSÁRIA:
+   - Queries estatísticas precisam ser atualizadas para novas tabelas
+   - 'investimentos' mantido nome mas estrutura alterada
+   - 'usuarios' com novos campos
+
+======================================================================
+RESUMO DE MUDANÇAS PRINCIPAIS:
+======================================================================
+
+1. 🔄 TABELA 'usuarios':
+   - Campo 'cargo' → 'tipo_usuario' (enum)
+   - Campo 'referencia_convite' → 'referenciado_por' (FK)
+   - Novos campos: 'status', 'ultimo_login'
+   - Remoção de campos financeiros (movidos para 'carteiras')
+
+2. 🆕 NOVA TABELA 'carteiras':
+   - Unifica todos os saldos (principal, bonus, comissao)
+   - Relaciona 1:1 com usuarios
+   - Campos: saldo_principal, saldo_bonus, saldo_comissao, total_depositado, total_sacado, total_investido
+
+3. 🔄 TABELA 'investimentos' (unificada):
+   - Remove duplicação com 'investidores'
+   - Campo 'renda_total' → 'rendimento_acumulado'
+   - Melhor estrutura com FKs
+
+4. 🔄 TABELA 'produtos':
+   - Campo 'valor_investimento' → 'valor_minimo'
+   - Campo 'renda_diaria' → 'rendimento_diario'
+   - Novo campo 'codigo_produto'
+
+5. 🔄 UNIFICAÇÃO 'pagamentos' + 'saques':
+   - Nova tabela 'operacoes_financeiras'
+   - Campos padronizados
+   - Status unificados
+
+6. 🆕 NOVA TABELA 'configuracoes':
+   - Unifica todas as configurações do sistema
+   - Estrutura categoria/chave/valor
+
+7. 🆕 NOVAS TABELAS DE AUDITORIA:
+   - 'logs_sistema' para auditoria
+   - 'tentativas_login' para segurança
+
+======================================================================
