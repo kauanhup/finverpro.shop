@@ -1,0 +1,213 @@
+ /* Variáveis de cores e fontes */
+ :root {
+    --background-color: #121A1E; /* Cor de fundo */
+    --text-color: white; /* Cor do texto */
+    --primary-color: #152731; /* Cor primária */
+    --secondary-color: #335D67; /* Cor secundária */
+    --dark-background: #152731; /* Cor de fundo escuro */
+    --font-family: Arial, sans-serif; /* Fonte padrão */
+}
+
+.custom-swal-popup {
+    border-radius: 10px;
+    /* Bordas arredondadas */
+    background: var(--primary-color);
+    /* Um gradiente leve para o fundo */
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* Sombras suaves */
+}
+
+.custom-confirm-button {
+    background-color: var(--secondary-color) !important;
+    /* Cor personalizada */
+    border-radius: 5px !important;
+    border-color: #fff;
+    /* Bordas arredondadas no botão */
+    color: #fff !important;
+    /* Texto branco */
+}
+
+.custom-confirm-button:focus,
+.custom-confirm-button:active {
+    outline: none !important;
+    /* Remove borda de foco */
+    box-shadow: none !important;
+    /* Remove efeito de clique */
+    border-color: #ff69b4 !important;
+    /* Mantém a borda rosa */
+}
+
+.custom-confirm-button:hover {
+    background-color: var(--secondary-color) !important;
+    /* Cor de fundo rosa ao hover */
+    color: #fff !important;
+    border-color: var(--secondary-color) !important;
+    /* Borda azul no hover */
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos do corpo e do contêiner */
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 100px;
+}
+
+/* Estilos do cabeçalho */
+header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para a caixa de resgate de código */
+.code-redeem-box {
+    background-color: var(--primary-color);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-img {
+max-width: 190px; /* Tamanho máximo da logo */
+height: auto; /* Mantém a proporção da imagem */
+padding-bottom: 15px;
+padding-top: 12px;
+}
+
+.activated-codes-card {
+    max-height: 220px; /* Ajuste essa altura conforme o tamanho dos itens */
+    overflow-y: auto;  /* Habilita a rolagem vertical */
+    border: 1px solid #122029; /* Borda opcional */
+    padding: 10px; /* Preenchimento interno opcional */
+    border-radius: 5px; /* Bordas arredondadas opcionais */
+    background-color: #f9f9f9; /* Cor de fundo opcional */
+}
+
+
+.code-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    color: var(--text-color);
+    background-color: var(--dark-background);
+    outline: none; /* Remove a borda ao focar */
+}
+
+.code-input:focus {
+    background-color: var(--dark-background); /* Muda a cor de fundo ao focar */
+}
+
+
+.redeem-btn {
+    background-color: var(--secondary-color);
+    border: none;
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.redeem-btn:hover {
+    background-color: #3c6f7d;
+}
+
+.note {
+    font-size: 14px;
+    color: var(--text-color);
+    margin-top: 10px;
+}
+
+.image-banner img {
+width: 100%;
+height: auto;
+border-radius: 15px;
+margin-bottom: 20px;
+}
+
+.bottom-nav {
+display: flex;
+justify-content: space-around;
+background-color: var(--primary-color);
+padding: 10px;
+width: 100%;  /* Garante que a nav ocupe a largura total */
+position: fixed; /* Fixa a nav na parte inferior */
+bottom: 0;
+left: 0;
+right: 0;
+border-radius: 0; /* Remove borda arredondada para largura total */
+}
+
+.bottom-nav a {
+color: var(--text-color);
+text-decoration: none;
+font-size: 14px;
+display: flex;
+flex-direction: column;
+align-items: center;
+flex: 1; /* Garante que cada link ocupe espaço igual */
+}
+
+.bottom-nav a i {
+font-size: 20px;
+margin-bottom: 5px;
+}
+
+/* Card de códigos ativados */
+.activated-codes-card {
+background-color: var(--primary-color);
+color: var(--text-color);
+padding: 15px;
+border-radius: 10px;
+margin-top: 20px;
+text-align: left;
+}
+
+.activated-codes-card h2 {
+font-size: 18px;
+margin-bottom: 10px;
+text-align: center;
+}
+
+.code-entry {
+background-color: #1d3a45;
+padding: 10px;
+border-radius: 5px;
+margin-bottom: 10px;
+}
+
+.code-entry p {
+font-size: 14px;
+margin: 2px 0;
+}
