@@ -664,9 +664,23 @@ GROUP BY u.id;
 -- DADOS INICIAIS
 -- ========================================
 
--- Administrador padrão
+-- Administrador padrão (senha: password - ALTERE IMEDIATAMENTE!)
 INSERT INTO `administrador` (`email`, `senha`, `nome`, `nivel`) VALUES
 ('admin@finverpro.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador', 'super');
+
+-- Usuário de teste (senha: 123456)
+INSERT INTO `usuarios` (`telefone`, `email`, `nome`, `senha`, `codigo_referencia`, `cargo`, `status`) VALUES
+('5511999999999', 'teste@finverpro.com', 'Usuário Teste', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'TEST001', 'usuario', 'ativo');
+
+-- Carteira para usuário de teste
+INSERT INTO `carteiras` (`usuario_id`, `saldo_principal`, `saldo_bonus`) VALUES
+(1, 100.00, 50.00);
+
+-- Produtos de exemplo
+INSERT INTO `produtos` (`titulo`, `descricao`, `codigo_robo`, `valor_minimo`, `valor_maximo`, `tipo_rendimento`, `rendimento_diario`, `duracao_dias`, `status`, `destaque`) VALUES
+('Robô Alpha', 'Robô de investimento conservador ideal para iniciantes', 'ALPHA001', 50.00, 1000.00, 'diario', 2.50, 30, 'ativo', 1),
+('Robô Beta', 'Robô de investimento moderado com boa rentabilidade', 'BETA002', 100.00, 5000.00, 'diario', 3.80, 45, 'ativo', 1),
+('Robô Gamma', 'Robô de investimento agressivo para perfil arrojado', 'GAMMA003', 500.00, 10000.00, 'diario', 5.20, 60, 'ativo', 0);
 
 -- Níveis VIP padrão
 INSERT INTO `niveis_vip` (`codigo`, `nome`, `requisito_investimento`, `requisito_indicacoes`, `cor_badge`, `icone`, `emoji`, `ordem`) VALUES
