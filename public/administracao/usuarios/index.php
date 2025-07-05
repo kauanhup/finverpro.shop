@@ -58,6 +58,8 @@ try {
             u.telefone,
             u.email,
             u.status,
+            u.cargo,
+            u.nivel_vip_id,
             u.created_at,
             u.ultimo_login,
             c.saldo_principal,
@@ -66,10 +68,14 @@ try {
             c.total_depositado,
             c.total_investido,
             c.total_sacado,
+            (c.saldo_principal + c.saldo_bonus + c.saldo_comissao) as saldo_total,
             (SELECT COUNT(*) FROM usuarios WHERE indicado_por = u.id) as total_indicados,
-            (SELECT COUNT(*) FROM investimentos WHERE usuario_id = u.id AND status = 'ativo') as investimentos_ativos
+            (SELECT COUNT(*) FROM investimentos WHERE usuario_id = u.id AND status = 'ativo') as investimentos_ativos,
+            nv.nome as nivel_vip_nome,
+            nv.emoji as nivel_vip_emoji
         FROM usuarios u
         LEFT JOIN carteiras c ON u.id = c.usuario_id
+        LEFT JOIN niveis_vip nv ON u.nivel_vip_id = nv.id
         $whereClause
         ORDER BY u.$orderBy $orderDir
         LIMIT $limit OFFSET $offset

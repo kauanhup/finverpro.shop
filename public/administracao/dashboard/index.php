@@ -15,59 +15,34 @@ requireAdmin();
 $admin = getAdminData();
 $db = Database::getInstance();
 
-// Obter estatísticas gerais
+// Obter estatísticas usando métodos otimizados
 try {
-    // Usuários
-    $totalUsuarios = $db->fetchOne("SELECT COUNT(*) as total FROM usuarios")['total'] ?? 0;
-    $usuariosHoje = $db->fetchOne("SELECT COUNT(*) as total FROM usuarios WHERE DATE(created_at) = CURDATE()")['total'] ?? 0;
-    $usuariosAtivos = $db->fetchOne("SELECT COUNT(*) as total FROM usuarios WHERE status = 'ativo'")['total'] ?? 0;
+    // Usar método otimizado da classe Database
+    $stats = $db->getDashboardStats();
     
-    // Investimentos
-    $totalInvestimentos = $db->fetchOne("SELECT COUNT(*) as total FROM investimentos WHERE status = 'ativo'")['total'] ?? 0;
-    $valorTotalInvestido = $db->fetchOne("SELECT SUM(valor_investido) as total FROM investimentos WHERE status = 'ativo'")['total'] ?? 0;
-    $investimentosHoje = $db->fetchOne("SELECT COUNT(*) as total FROM investimentos WHERE DATE(created_at) = CURDATE()")['total'] ?? 0;
+    // Extrair estatísticas
+    $totalUsuarios = $stats['usuarios']['total'] ?? 0;
+    $usuariosHoje = $stats['usuarios']['hoje'] ?? 0;
+    $usuariosAtivos = $stats['usuarios']['ativos'] ?? 0;
     
-    // Saques
-    $saquesPendentes = $db->fetchOne("SELECT COUNT(*) as total FROM saques WHERE status = 'pendente'")['total'] ?? 0;
-    $valorSaquesPendentes = $db->fetchOne("SELECT SUM(valor_bruto) as total FROM saques WHERE status = 'pendente'")['total'] ?? 0;
-    $saquesHoje = $db->fetchOne("SELECT COUNT(*) as total FROM saques WHERE DATE(created_at) = CURDATE()")['total'] ?? 0;
+    $totalInvestimentos = $stats['investimentos']['total'] ?? 0;
+    $valorTotalInvestido = $stats['investimentos']['valor_total'] ?? 0;
+    $investimentosHoje = $stats['investimentos']['hoje'] ?? 0;
     
-    // Transações
-    $transacoesHoje = $db->fetchOne("SELECT COUNT(*) as total FROM transacoes WHERE DATE(created_at) = CURDATE()")['total'] ?? 0;
-    $depositosHoje = $db->fetchOne("SELECT SUM(valor) as total FROM transacoes WHERE tipo = 'deposito' AND DATE(created_at) = CURDATE() AND status = 'concluido'")['total'] ?? 0;
+    $saquesPendentes = $stats['saques']['pendentes'] ?? 0;
+    $valorSaquesPendentes = $stats['saques']['valor_pendente'] ?? 0;
+    $saquesHoje = $stats['saques']['hoje'] ?? 0;
     
-    // Comissões
-    $comissoesPendentes = $db->fetchOne("SELECT COUNT(*) as total FROM comissoes WHERE status = 'pendente'")['total'] ?? 0;
-    $valorComissoesPendentes = $db->fetchOne("SELECT SUM(valor_comissao) as total FROM comissoes WHERE status = 'pendente'")['total'] ?? 0;
+    $transacoesHoje = $stats['transacoes']['hoje'] ?? 0;
+    $depositosHoje = $stats['transacoes']['depositos_hoje'] ?? 0;
     
-    // Últimos usuários registrados
-    $ultimosUsuarios = $db->fetchAll("
-        SELECT id, nome, telefone, created_at, status 
-        FROM usuarios 
-        ORDER BY created_at DESC 
-        LIMIT 5
-    ");
+    $comissoesPendentes = $stats['comissoes']['pendentes'] ?? 0;
+    $valorComissoesPendentes = $stats['comissoes']['valor_pendente'] ?? 0;
     
-    // Últimos saques pendentes
-    $ultimosSaques = $db->fetchAll("
-        SELECT s.id, s.valor_bruto, s.created_at, u.nome, u.telefone, cp.chave_pix
-        FROM saques s
-        JOIN usuarios u ON s.usuario_id = u.id
-        JOIN chaves_pix cp ON s.chave_pix_id = cp.id
-        WHERE s.status = 'pendente'
-        ORDER BY s.created_at DESC
-        LIMIT 5
-    ");
-    
-    // Produtos mais populares
-    $produtosPopulares = $db->fetchAll("
-        SELECT p.titulo, COUNT(i.id) as total_investimentos, SUM(i.valor_investido) as valor_total
-        FROM produtos p
-        LEFT JOIN investimentos i ON p.id = i.produto_id AND i.status = 'ativo'
-        GROUP BY p.id, p.titulo
-        ORDER BY total_investimentos DESC
-        LIMIT 5
-    ");
+    // Usar métodos otimizados para listas
+    $ultimosUsuarios = $db->getLatestUsers(5);
+    $ultimosSaques = $db->getLatestPendingWithdrawals(5);
+    $produtosPopulares = $db->getPopularProducts(5);
     
 } catch (Exception $e) {
     error_log("Erro ao carregar dashboard: " . $e->getMessage());

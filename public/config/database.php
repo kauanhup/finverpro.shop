@@ -2,7 +2,8 @@
 /**
  * ========================================
  * FINVER PRO - CONFIGURAÇÃO DE BANCO
- * Arquivo de Conexão Organizado e Otimizado
+ * Classe Database Atualizada para Estrutura Completa
+ * Versão: 3.0 - Compatível com 27 Tabelas
  * ========================================
  */
 
@@ -34,13 +35,16 @@ const DB_FALLBACK_HOSTS = [
 
 /**
  * Classe de Conexão com Banco de Dados
+ * Otimizada para a estrutura completa do FinverPro
  */
 class Database {
     private static $instance = null;
     private $connection;
+    private static $configCache = [];
     
     private function __construct() {
         $this->connect();
+        $this->loadConfigCache();
     }
     
     /**
@@ -82,6 +86,38 @@ class Database {
         
         // Se chegou aqui, nenhuma conexão funcionou
         $this->handleConnectionError($lastError);
+    }
+    
+    /**
+     * Carregar cache de configurações
+     */
+    private function loadConfigCache() {
+        try {
+            $configs = $this->fetchAll("SELECT categoria, chave, valor, tipo FROM configuracoes");
+            foreach ($configs as $config) {
+                $key = $config['categoria'] . '.' . $config['chave'];
+                self::$configCache[$key] = $this->castConfigValue($config['valor'], $config['tipo']);
+            }
+        } catch (Exception $e) {
+            // Se não conseguir carregar, continua sem cache
+            error_log("Erro ao carregar cache de configurações: " . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Converter valor da configuração para o tipo correto
+     */
+    private function castConfigValue($value, $type) {
+        switch ($type) {
+            case 'boolean':
+                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+            case 'number':
+                return is_numeric($value) ? (float)$value : 0;
+            case 'json':
+                return json_decode($value, true) ?: [];
+            default:
+                return $value;
+        }
     }
     
     /**
@@ -173,6 +209,256 @@ class Database {
     }
     
     /**
+     * ========================================
+     * MÉTODOS ESPECÍFICOS PARA CONFIGURAÇÕES
+     * ========================================
+     */
+    
+    /**
+     * Obter configuração do cache ou banco
+     */
+    public function getConfig($categoria, $chave, $default = null) {
+        $key = $categoria . '.' . $chave;
+        
+        if (isset(self::$configCache[$key])) {
+            return self::$configCache[$key];
+        }
+        
+        try {
+            $config = $this->fetchOne(
+                "SELECT valor, tipo FROM configuracoes WHERE categoria = ? AND chave = ?",
+                [$categoria, $chave]
+            );
+            
+            if ($config) {
+                $value = $this->castConfigValue($config['valor'], $config['tipo']);
+                self::$configCache[$key] = $value;
+                return $value;
+            }
+        } catch (Exception $e) {
+            error_log("Erro ao buscar configuração {$key}: " . $e->getMessage());
+        }
+        
+        return $default;
+    }
+    
+    /**
+     * Definir configuração
+     */
+    public function setConfig($categoria, $chave, $valor, $tipo = 'string', $descricao = null) {
+        try {
+            $exists = $this->fetchOne(
+                "SELECT id FROM configuracoes WHERE categoria = ? AND chave = ?",
+                [$categoria, $chave]
+            );
+            
+            if ($exists) {
+                $this->query(
+                    "UPDATE configuracoes SET valor = ?, tipo = ?, updated_at = NOW() WHERE categoria = ? AND chave = ?",
+                    [$valor, $tipo, $categoria, $chave]
+                );
+            } else {
+                $this->query(
+                    "INSERT INTO configuracoes (categoria, chave, valor, tipo, descricao) VALUES (?, ?, ?, ?, ?)",
+                    [$categoria, $chave, $valor, $tipo, $descricao]
+                );
+            }
+            
+            // Atualizar cache
+            $key = $categoria . '.' . $chave;
+            self::$configCache[$key] = $this->castConfigValue($valor, $tipo);
+            
+            return true;
+        } catch (Exception $e) {
+            error_log("Erro ao salvar configuração {$categoria}.{$chave}: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * ========================================
+     * MÉTODOS ESPECÍFICOS PARA ADMINISTRAÇÃO
+     * ========================================
+     */
+    
+    /**
+     * Obter estatísticas do dashboard
+     */
+    public function getDashboardStats() {
+        try {
+            return [
+                'usuarios' => [
+                    'total' => $this->fetchOne("SELECT COUNT(*) as total FROM usuarios")['total'] ?? 0,
+                    'hoje' => $this->fetchOne("SELECT COUNT(*) as total FROM usuarios WHERE DATE(created_at) = CURDATE()")['total'] ?? 0,
+                    'ativos' => $this->fetchOne("SELECT COUNT(*) as total FROM usuarios WHERE status = 'ativo'")['total'] ?? 0,
+                ],
+                'investimentos' => [
+                    'total' => $this->fetchOne("SELECT COUNT(*) as total FROM investimentos WHERE status = 'ativo'")['total'] ?? 0,
+                    'valor_total' => $this->fetchOne("SELECT SUM(valor_investido) as total FROM investimentos WHERE status = 'ativo'")['total'] ?? 0,
+                    'hoje' => $this->fetchOne("SELECT COUNT(*) as total FROM investimentos WHERE DATE(created_at) = CURDATE()")['total'] ?? 0,
+                ],
+                'saques' => [
+                    'pendentes' => $this->fetchOne("SELECT COUNT(*) as total FROM saques WHERE status = 'pendente'")['total'] ?? 0,
+                    'valor_pendente' => $this->fetchOne("SELECT SUM(valor_bruto) as total FROM saques WHERE status = 'pendente'")['total'] ?? 0,
+                    'hoje' => $this->fetchOne("SELECT COUNT(*) as total FROM saques WHERE DATE(created_at) = CURDATE()")['total'] ?? 0,
+                ],
+                'transacoes' => [
+                    'hoje' => $this->fetchOne("SELECT COUNT(*) as total FROM transacoes WHERE DATE(created_at) = CURDATE()")['total'] ?? 0,
+                    'depositos_hoje' => $this->fetchOne("SELECT SUM(valor) as total FROM transacoes WHERE tipo = 'deposito' AND DATE(created_at) = CURDATE() AND status = 'concluido'")['total'] ?? 0,
+                ],
+                'comissoes' => [
+                    'pendentes' => $this->fetchOne("SELECT COUNT(*) as total FROM comissoes WHERE status = 'pendente'")['total'] ?? 0,
+                    'valor_pendente' => $this->fetchOne("SELECT SUM(valor_comissao) as total FROM comissoes WHERE status = 'pendente'")['total'] ?? 0,
+                ]
+            ];
+        } catch (Exception $e) {
+            error_log("Erro ao obter estatísticas do dashboard: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    /**
+     * Obter últimos usuários
+     */
+    public function getLatestUsers($limit = 5) {
+        return $this->fetchAll("
+            SELECT u.id, u.nome, u.telefone, u.created_at, u.status,
+                   c.saldo_principal, c.saldo_bonus, c.saldo_comissao
+            FROM usuarios u
+            LEFT JOIN carteiras c ON u.id = c.usuario_id
+            ORDER BY u.created_at DESC
+            LIMIT ?
+        ", [$limit]);
+    }
+    
+    /**
+     * Obter últimos saques pendentes
+     */
+    public function getLatestPendingWithdrawals($limit = 5) {
+        return $this->fetchAll("
+            SELECT s.id, s.valor_bruto, s.created_at, 
+                   u.nome, u.telefone, 
+                   cp.chave_pix, cp.tipo
+            FROM saques s
+            JOIN usuarios u ON s.usuario_id = u.id
+            JOIN chaves_pix cp ON s.chave_pix_id = cp.id
+            WHERE s.status = 'pendente'
+            ORDER BY s.created_at DESC
+            LIMIT ?
+        ", [$limit]);
+    }
+    
+    /**
+     * Obter produtos mais populares
+     */
+    public function getPopularProducts($limit = 5) {
+        return $this->fetchAll("
+            SELECT p.titulo, 
+                   COUNT(i.id) as total_investimentos, 
+                   SUM(i.valor_investido) as valor_total
+            FROM produtos p
+            LEFT JOIN investimentos i ON p.id = i.produto_id AND i.status = 'ativo'
+            GROUP BY p.id, p.titulo
+            ORDER BY total_investimentos DESC
+            LIMIT ?
+        ", [$limit]);
+    }
+    
+    /**
+     * ========================================
+     * MÉTODOS DE COMPATIBILIDADE
+     * ========================================
+     */
+    
+    /**
+     * Verificar se tabela existe
+     */
+    public function tableExists($tableName) {
+        try {
+            $result = $this->fetchOne(
+                "SELECT COUNT(*) as count FROM information_schema.tables WHERE table_schema = ? AND table_name = ?",
+                [DB_CONFIG['database'], $tableName]
+            );
+            return $result['count'] > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Verificar se coluna existe
+     */
+    public function columnExists($tableName, $columnName) {
+        try {
+            $result = $this->fetchOne(
+                "SELECT COUNT(*) as count FROM information_schema.columns WHERE table_schema = ? AND table_name = ? AND column_name = ?",
+                [DB_CONFIG['database'], $tableName, $columnName]
+            );
+            return $result['count'] > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Migrar dados se necessário
+     */
+    public function migrateIfNeeded() {
+        try {
+            // Verificar se é a estrutura antiga e migrar
+            if ($this->tableExists('historico_transacoes') && !$this->tableExists('transacoes')) {
+                $this->migrateOldStructure();
+            }
+            
+            // Verificar se carteiras existem para todos os usuários
+            $this->ensureUserWallets();
+            
+            return true;
+        } catch (Exception $e) {
+            error_log("Erro na migração: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Garantir que todos os usuários tenham carteiras
+     */
+    private function ensureUserWallets() {
+        $usersWithoutWallet = $this->fetchAll("
+            SELECT u.id FROM usuarios u
+            LEFT JOIN carteiras c ON u.id = c.usuario_id
+            WHERE c.id IS NULL
+        ");
+        
+        foreach ($usersWithoutWallet as $user) {
+            $this->query("INSERT INTO carteiras (usuario_id) VALUES (?)", [$user['id']]);
+        }
+    }
+    
+    /**
+     * Migrar estrutura antiga
+     */
+    private function migrateOldStructure() {
+        // Migrar transações
+        if ($this->tableExists('historico_transacoes')) {
+            $this->query("
+                INSERT INTO transacoes (usuario_id, tipo, valor, descricao, status, created_at)
+                SELECT user_id, tipo, valor, descricao, status, data_transacao
+                FROM historico_transacoes
+                WHERE user_id IS NOT NULL
+            ");
+        }
+        
+        // Migrar outras tabelas se necessário...
+    }
+    
+    /**
+     * ========================================
+     * TRATAMENTO DE ERROS
+     * ========================================
+     */
+    
+    /**
      * Tratar erro de conexão
      */
     private function handleConnectionError($error) {
@@ -206,7 +492,9 @@ class Database {
             $this->connection->query("SELECT 1");
             return [
                 'success' => true,
-                'message' => 'Conexão com banco de dados estabelecida com sucesso!'
+                'message' => 'Conexão com banco de dados estabelecida com sucesso!',
+                'version' => $this->connection->getAttribute(PDO::ATTR_SERVER_VERSION),
+                'database' => DB_CONFIG['database']
             ];
         } catch (PDOException $e) {
             return [
@@ -218,7 +506,9 @@ class Database {
 }
 
 /**
- * Funções auxiliares para compatibilidade
+ * ========================================
+ * FUNÇÕES AUXILIARES GLOBAIS
+ * ========================================
  */
 
 /**
@@ -233,6 +523,20 @@ function getDBConnection() {
  */
 function getDB() {
     return Database::getInstance();
+}
+
+/**
+ * Obter configuração do sistema
+ */
+function getConfig($categoria, $chave, $default = null) {
+    return Database::getInstance()->getConfig($categoria, $chave, $default);
+}
+
+/**
+ * Definir configuração do sistema
+ */
+function setConfig($categoria, $chave, $valor, $tipo = 'string', $descricao = null) {
+    return Database::getInstance()->setConfig($categoria, $chave, $valor, $tipo, $descricao);
 }
 
 /**
@@ -270,9 +574,20 @@ function validateDatabaseConfig() {
     return true;
 }
 
+/**
+ * ========================================
+ * INICIALIZAÇÃO AUTOMÁTICA
+ * ========================================
+ */
+
 // Validar configurações ao incluir o arquivo
 try {
     validateDatabaseConfig();
+    
+    // Tentar migração automática se necessário
+    $db = Database::getInstance();
+    $db->migrateIfNeeded();
+    
 } catch (Exception $e) {
     if (APP_DEBUG) {
         die("Configuração inválida: " . $e->getMessage());

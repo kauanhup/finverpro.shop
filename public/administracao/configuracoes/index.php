@@ -1,70 +1,161 @@
 <?php
+/**
+ * ========================================
+ * FINVER PRO - CONFIGURAÇÕES DO SISTEMA
+ * Módulo Completo de Configurações
+ * ========================================
+ */
+
 require_once '../includes/auth.php';
 require_once '../../config/database.php';
 
-requireAdmin();
+// Verificar autenticação e permissões
+requireAdmin('admin');
+
 $admin = getAdminData();
 $db = Database::getInstance();
 
-// Processar atualizações
+// Processar formulário
 if ($_POST) {
     try {
         $db->beginTransaction();
         
-        // Atualizar configurações gerais
-        if (isset($_POST['site_titulo'])) {
-            $db->query("INSERT INTO configuracoes (categoria, chave, valor) VALUES ('site', 'titulo', ?) 
-                       ON DUPLICATE KEY UPDATE valor = ?", [$_POST['site_titulo'], $_POST['site_titulo']]);
+        // Configurações do site
+        if (isset($_POST['site_nome'])) {
+            $db->setConfig('site', 'nome', $_POST['site_nome'], 'string', 'Nome do site');
+            $db->setConfig('site', 'titulo', $_POST['site_titulo'], 'string', 'Título do site');
+            $db->setConfig('site', 'descricao', $_POST['site_descricao'], 'string', 'Descrição do site');
+            $db->setConfig('site', 'url', $_POST['site_url'], 'url', 'URL do site');
         }
         
-        if (isset($_POST['site_descricao'])) {
-            $db->query("INSERT INTO configuracoes (categoria, chave, valor) VALUES ('site', 'descricao', ?) 
-                       ON DUPLICATE KEY UPDATE valor = ?", [$_POST['site_descricao'], $_POST['site_descricao']]);
-        }
-        
-        // Atualizar configurações de saque
+        // Configurações de saque
         if (isset($_POST['saque_valor_minimo'])) {
             $db->query("UPDATE config_saques SET 
                 valor_minimo = ?, 
                 taxa_percentual = ?, 
                 limite_diario = ?,
-                requer_investimento_ativo = ?
+                horario_inicio = ?,
+                horario_fim = ?,
+                segunda_feira = ?,
+                terca_feira = ?,
+                quarta_feira = ?,
+                quinta_feira = ?,
+                sexta_feira = ?,
+                sabado = ?,
+                domingo = ?,
+                requer_investimento_ativo = ?,
+                atualizado_em = NOW()
                 WHERE id = 1", [
-                $_POST['saque_valor_minimo'],
-                $_POST['saque_taxa'],
-                $_POST['saque_limite_diario'],
+                floatval($_POST['saque_valor_minimo']),
+                floatval($_POST['saque_taxa_percentual']),
+                intval($_POST['saque_limite_diario']),
+                $_POST['saque_horario_inicio'],
+                $_POST['saque_horario_fim'],
+                isset($_POST['saque_segunda']) ? 1 : 0,
+                isset($_POST['saque_terca']) ? 1 : 0,
+                isset($_POST['saque_quarta']) ? 1 : 0,
+                isset($_POST['saque_quinta']) ? 1 : 0,
+                isset($_POST['saque_sexta']) ? 1 : 0,
+                isset($_POST['saque_sabado']) ? 1 : 0,
+                isset($_POST['saque_domingo']) ? 1 : 0,
                 isset($_POST['saque_requer_investimento']) ? 1 : 0
             ]);
         }
         
+        // Configurações de comissão
+        if (isset($_POST['comissao_nivel_1'])) {
+            $db->query("UPDATE configuracao_comissoes SET percentual = ? WHERE nivel = 1", [floatval($_POST['comissao_nivel_1'])]);
+            $db->query("UPDATE configuracao_comissoes SET percentual = ? WHERE nivel = 2", [floatval($_POST['comissao_nivel_2'])]);
+            $db->query("UPDATE configuracao_comissoes SET percentual = ? WHERE nivel = 3", [floatval($_POST['comissao_nivel_3'])]);
+        }
+        
+        // Configurações de cadastro
+        if (isset($_POST['cadastro_bonus'])) {
+            $db->query("UPDATE configurar_cadastro SET 
+                bonus_cadastro = ?,
+                min_password_length = ?,
+                allow_registration = ?,
+                require_invite_code = ?,
+                updated_at = NOW()
+                WHERE id = 1", [
+                floatval($_POST['cadastro_bonus']),
+                intval($_POST['cadastro_min_senha']),
+                isset($_POST['cadastro_permitir']) ? 1 : 0,
+                isset($_POST['cadastro_requer_convite']) ? 1 : 0
+            ]);
+        }
+        
+        // Configurações de texto
+        if (isset($_POST['texto_titulo'])) {
+            $db->query("UPDATE configurar_textos SET 
+                titulo_site = ?,
+                descricao_site = ?,
+                keywords_site = ?,
+                link_site = ?,
+                link_suporte = ?,
+                popup_titulo = ?,
+                popup_ativo = ?,
+                popup_delay = ?
+                WHERE id = 1", [
+                $_POST['texto_titulo'],
+                $_POST['texto_descricao'],
+                $_POST['texto_keywords'],
+                $_POST['texto_link'],
+                $_POST['texto_suporte'],
+                $_POST['texto_popup_titulo'],
+                isset($_POST['texto_popup_ativo']) ? 1 : 0,
+                intval($_POST['texto_popup_delay'])
+            ]);
+        }
+        
+        // Configurações de cores
+        if (isset($_POST['cor_1'])) {
+            $db->query("UPDATE personalizar_cores SET 
+                cor_1 = ?, cor_2 = ?, cor_3 = ?, cor_4 = ?, cor_5 = ?, updated_at = NOW()
+                WHERE id = 1", [
+                $_POST['cor_1'], $_POST['cor_2'], $_POST['cor_3'], $_POST['cor_4'], $_POST['cor_5']
+            ]);
+        }
+        
         $db->commit();
-        logAdminAction('config.update', 'Configurações atualizadas');
-        $message = "Configurações atualizadas com sucesso!";
+        logAdminAction('config.update', 'Configurações do sistema atualizadas');
+        $success = "Configurações salvas com sucesso!";
         
     } catch (Exception $e) {
         $db->rollback();
-        $error = "Erro ao atualizar configurações: " . $e->getMessage();
+        logAdminAction('config.update.error', 'Erro ao atualizar configurações: ' . $e->getMessage());
+        $error = "Erro ao salvar configurações: " . $e->getMessage();
     }
 }
 
-// Buscar configurações atuais
+// Carregar configurações atuais
 try {
-    $configs = [];
-    $result = $db->fetchAll("SELECT categoria, chave, valor FROM configuracoes");
-    foreach ($result as $config) {
-        $configs[$config['categoria']][$config['chave']] = $config['valor'];
+    // Configurações de saque
+    $configSaque = $db->fetchOne("SELECT * FROM config_saques WHERE id = 1") ?: [];
+    
+    // Configurações de comissão
+    $configComissoes = [];
+    $comissoes = $db->fetchAll("SELECT nivel, percentual FROM configuracao_comissoes ORDER BY nivel");
+    foreach ($comissoes as $comissao) {
+        $configComissoes[$comissao['nivel']] = $comissao['percentual'];
     }
     
-    $configSaques = $db->fetchOne("SELECT * FROM config_saques WHERE id = 1") ?: [
-        'valor_minimo' => 30.00,
-        'taxa_percentual' => 8.00,
-        'limite_diario' => 1,
-        'requer_investimento_ativo' => 1
-    ];
+    // Configurações de cadastro
+    $configCadastro = $db->fetchOne("SELECT * FROM configurar_cadastro WHERE id = 1") ?: [];
+    
+    // Configurações de texto
+    $configTexto = $db->fetchOne("SELECT * FROM configurar_textos WHERE id = 1") ?: [];
+    
+    // Configurações de cores
+    $configCores = $db->fetchOne("SELECT * FROM personalizar_cores WHERE id = 1") ?: [];
+    
+    // Gateways
+    $gateways = $db->fetchAll("SELECT * FROM gateways ORDER BY nome");
     
 } catch (Exception $e) {
-    $configs = [];
-    $configSaques = [];
+    error_log("Erro ao carregar configurações: " . $e->getMessage());
+    $configSaque = $configComissoes = $configCadastro = $configTexto = $configCores = [];
+    $gateways = [];
 }
 ?>
 <!DOCTYPE html>
@@ -72,7 +163,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurações - Finver Pro</title>
+    <title>Configurações do Sistema - Finver Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -83,6 +174,8 @@ try {
             --text-color: #FFFFFF;
             --success-color: #10B981;
             --error-color: #EF4444;
+            --warning-color: #F59E0B;
+            --info-color: #3B82F6;
             --border-radius: 12px;
             --sidebar-width: 280px;
         }
@@ -117,7 +210,7 @@ try {
         .sidebar-logo {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, var(--success-color), #3B82F6);
+            background: linear-gradient(135deg, var(--success-color), var(--info-color));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -175,21 +268,44 @@ try {
             -webkit-text-fill-color: transparent;
         }
         
+        .config-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .config-tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .config-tab.active {
+            color: var(--info-color);
+            border-bottom-color: var(--info-color);
+        }
+        
         .config-section {
+            display: none;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--border-radius);
             padding: 2rem;
-            margin-bottom: 2rem;
         }
+        
+        .config-section.active { display: block; }
         
         .section-title {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+            color: var(--text-color);
         }
         
         .form-grid {
@@ -199,18 +315,18 @@ try {
         }
         
         .form-group {
-            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
         
         .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
             font-weight: 500;
             color: rgba(255, 255, 255, 0.9);
+            font-size: 0.875rem;
         }
         
-        .form-input {
-            width: 100%;
+        .form-input, .form-select, .form-textarea {
             padding: 0.75rem 1rem;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -219,17 +335,34 @@ try {
             font-size: 0.875rem;
         }
         
-        .form-input:focus {
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
             border-color: var(--secondary-color);
             background: rgba(255, 255, 255, 0.15);
         }
         
-        .form-check {
+        .form-textarea { resize: vertical; min-height: 100px; }
+        
+        .form-checkbox {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             margin-top: 0.5rem;
+        }
+        
+        .form-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--secondary-color);
+        }
+        
+        .color-input {
+            width: 60px;
+            height: 40px;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            cursor: pointer;
         }
         
         .btn {
@@ -239,6 +372,7 @@ try {
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s ease;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -249,7 +383,8 @@ try {
             color: white;
         }
         
-        .btn:hover {
+        .btn-primary:hover {
+            background: var(--primary-color);
             transform: translateY(-2px);
         }
         
@@ -269,6 +404,38 @@ try {
         .alert-danger {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #EF4444;
+        }
+        
+        .gateway-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .gateway-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .gateway-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .gateway-status.ativo {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+        }
+        
+        .gateway-status.inativo {
+            background: rgba(239, 68, 68, 0.2);
             color: #EF4444;
         }
         
@@ -306,9 +473,9 @@ try {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="../afiliados/" class="nav-link">
-                            <i class="fas fa-user-friends"></i>
-                            <span>Afiliados</span>
+                        <a href="../saques/" class="nav-link">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Saques</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -318,9 +485,15 @@ try {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="../saques/" class="nav-link">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span>Saques</span>
+                        <a href="../configuracoes/" class="nav-link active">
+                            <i class="fas fa-cog"></i>
+                            <span>Configurações</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../afiliados/" class="nav-link">
+                            <i class="fas fa-user-friends"></i>
+                            <span>Afiliados</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -335,101 +508,397 @@ try {
                             <span>Relatórios</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="./" class="nav-link active">
-                            <i class="fas fa-cogs"></i>
-                            <span>Configurações</span>
-                        </a>
-                    </li>
                 </ul>
             </nav>
         </aside>
-        
+
         <!-- Main Content -->
         <main class="main-content">
             <div class="page-header">
                 <h1 class="page-title">Configurações do Sistema</h1>
-            </div>
-            
-            <?php if (isset($message)): ?>
-                <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i> <?= htmlspecialchars($message) ?>
-                </div>
-            <?php endif; ?>
-            
-            <?php if (isset($error)): ?>
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle"></i> <?= htmlspecialchars($error) ?>
-                </div>
-            <?php endif; ?>
-            
-            <form method="POST">
-                <!-- Configurações Gerais -->
-                <div class="config-section">
-                    <h3 class="section-title">
-                        <i class="fas fa-globe"></i>
-                        Configurações Gerais
-                    </h3>
-                    
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Título do Site</label>
-                            <input type="text" name="site_titulo" class="form-input" 
-                                   value="<?= htmlspecialchars($configs['site']['titulo'] ?? 'Finver Pro') ?>">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Descrição do Site</label>
-                            <textarea name="site_descricao" class="form-input" rows="3"><?= htmlspecialchars($configs['site']['descricao'] ?? 'Plataforma de investimentos automatizados') ?></textarea>
+                <div class="page-actions">
+                    <div class="admin-info">
+                        <div class="admin-avatar"><?= strtoupper(substr($admin['nome'] ?: $admin['email'], 0, 2)) ?></div>
+                        <div>
+                            <div style="font-weight: 500;"><?= htmlspecialchars($admin['nome'] ?: 'Admin') ?></div>
+                            <div style="font-size: 0.75rem; opacity: 0.7;"><?= htmlspecialchars($admin['email']) ?></div>
                         </div>
                     </div>
+                    <a href="../logout.php" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </a>
                 </div>
-                
+            </div>
+
+            <?php if (isset($success)): ?>
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <?= htmlspecialchars($success) ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($error)): ?>
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <?= htmlspecialchars($error) ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- Tabs de Configuração -->
+            <div class="config-tabs">
+                <button class="config-tab active" onclick="showTab('saques')">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Saques
+                </button>
+                <button class="config-tab" onclick="showTab('comissoes')">
+                    <i class="fas fa-percentage"></i>
+                    Comissões
+                </button>
+                <button class="config-tab" onclick="showTab('cadastro')">
+                    <i class="fas fa-user-plus"></i>
+                    Cadastro
+                </button>
+                <button class="config-tab" onclick="showTab('site')">
+                    <i class="fas fa-globe"></i>
+                    Site
+                </button>
+                <button class="config-tab" onclick="showTab('cores')">
+                    <i class="fas fa-palette"></i>
+                    Cores
+                </button>
+                <button class="config-tab" onclick="showTab('gateways')">
+                    <i class="fas fa-credit-card"></i>
+                    Gateways
+                </button>
+            </div>
+
+            <form method="POST">
                 <!-- Configurações de Saques -->
-                <div class="config-section">
-                    <h3 class="section-title">
+                <div id="saques" class="config-section active">
+                    <h2 class="section-title">
                         <i class="fas fa-money-bill-wave"></i>
                         Configurações de Saques
-                    </h3>
+                    </h2>
                     
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label">Valor Mínimo (R$)</label>
-                            <input type="number" step="0.01" name="saque_valor_minimo" class="form-input" 
-                                   value="<?= $configSaques['valor_minimo'] ?? 30.00 ?>">
+                            <input type="number" name="saque_valor_minimo" class="form-input" 
+                                   value="<?= $configSaque['valor_minimo'] ?? 30 ?>" 
+                                   step="0.01" min="1" required>
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Taxa (%)</label>
-                            <input type="number" step="0.01" name="saque_taxa" class="form-input" 
-                                   value="<?= $configSaques['taxa_percentual'] ?? 8.00 ?>">
+                            <label class="form-label">Taxa Percentual (%)</label>
+                            <input type="number" name="saque_taxa_percentual" class="form-input" 
+                                   value="<?= $configSaque['taxa_percentual'] ?? 8 ?>" 
+                                   step="0.01" min="0" max="100" required>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Limite Diário</label>
                             <input type="number" name="saque_limite_diario" class="form-input" 
-                                   value="<?= $configSaques['limite_diario'] ?? 1 ?>">
+                                   value="<?= $configSaque['limite_diario'] ?? 1 ?>" 
+                                   min="1" required>
                         </div>
                         
                         <div class="form-group">
-                            <div class="form-check">
-                                <input type="checkbox" name="saque_requer_investimento" id="saque_requer_investimento" 
-                                       <?= ($configSaques['requer_investimento_ativo'] ?? 1) ? 'checked' : '' ?>>
-                                <label for="saque_requer_investimento" class="form-label">Requer investimento ativo</label>
-                            </div>
+                            <label class="form-label">Horário de Início</label>
+                            <input type="time" name="saque_horario_inicio" class="form-input" 
+                                   value="<?= $configSaque['horario_inicio'] ?? '09:00' ?>" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Horário de Fim</label>
+                            <input type="time" name="saque_horario_fim" class="form-input" 
+                                   value="<?= $configSaque['horario_fim'] ?? '18:00' ?>" required>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Botão de Salvar -->
-                <div style="text-align: center; margin-top: 2rem;">
-                    <button type="submit" class="btn btn-primary">
+                    
+                    <h3 style="margin: 2rem 0 1rem 0; font-size: 1.125rem;">Dias Permitidos</h3>
+                    <div class="form-grid">
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="saque_segunda" <?= ($configSaque['segunda_feira'] ?? 1) ? 'checked' : '' ?>>
+                            <label>Segunda-feira</label>
+                        </div>
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="saque_terca" <?= ($configSaque['terca_feira'] ?? 1) ? 'checked' : '' ?>>
+                            <label>Terça-feira</label>
+                        </div>
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="saque_quarta" <?= ($configSaque['quarta_feira'] ?? 1) ? 'checked' : '' ?>>
+                            <label>Quarta-feira</label>
+                        </div>
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="saque_quinta" <?= ($configSaque['quinta_feira'] ?? 1) ? 'checked' : '' ?>>
+                            <label>Quinta-feira</label>
+                        </div>
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="saque_sexta" <?= ($configSaque['sexta_feira'] ?? 1) ? 'checked' : '' ?>>
+                            <label>Sexta-feira</label>
+                        </div>
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="saque_sabado" <?= ($configSaque['sabado'] ?? 0) ? 'checked' : '' ?>>
+                            <label>Sábado</label>
+                        </div>
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="saque_domingo" <?= ($configSaque['domingo'] ?? 0) ? 'checked' : '' ?>>
+                            <label>Domingo</label>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="saque_requer_investimento" <?= ($configSaque['requer_investimento_ativo'] ?? 1) ? 'checked' : '' ?>>
+                            <label>Exigir investimento ativo para saque</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="margin-top: 2rem;">
                         <i class="fas fa-save"></i>
-                        Salvar Configurações
+                        Salvar Configurações de Saque
                     </button>
+                </div>
+
+                <!-- Configurações de Comissões -->
+                <div id="comissoes" class="config-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-percentage"></i>
+                        Configurações de Comissões
+                    </h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Comissão Nível 1 (%)</label>
+                            <input type="number" name="comissao_nivel_1" class="form-input" 
+                                   value="<?= $configComissoes[1] ?? 10 ?>" 
+                                   step="0.01" min="0" max="100" required>
+                            <small style="color: rgba(255,255,255,0.6);">Indicação direta</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Comissão Nível 2 (%)</label>
+                            <input type="number" name="comissao_nivel_2" class="form-input" 
+                                   value="<?= $configComissoes[2] ?? 6 ?>" 
+                                   step="0.01" min="0" max="100" required>
+                            <small style="color: rgba(255,255,255,0.6);">Segundo nível</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Comissão Nível 3 (%)</label>
+                            <input type="number" name="comissao_nivel_3" class="form-input" 
+                                   value="<?= $configComissoes[3] ?? 1 ?>" 
+                                   step="0.01" min="0" max="100" required>
+                            <small style="color: rgba(255,255,255,0.6);">Terceiro nível</small>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="margin-top: 2rem;">
+                        <i class="fas fa-save"></i>
+                        Salvar Configurações de Comissão
+                    </button>
+                </div>
+
+                <!-- Configurações de Cadastro -->
+                <div id="cadastro" class="config-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user-plus"></i>
+                        Configurações de Cadastro
+                    </h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Bônus de Cadastro (R$)</label>
+                            <input type="number" name="cadastro_bonus" class="form-input" 
+                                   value="<?= $configCadastro['bonus_cadastro'] ?? 6 ?>" 
+                                   step="0.01" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tamanho Mínimo da Senha</label>
+                            <input type="number" name="cadastro_min_senha" class="form-input" 
+                                   value="<?= $configCadastro['min_password_length'] ?? 6 ?>" 
+                                   min="4" max="20" required>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="cadastro_permitir" <?= ($configCadastro['allow_registration'] ?? 1) ? 'checked' : '' ?>>
+                            <label>Permitir novos cadastros</label>
+                        </div>
+                        
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="cadastro_requer_convite" <?= ($configCadastro['require_invite_code'] ?? 0) ? 'checked' : '' ?>>
+                            <label>Exigir código de convite</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="margin-top: 2rem;">
+                        <i class="fas fa-save"></i>
+                        Salvar Configurações de Cadastro
+                    </button>
+                </div>
+
+                <!-- Configurações do Site -->
+                <div id="site" class="config-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-globe"></i>
+                        Configurações do Site
+                    </h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Título do Site</label>
+                            <input type="text" name="texto_titulo" class="form-input" 
+                                   value="<?= htmlspecialchars($configTexto['titulo_site'] ?? 'FinverPro') ?>" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Link do Site</label>
+                            <input type="url" name="texto_link" class="form-input" 
+                                   value="<?= htmlspecialchars($configTexto['link_site'] ?? '') ?>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Link do Suporte</label>
+                            <input type="url" name="texto_suporte" class="form-input" 
+                                   value="<?= htmlspecialchars($configTexto['link_suporte'] ?? '') ?>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Título do Popup</label>
+                            <input type="text" name="texto_popup_titulo" class="form-input" 
+                                   value="<?= htmlspecialchars($configTexto['popup_titulo'] ?? 'Notificação') ?>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Delay do Popup (ms)</label>
+                            <input type="number" name="texto_popup_delay" class="form-input" 
+                                   value="<?= $configTexto['popup_delay'] ?? 3000 ?>" min="1000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 1.5rem;">
+                        <label class="form-label">Descrição do Site</label>
+                        <textarea name="texto_descricao" class="form-textarea"><?= htmlspecialchars($configTexto['descricao_site'] ?? '') ?></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Keywords SEO</label>
+                        <textarea name="texto_keywords" class="form-textarea"><?= htmlspecialchars($configTexto['keywords_site'] ?? '') ?></textarea>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <div class="form-checkbox">
+                            <input type="checkbox" name="texto_popup_ativo" <?= ($configTexto['popup_ativo'] ?? 1) ? 'checked' : '' ?>>
+                            <label>Popup ativo</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="margin-top: 2rem;">
+                        <i class="fas fa-save"></i>
+                        Salvar Configurações do Site
+                    </button>
+                </div>
+
+                <!-- Configurações de Cores -->
+                <div id="cores" class="config-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-palette"></i>
+                        Personalização de Cores
+                    </h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Cor Primária</label>
+                            <input type="color" name="cor_1" class="color-input" 
+                                   value="<?= $configCores['cor_1'] ?? '#121A1E' ?>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Cor Secundária</label>
+                            <input type="color" name="cor_2" class="color-input" 
+                                   value="<?= $configCores['cor_2'] ?? '#FFFFFF' ?>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Cor Terciária</label>
+                            <input type="color" name="cor_3" class="color-input" 
+                                   value="<?= $configCores['cor_3'] ?? '#152731' ?>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Cor Quaternária</label>
+                            <input type="color" name="cor_4" class="color-input" 
+                                   value="<?= $configCores['cor_4'] ?? '#335D67' ?>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Cor Quinária</label>
+                            <input type="color" name="cor_5" class="color-input" 
+                                   value="<?= $configCores['cor_5'] ?? '#152731' ?>">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="margin-top: 2rem;">
+                        <i class="fas fa-save"></i>
+                        Salvar Configurações de Cores
+                    </button>
+                </div>
+
+                <!-- Configurações de Gateways -->
+                <div id="gateways" class="config-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-credit-card"></i>
+                        Gateways de Pagamento
+                    </h2>
+                    
+                    <?php foreach ($gateways as $gateway): ?>
+                        <div class="gateway-card">
+                            <div class="gateway-header">
+                                <h3><?= htmlspecialchars($gateway['nome']) ?></h3>
+                                <span class="gateway-status <?= $gateway['ativo'] ? 'ativo' : 'inativo' ?>">
+                                    <?= $gateway['ativo'] ? 'Ativo' : 'Inativo' ?>
+                                </span>
+                            </div>
+                            <p><strong>Código:</strong> <?= htmlspecialchars($gateway['codigo']) ?></p>
+                            <p><strong>Ambiente:</strong> <?= ucfirst($gateway['ambiente']) ?></p>
+                            <?php if ($gateway['taxa_percentual'] > 0): ?>
+                                <p><strong>Taxa:</strong> <?= number_format($gateway['taxa_percentual'], 2) ?>%</p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                    
+                    <?php if (empty($gateways)): ?>
+                        <p style="text-align: center; color: rgba(255,255,255,0.6); padding: 2rem;">
+                            Nenhum gateway configurado
+                        </p>
+                    <?php endif; ?>
                 </div>
             </form>
         </main>
     </div>
+
+    <script>
+        function showTab(tabName) {
+            // Esconder todas as seções
+            document.querySelectorAll('.config-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remover classe active de todas as tabs
+            document.querySelectorAll('.config-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar seção selecionada
+            document.getElementById(tabName).classList.add('active');
+            
+            // Adicionar classe active na tab clicada
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>

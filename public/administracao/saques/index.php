@@ -45,6 +45,14 @@ if ($_POST['action'] ?? false) {
             
             // Devolver valor para saldo do usuário
             $saque = $db->fetchOne("SELECT * FROM saques WHERE id = ?", [$saqueId]);
+            
+            // Verificar se carteira existe, se não, criar
+            $carteira = $db->fetchOne("SELECT id FROM carteiras WHERE usuario_id = ?", [$saque['usuario_id']]);
+            if (!$carteira) {
+                $db->query("INSERT INTO carteiras (usuario_id) VALUES (?)", [$saque['usuario_id']]);
+            }
+            
+            // Devolver valor
             $db->query("UPDATE carteiras SET saldo_principal = saldo_principal + ? WHERE usuario_id = ?",
                       [$saque['valor_bruto'], $saque['usuario_id']]);
             
@@ -76,8 +84,10 @@ try {
             u.nome as usuario_nome,
             u.telefone as usuario_telefone,
             cp.chave_pix,
-            cp.tipo_pix,
-            cp.nome_titular
+            cp.tipo,
+            cp.nome_titular,
+            cp.banco,
+            cp.apelido
         FROM saques s
         JOIN usuarios u ON s.usuario_id = u.id
         JOIN chaves_pix cp ON s.chave_pix_id = cp.id
