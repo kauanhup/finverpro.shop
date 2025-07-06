@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinverPro - Perfil</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-sidebar: #1E293B;
+            --bg-card: #FFFFFF;
+            --bg-header: #FFFFFF;
+            
+            --primary: #0F172A;
+            --primary-light: #334155;
+            --accent: #3B82F6;
+            --success: #059669;
+            --warning: #D97706;
+            --danger: #DC2626;
+            --purple: #8B5CF6;
+            --pink: #EC4899;
+            --orange: #F97316;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --text-white: #FFFFFF;
+            
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-sidebar: #0F172A;
+            --bg-card: #1E293B;
+            --bg-header: #1E293B;
+            
+            --primary: #F8FAFC;
+            --primary-light: #E2E8F0;
+            --accent: #3B82F6;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --text-white: #FFFFFF;
+            
+            --border: #334155;
+            --border-light: #475569;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Fixed Header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hamburger {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            color: var(--text-white);
+            padding: 0;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 72px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding: 0 24px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-white);
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+            border-right-color: #3B82F6;
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            margin-top: 72px;
+            padding: 32px;
+            max-width: calc(100vw - 280px);
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .header-left p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Profile Grid */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            height: fit-content;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 48px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            border: 2px solid white;
+            transition: all 0.2s ease;
+        }
+
+        .avatar-upload:hover {
+            background: var(--purple);
+            transform: scale(1.1);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .profile-level {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .profile-stat {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+        }
+
+        .profile-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .profile-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Settings Tabs */
+        .settings-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .settings-tabs {
+            display: flex;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 16px 24px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+            background: var(--bg-card);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .tab-content {
+            padding: 32px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            color: var(--text-primary);
+            background: var(--bg-card);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input:disabled {
+            background: var(--bg-primary);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--border-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #B91C1C;
+            transform: translateY(-1px);
+        }
+
+        /* Security Section */
+        .security-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .security-item:last-child {
+            border-bottom: none;
+        }
+
+        .security-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .security-info p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .security-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        .status-verified {
+            background: var(--success);
+        }
+
+        .status-pending {
+            background: var(--warning);
+        }
+
+        /* Activity Log */
+        .activity-log {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+        }
+
+        .activity-login {
+            background: var(--accent);
+        }
+
+        .activity-investment {
+            background: var(--success);
+        }
+
+        .activity-withdrawal {
+            background: var(--warning);
+        }
+
+        .activity-referral {
+            background: var(--purple);
+        }
+
+        .activity-details h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .activity-details p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .activity-time {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Hidden file input */
+        .file-input {
+            display: none;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent);
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::before {
+            transform: translateX(26px);
+        }
+
+        .notification-setting {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .notification-setting:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100vw;
+                padding: 20px;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-tabs {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .tab-content.active {
+            animation: slideIn 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fixed Header -->
+    <header class="fixed-header">
+        <div class="header-left">
+            <button class="hamburger" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-title">FinverPro</div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="nav-section">
+                <div class="nav-section-title">Básico</div>
+                <a href="../dashboard/" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Início
+                </a>
+                <a href="../equipe/" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    Equipe
+                </a>
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-user-circle"></i>
+                    Perfil
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Investimentos</div>
+                <a href="../investimentos/" class="nav-item">
+                    <i class="fas fa-coins"></i>
+                    Produtos
+                </a>
+                <a href="../investimentos/" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    Meus Investimentos
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Diversão</div>
+                <a href="../roleta/" class="nav-item">
+                    <i class="fas fa-magic"></i>
+                    Roleta da Sorte
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Estatísticas</div>
+                <a href="../relatorios/" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>👤 Meu Perfil</h1>
+                <p>Gerencie suas informações pessoais e configurações</p>
+            </div>
+        </div>
+
+        <!-- Profile Grid -->
+        <div class="profile-grid">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    JI
+                    <div class="avatar-upload" onclick="uploadAvatar()">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                
+                <h2 class="profile-name">João Investidor</h2>
+                <div class="profile-level">⭐ Investidor Gold</div>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">3 anos</div>
+                        <div class="profile-stat-label">Membro desde</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">156</div>
+                        <div class="profile-stat-label">Indicações</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-crown"></i>
+                    Upgrade para Diamond
+                </button>
+            </div>
+
+            <!-- Settings Card -->
+            <div class="settings-card">
+                <div class="settings-tabs">
+                    <button class="tab-btn active" onclick="showTab('personal')">
+                        <i class="fas fa-user"></i>
+                        Dados Pessoais
+                    </button>
+                    <button class="tab-btn" onclick="showTab('security')">
+                        <i class="fas fa-shield-alt"></i>
+                        Segurança
+                    </button>
+                    <button class="tab-btn" onclick="showTab('notifications')">
+                        <i class="fas fa-bell"></i>
+                        Notificações
+                    </button>
+                </div>
+
+                <!-- Personal Information Tab -->
+                <div class="tab-content active" id="personal">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Nome Completo</label>
+                                <input type="text" class="form-input" value="João Investidor Silva" placeholder="Digite seu nome completo">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CPF</label>
+                                <input type="text" class="form-input" value="***.***.***-**" disabled>
+                                <div class="form-info">CPF não pode ser alterado</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">E-mail</label>
+                                <input type="email" class="form-input" value="joao@email.com" placeholder="Digite seu e-mail">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telefone</label>
+                                <input type="tel" class="form-input" value="(11) 99999-9999" placeholder="Digite seu telefone">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Data de Nascimento</label>
+                                <input type="date" class="form-input" value="1990-01-15">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Estado Civil</label>
+                                <select class="form-input">
+                                    <option>Solteiro</option>
+                                    <option selected>Casado</option>
+                                    <option>Divorciado</option>
+                                    <option>Viúvo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Endereço Completo</label>
+                            <input type="text" class="form-input" value="Rua das Flores, 123 - Centro - São Paulo/SP" placeholder="Digite seu endereço">
+                        </div>
+
+                        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Security Tab -->
+                <div class="tab-content" id="security">
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Verificação por E-mail</h4>
+                            <p>Seu e-mail está verificado e protegido</p>
+                        </div>
+                        <div class="security-status">
+                            <div class="status-icon status-verified">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            Verificado
+                        </div>
+                    </div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Verificação por SMS</h4>
+                            <p>Receba códigos de segurança por SMS</p>
+                        </div>
+                        <div class="security-status">
+                            <div class="status-icon status-verified">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            Ativo
+                        </div>
+                    </div>
+
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>Autenticação em Duas Etapas</h4>
+                            <p>Adicione uma camada extra de segurança</p>
+                        </div>
+                        <div class="security-status">
+                            <div class="status-icon status-pending">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            Configurar
+                        </div>
+                    </div>
+
+                    <hr style="margin: 24px 0; border: none; border-top: 1px solid var(--border-light);">
+
+                    <h3 style="margin-bottom: 20px; font-size: 18px; color: var(--text-primary);">Alterar Senha</h3>
+                    
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label">Senha Atual</label>
+                            <input type="password" class="form-input" placeholder="Digite sua senha atual">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Nova Senha</label>
+                                <input type="password" class="form-input" placeholder="Digite sua nova senha">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirmar Nova Senha</label>
+                                <input type="password" class="form-input" placeholder="Confirme sua nova senha">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-lock"></i>
+                                Alterar Senha
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Notifications Tab -->
+                <div class="tab-content" id="notifications">
+                    <div class="notification-setting">
+                        <div>
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Notificações por E-mail</h4>
+                            <p style="font-size: 14px; color: var(--text-secondary);">Receba atualizações sobre seus investimentos</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                    </div>
+
+                    <div class="notification-setting">
+                        <div>
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Notificações por SMS</h4>
+                            <p style="font-size: 14px; color: var(--text-secondary);">Alertas importantes via mensagem de texto</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                    </div>
+
+                    <div class="notification-setting">
+                        <div>
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Alertas de Rendimento</h4>
+                            <p style="font-size: 14px; color: var(--text-secondary);">Seja notificado quando seus investimentos renderem</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                    </div>
+
+                    <div class="notification-setting">
+                        <div>
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Newsletter Semanal</h4>
+                            <p style="font-size: 14px; color: var(--text-secondary);">Resumo semanal de suas atividades</p>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleNotification(this)"></div>
+                    </div>
+
+                    <div class="notification-setting">
+                        <div>
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Alertas de Segurança</h4>
+                            <p style="font-size: 14px; color: var(--text-secondary);">Notificações sobre atividades suspeitas</p>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                    </div>
+
+                    <hr style="margin: 24px 0; border: none; border-top: 1px solid var(--border-light);">
+
+                    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                        <button type="button" class="btn btn-danger">
+                            <i class="fas fa-user-times"></i>
+                            Excluir Conta
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar Preferências
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="activity-log">
+            <h2 class="section-title">
+                <i class="fas fa-history"></i>
+                Atividades Recentes
+            </h2>
+            
+            <div class="activity-item">
+                <div class="activity-icon activity-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <div class="activity-details">
+                    <h4>Login realizado</h4>
+                    <p>Acesso via dispositivo móvel - IP: 192.168.1.1</p>
+                </div>
+                <div class="activity-time">Agora</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon activity-investment">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="activity-details">
+                    <h4>Investimento realizado</h4>
+                    <p>R$ 5.000,00 em Renda Fixa Premium</p>
+                </div>
+                <div class="activity-time">2 horas atrás</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon activity-referral">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="activity-details">
+                    <h4>Nova indicação</h4>
+                    <p>Ana Costa se cadastrou usando seu código</p>
+                </div>
+                <div class="activity-time">1 dia atrás</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon activity-withdrawal">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <div class="activity-details">
+                    <h4>Saque solicitado</h4>
+                    <p>R$ 1.500,00 via PIX - Processando</p>
+                </div>
+                <div class="activity-time">2 dias atrás</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon activity-investment">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="activity-details">
+                    <h4>Rendimento creditado</h4>
+                    <p>R$ 152,30 de rendimentos do Elite Invest</p>
+                </div>
+                <div class="activity-time">3 dias atrás</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hidden file input for avatar upload -->
+    <input type="file" class="file-input" id="avatarInput" accept="image/*" onchange="handleAvatarUpload(event)">
+
+    <script>
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active to clicked tab button
+            event.target.classList.add('active');
+        }
+
+        // Avatar upload
+        function uploadAvatar() {
+            document.getElementById('avatarInput').click();
+        }
+
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatar = document.querySelector('.profile-avatar');
+                    avatar.innerHTML = `
+                        <img src="${e.target.result}" alt="Avatar">
+                        <div class="avatar-upload" onclick="uploadAvatar()">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Toggle notifications
+        function toggleNotification(element) {
+            element.classList.toggle('active');
+        }
+
+        // Form submissions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Personal info form
+            const personalForm = document.querySelector('#personal form');
+            personalForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                showToast('Informações pessoais atualizadas com sucesso!', 'success');
+            });
+
+            // Security form
+            const securityForm = document.querySelector('#security form');
+            securityForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const currentPassword = e.target.querySelector('input[placeholder="Digite sua senha atual"]').value;
+                const newPassword = e.target.querySelector('input[placeholder="Digite sua nova senha"]').value;
+                const confirmPassword = e.target.querySelector('input[placeholder="Confirme sua nova senha"]').value;
+
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    showToast('Por favor, preencha todos os campos', 'error');
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    showToast('As senhas não coincidem', 'error');
+                    return;
+                }
+
+                if (newPassword.length < 6) {
+                    showToast('A nova senha deve ter pelo menos 6 caracteres', 'error');
+                    return;
+                }
+
+                showToast('Senha alterada com sucesso!', 'success');
+                e.target.reset();
+            });
+        });
+
+        // Toast notification system
+        function showToast(message, type = 'success', duration = 4000) {
+            // Remove existing toasts
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.style.cssText = `
+                position: fixed;
+                top: 96px;
+                right: 24px;
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-left: 4px solid var(--${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'accent'});
+                border-radius: var(--radius-lg);
+                padding: 16px 20px;
+                box-shadow: var(--shadow-lg);
+                z-index: 10000;
+                opacity: 0;
+                transform: translateX(100px);
+                transition: all 0.3s ease;
+                min-width: 300px;
+                max-width: 400px;
+            `;
+            
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}" 
+                       style="color: var(--${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'accent'});"></i>
+                    <span style="flex: 1; font-size: 14px; font-weight: 500; color: var(--text-primary);">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0; font-size: 16px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove toast
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100px)';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, duration);
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const hamburger = document.querySelector('.hamburger');
+            
+            if (window.innerWidth <= 1024 && !sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Responsive handling
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
