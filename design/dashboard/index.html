@@ -497,7 +497,7 @@
         }
 
         .balance-card {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            background: linear-gradient(135deg, #1E293B, #334155);
             color: white;
             border-radius: var(--radius-lg);
             padding: 32px;
@@ -857,9 +857,13 @@
                 display: flex;
             }
             
-            .profile-section {
+            .header {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .profile-section {
                 gap: 12px;
             }
             
@@ -872,7 +876,7 @@
             }
             
             .header-right {
-                margin-top: 12px;
+                width: 100%;
             }
         }
 
@@ -936,7 +940,7 @@
         <div class="sidebar-content">
             <div class="nav-section">
                 <div class="nav-section-title">Básico</div>
-                <a href="#" class="nav-item">
+                <a href="#" class="nav-item active">
                     <i class="fas fa-home"></i>
                     Início
                 </a>
@@ -988,7 +992,7 @@
 
             <div class="nav-section">
                 <div class="nav-section-title">Estatísticas</div>
-                <a href="#" class="nav-item active">
+                <a href="#" class="nav-item">
                     <i class="fas fa-tachometer-alt"></i>
                     Dashboard
                 </a>
@@ -1063,13 +1067,13 @@
             
             <div class="actions-card">
                 <h3 class="actions-title">Ações Rápidas</h3>
-                <a href="../investimentos/" class="action-btn">
+                <a href="../depositar/" class="action-btn">
                     <i class="fas fa-plus"></i>
-                    Investir
+                    Depositar
                 </a>
-                <a href="../roleta/" class="action-btn secondary">
-                    <i class="fas fa-magic"></i>
-                    Roleta da Sorte
+                <a href="../saque/" class="action-btn secondary">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Fazer Saque
                 </a>
             </div>
         </section>
