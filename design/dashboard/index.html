@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -1269,6 +1269,7 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('open');
+            console.log('Sidebar toggled!'); // Debug
         }
 
         // Close sidebar when clicking outside on mobile
@@ -1276,7 +1277,8 @@
             const sidebar = document.getElementById('sidebar');
             const hamburger = document.querySelector('.hamburger');
             
-            if (window.innerWidth <= 1024 && !sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+            if (window.innerWidth <= 1024 && sidebar.classList.contains('open') && 
+                !sidebar.contains(event.target) && !hamburger.contains(event.target)) {
                 sidebar.classList.remove('open');
             }
         });
