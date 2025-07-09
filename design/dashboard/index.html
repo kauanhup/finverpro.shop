@@ -210,10 +210,51 @@
             transition: all 0.3s ease;
         }
 
+        .sidebar-logo {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            flex: 1;
+        }
+
+        .logo-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .logo-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+        }
+
         .sidebar-content {
             flex: 1;
             overflow-y: auto;
-            padding: 24px 0;
+            padding: 0 0 24px 0;
         }
 
         .nav-section {
@@ -351,10 +392,100 @@
             font-size: 14px;
         }
 
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-avatar {
+            position: relative;
+        }
+
+        .profile-img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+        }
+
+        .profile-status {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 16px;
+            height: 16px;
+            background: var(--success);
+            border: 3px solid var(--bg-card);
+            border-radius: 50%;
+        }
+
+        .profile-info h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .profile-info p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge-premium {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-verified {
+            background: var(--success);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
         .header-right {
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .stat-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 500;
         }
 
         /* Balance section */
@@ -725,6 +856,24 @@
             .hamburger {
                 display: flex;
             }
+            
+            .profile-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .profile-info h1 {
+                font-size: 20px;
+            }
+            
+            .header-stats {
+                gap: 16px;
+            }
+            
+            .header-right {
+                margin-top: 12px;
+            }
         }
 
         /* Animations */
@@ -771,16 +920,33 @@
 
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
+        <!-- Logo Section -->
+        <div class="sidebar-logo">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="logo-text">
+                    <div class="logo-title">FinverPro</div>
+                    <div class="logo-subtitle">Investment Platform</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="sidebar-content">
             <div class="nav-section">
                 <div class="nav-section-title">Básico</div>
-                <a href="#" class="nav-item active">
+                <a href="#" class="nav-item">
                     <i class="fas fa-home"></i>
                     Início
                 </a>
                 <a href="../equipe/" class="nav-item">
                     <i class="fas fa-users"></i>
                     Equipe
+                </a>
+                <a href="../salarios/" class="nav-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    Salários
                 </a>
                 <a href="../perfil/" class="nav-item">
                     <i class="fas fa-user-circle"></i>
@@ -801,15 +967,31 @@
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Diversão</div>
+                <div class="nav-section-title">Bônus</div>
                 <a href="../roleta/" class="nav-item">
                     <i class="fas fa-magic"></i>
                     Roleta da Sorte
+                </a>
+                <a href="../checklist/" class="nav-item">
+                    <i class="fas fa-check-square"></i>
+                    Checklist
+                </a>
+                <a href="../tarefas/" class="nav-item">
+                    <i class="fas fa-tasks"></i>
+                    Tarefas
+                </a>
+                <a href="../codigo-bonus/" class="nav-item">
+                    <i class="fas fa-gift"></i>
+                    Código Bônus
                 </a>
             </div>
 
             <div class="nav-section">
                 <div class="nav-section-title">Estatísticas</div>
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
                 <a href="../relatorios/" class="nav-item">
                     <i class="fas fa-chart-bar"></i>
                     Relatórios
@@ -842,8 +1024,32 @@
         <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <h1>Dashboard</h1>
-                <p>Bem-vindo de volta, Investidor</p>
+                <div class="profile-section">
+                    <div class="profile-avatar">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGM0Y0RjYiLz4KPGNpcmNsZSBjeD0iMzIiIGN5PSIyNCIgcj0iMTAiIGZpbGw9IiM2MzdBOUIiLz4KPHBhdGggZD0iTTEwIDU2QzEwIDQ0IDIwIDM2IDMyIDM2UzU0IDQ0IDU0IDU2SDEwWiIgZmlsbD0iIzYzN0E5QiIvPgo8L3N2Zz4=" alt="Profile" class="profile-img">
+                        <div class="profile-status"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h1>Bem-vindo de volta!</h1>
+                        <p>João Silva - ID: #12345</p>
+                        <div class="profile-badges">
+                            <span class="badge-premium">Premium</span>
+                            <span class="badge-verified">Verificado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">127</span>
+                        <span class="stat-text">Dias Ativo</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">15.2%</span>
+                        <span class="stat-text">Rentabilidade</span>
+                    </div>
+                </div>
             </div>
         </div>
 
