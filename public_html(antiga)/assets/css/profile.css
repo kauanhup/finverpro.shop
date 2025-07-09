@@ -1,0 +1,204 @@
+:root {
+    --background-color: #121A1E; /* Cor de fundo */
+    --text-color: white; /* Cor do texto */
+    --primary-color: #152731; /* Cor primária */
+    --secondary-color: #335D67; /* Cor secundária */
+    --dark-background: #152731; /* Cor de fundo escuro */
+    --font-family: Arial, sans-serif; /* Fonte padrão */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+
+.custom-swal-popup {
+    border-radius: 10px;
+    /* Bordas arredondadas */
+    background: #152731;
+    /* Um gradiente leve para o fundo */
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* Sombras suaves */
+}
+
+.custom-confirm-button {
+    background-color: var(--secondary-color) !important;
+    /* Cor personalizada */
+    border-radius: 5px !important;
+    border-color: #fff;
+    /* Bordas arredondadas no botão */
+    color: #fff !important;
+    /* Texto branco */
+}
+
+.custom-confirm-button:focus,
+.custom-confirm-button:active {
+    outline: none !important;
+    /* Remove borda de foco */
+    box-shadow: none !important;
+    /* Remove efeito de clique */
+    border-color: #ff69b4 !important;
+    /* Mantém a borda rosa */
+}
+
+.custom-confirm-button:hover {
+    background-color: var(--secondary-color) !important;
+    /* Cor de fundo rosa ao hover */
+    color: #fff !important;
+    border-color: var(--secondary-color) !important;
+    /* Borda azul no hover */
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 6px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.logo-img {
+    max-width: 190px; /* Tamanho máximo da logo */
+    height: auto; /* Mantém a proporção da imagem */
+    padding-bottom: 15px;
+    padding-top: 12px;
+}
+
+.image-banner {
+    position: relative;
+}
+
+.image-banner img {
+    width: 90%;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    position: absolute;
+    top: 80px; /* Ajuste a posição do avatar */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.avatar-img {
+    width: 100px;
+    height: 100px;
+    margin-top: 130px;
+    border-radius: 50%; /* Para fazer o avatar ser circular */
+    border: 3px solid var(--secondary-color);
+    object-fit: cover; /* Cobre o espaço disponível, mantendo a proporção */
+}
+
+.stats-cards {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os itens se movam para a próxima linha */
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 10px; /* Espaçamento entre os cards */
+}
+
+.stats-card {
+    background-color: var(--dark-background);
+    flex: 1 0 48%; /* Flexível para ocupar duas colunas */
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stats-card i {
+    font-size: 24px; /* Tamanho do ícone */
+    margin-bottom: 5px; /* Espaço entre ícone e texto */
+}
+
+.stats-card p {
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.stats-card span {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.actions .action-btn:last-child {
+    margin-bottom: 90px; /* Espaço extra abaixo do último botão */
+}
+
+.actions {
+    display: flex;
+    flex-direction: column; /* Coloca os botões em uma coluna */
+    margin-bottom: 20px;
+}
+
+.action-btn {
+    background-color: var(--dark-background); /* Fundo para cada botão */
+    border: none;
+    color: var(--text-color);
+    padding: 10px;
+    display: flex;
+    text-decoration: none;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: flex-start; /* Alinha texto à esquerda */
+    cursor: pointer;
+    margin-bottom: 5px; /* Espaço entre os botões */
+    border-radius: 10px; /* Bordas arredondadas para os botões */
+}
+
+.action-btn i {
+    font-size: 14px; /* Tamanho do ícone */
+    margin-right: 10px; /* Espaço entre ícone e texto */
+}
+
+.action-btn:last-child {
+    margin-bottom: 25px; /* Adiciona espaço de 25px abaixo do último botão */
+}
+
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--primary-color);
+    padding: 10px;
+    width: 100%;  /* Garante que a nav ocupe a largura total */
+    position: fixed; /* Fixa a nav na parte inferior */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0; /* Remove borda arredondada para largura total */
+}
+
+.bottom-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1; /* Garante que cada link ocupe espaço igual */
+}
+
+.bottom-nav a i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}

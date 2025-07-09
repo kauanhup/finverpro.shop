@@ -1,0 +1,191 @@
+:root {
+    --background-color: #121A1E;
+    --text-color: white;
+    --primary-color: #152731;
+    --secondary-color: #335D67;
+    --primary-color: #335D67;
+    --font-family: Arial, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.fixed-image {
+    width: 380px; /* Largura fixa da imagem */
+    height: 200px; /* Altura fixa da imagem */
+    object-fit: cover; /* Mantém a proporção da imagem sem distorcer */
+    margin-top: 30px; /* Espaço acima da imagem */
+    margin-bottom: 40px;
+    border-radius: 10px; /* Bordas arredondadas */
+}
+
+.logo-img {
+    max-width: 190px; /* Tamanho máximo da logo */
+    height: auto; /* Mantém a proporção da imagem */
+    padding-bottom: 15px;
+    padding-top: 12px;
+}
+
+#custom-value {
+    border: none;
+    outline: none; /* Remove a borda ao focar */
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#custom-value::placeholder {
+    color: #bbb; /* Cor do texto do placeholder */
+}
+
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.value-selection {
+    margin-bottom: 20px;
+}
+
+.value-selection label {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.value-selection input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+.value-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.value-box {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.value-box:hover {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+h2 {
+    font-size: 15px;          /* Tamanho da fonte */
+    color: var(--text-color);  /* Cor do texto */
+    margin-bottom: 15px;       /* Espaço abaixo do título */
+    text-align: center;        /* Centralizar o texto */
+    font-weight: bold;         /* Negrito para destaque */
+}
+
+
+
+.pix-options {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espaço entre os cartões */
+    margin-top: 15px; /* Espaço entre o título e as opções */
+}
+
+.pix-card {
+    flex: 1;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.pix-card:hover {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+
+.invest-btn {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.invest-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--font-family);
+}
+
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--primary-color);
+    padding: 10px;
+    width: 100%;  /* Garante que a nav ocupe a largura total */
+    position: fixed; /* Fixa a nav na parte inferior */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0; /* Remove borda arredondada para largura total */
+}
+
+.bottom-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1; /* Garante que cada link ocupe espaço igual */
+}
+
+.bottom-nav a i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}

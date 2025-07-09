@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinverPro - Relatórios</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-sidebar: #1E293B;
+            --bg-card: #FFFFFF;
+            --bg-header: #FFFFFF;
+            
+            --primary: #0F172A;
+            --primary-light: #334155;
+            --accent: #3B82F6;
+            --success: #059669;
+            --warning: #D97706;
+            --danger: #DC2626;
+            --purple: #8B5CF6;
+            --pink: #EC4899;
+            --orange: #F97316;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --text-white: #FFFFFF;
+            
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-sidebar: #0F172A;
+            --bg-card: #1E293B;
+            --bg-header: #1E293B;
+            
+            --primary: #F8FAFC;
+            --primary-light: #E2E8F0;
+            --accent: #3B82F6;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --text-white: #FFFFFF;
+            
+            --border: #334155;
+            --border-light: #475569;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Fixed Header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hamburger {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            color: var(--text-white);
+            padding: 0;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 72px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding: 0 24px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-white);
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+            border-right-color: #3B82F6;
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            margin-top: 72px;
+            padding: 32px;
+            max-width: calc(100vw - 280px);
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .header-left p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Period Selector */
+        .period-selector {
+            display: flex;
+            gap: 8px;
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 4px;
+        }
+
+        .period-btn {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .period-btn.active {
+            background: var(--bg-card);
+            color: var(--accent);
+            box-shadow: var(--shadow);
+        }
+
+        .period-btn:hover {
+            color: var(--text-primary);
+        }
+
+        /* Overview Grid */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .overview-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .overview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+        }
+
+        .overview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .overview-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .overview-change {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        .change-positive {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success);
+        }
+
+        .change-negative {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--danger);
+        }
+
+        .overview-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .overview-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Chart Grid */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chart-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Table Styles */
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 24px 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .table-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .table-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 16px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .data-table th {
+            background: var(--bg-primary);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .data-table td {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg-primary);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success);
+        }
+
+        .status-completed {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+        }
+
+        .status-pending {
+            background: rgba(217, 119, 6, 0.1);
+            color: var(--warning);
+        }
+
+        /* Investment Performance */
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .performance-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .performance-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .performance-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .performance-return {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .return-positive {
+            color: var(--success);
+        }
+
+        .return-negative {
+            color: var(--danger);
+        }
+
+        .performance-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .performance-detail {
+            text-align: center;
+        }
+
+        .performance-detail-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .performance-detail-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Export Button */
+        .export-btn {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100vw;
+                padding: 20px;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .overview-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .period-selector {
+                flex-wrap: wrap;
+            }
+
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 12px 16px;
+            }
+        }
+
+        /* Legend */
+        .chart-legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fixed Header -->
+    <header class="fixed-header">
+        <div class="header-left">
+            <button class="hamburger" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-title">FinverPro</div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="nav-section">
+                <div class="nav-section-title">Básico</div>
+                <a href="../dashboard/" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Início
+                </a>
+                <a href="../equipe/" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    Equipe
+                </a>
+                <a href="../perfil/" class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    Perfil
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Investimentos</div>
+                <a href="../investimentos/" class="nav-item">
+                    <i class="fas fa-coins"></i>
+                    Produtos
+                </a>
+                <a href="../investimentos/" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    Meus Investimentos
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Diversão</div>
+                <a href="../roleta/" class="nav-item">
+                    <i class="fas fa-magic"></i>
+                    Roleta da Sorte
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Estatísticas</div>
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>📊 Relatórios</h1>
+                <p>Análise completa dos seus investimentos e indicações</p>
+            </div>
+            
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <div class="period-selector">
+                    <button class="period-btn" onclick="changePeriod('7d')">7 dias</button>
+                    <button class="period-btn active" onclick="changePeriod('30d')">30 dias</button>
+                    <button class="period-btn" onclick="changePeriod('90d')">90 dias</button>
+                    <button class="period-btn" onclick="changePeriod('1y')">1 ano</button>
+                </div>
+                
+                <button class="export-btn" onclick="exportReport()">
+                    <i class="fas fa-download"></i>
+                    Exportar
+                </button>
+            </div>
+        </div>
+
+        <!-- Overview Grid -->
+        <div class="overview-grid">
+            <div class="overview-card">
+                <div class="overview-header">
+                    <div class="overview-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="overview-change change-positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +12.5%
+                    </div>
+                </div>
+                <div class="overview-value">R$ 52.847,32</div>
+                <div class="overview-label">Patrimônio Total</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-header">
+                    <div class="overview-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="overview-change change-positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +8.3%
+                    </div>
+                </div>
+                <div class="overview-value">R$ 4.285,67</div>
+                <div class="overview-label">Rendimento Mensal</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-header">
+                    <div class="overview-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="overview-change change-positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +24
+                    </div>
+                </div>
+                <div class="overview-value">156</div>
+                <div class="overview-label">Indicações Ativas</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-header">
+                    <div class="overview-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="overview-change change-positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +2.1%
+                    </div>
+                </div>
+                <div class="overview-value">18.7%</div>
+                <div class="overview-label">ROI Médio</div>
+            </div>
+        </div>
+
+        <!-- Chart Grid -->
+        <div class="chart-grid">
+            <!-- Performance Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Evolução do Patrimônio</h3>
+                    <div class="chart-info">
+                        <i class="fas fa-info-circle"></i>
+                        Últimos 12 meses
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3B82F6;"></div>
+                        Patrimônio Total
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #059669;"></div>
+                        Rendimentos
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Distribution -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Distribuição da Carteira</h3>
+                    <div class="chart-info">
+                        <i class="fas fa-pie-chart"></i>
+                        Por produto
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="portfolioChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3B82F6;"></div>
+                        Renda Fixa Premium
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #8B5CF6;"></div>
+                        Multi Plus
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #F97316;"></div>
+                        Elite Invest
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Section -->
+        <section>
+            <h2 class="section-title">
+                <i class="fas fa-trophy"></i>
+                Performance dos Investimentos
+            </h2>
+            
+            <div class="performance-grid">
+                <div class="performance-card">
+                    <div class="performance-header">
+                        <h3 class="performance-title">Renda Fixa Premium</h3>
+                        <div class="performance-return return-positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +15.2%
+                        </div>
+                    </div>
+                    <div class="performance-details">
+                        <div class="performance-detail">
+                            <div class="performance-detail-value">R$ 18.547</div>
+                            <div class="performance-detail-label">Investido</div>
+                        </div>
+                        <div class="performance-detail">
+                            <div class="performance-detail-value">R$ 2.819</div>
+                            <div class="performance-detail-label">Rendimento</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="performance-card">
+                    <div class="performance-header">
+                        <h3 class="performance-title">Multi Plus</h3>
+                        <div class="performance-return return-positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +18.7%
+                        </div>
+                    </div>
+                    <div class="performance-details">
+                        <div class="performance-detail">
+                            <div class="performance-detail-value">R$ 22.500</div>
+                            <div class="performance-detail-label">Investido</div>
+                        </div>
+                        <div class="performance-detail">
+                            <div class="performance-detail-value">R$ 4.207</div>
+                            <div class="performance-detail-label">Rendimento</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="performance-card">
+                    <div class="performance-header">
+                        <h3 class="performance-title">Elite Invest</h3>
+                        <div class="performance-return return-positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +22.1%
+                        </div>
+                    </div>
+                    <div class="performance-details">
+                        <div class="performance-detail">
+                            <div class="performance-detail-value">R$ 15.000</div>
+                            <div class="performance-detail-label">Investido</div>
+                        </div>
+                        <div class="performance-detail">
+                            <div class="performance-detail-value">R$ 3.315</div>
+                            <div class="performance-detail-label">Rendimento</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Transactions -->
+        <section style="margin-top: 32px;">
+            <div class="table-card">
+                <div class="table-header">
+                    <h2 class="table-title">
+                        <i class="fas fa-history"></i>
+                        Transações Recentes
+                    </h2>
+                    <div class="table-actions">
+                        <button class="table-btn">
+                            <i class="fas fa-filter"></i>
+                            Filtrar
+                        </button>
+                        <button class="table-btn">
+                            <i class="fas fa-download"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th>Produto</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>30/01/2024</td>
+                            <td>Investimento</td>
+                            <td>Renda Fixa Premium</td>
+                            <td>R$ 5.000,00</td>
+                            <td><span class="status-badge status-active">Ativo</span></td>
+                            <td>
+                                <button class="table-btn" style="font-size: 12px; padding: 4px 8px;">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>28/01/2024</td>
+                            <td>Rendimento</td>
+                            <td>Multi Plus</td>
+                            <td>R$ 312,50</td>
+                            <td><span class="status-badge status-completed">Creditado</span></td>
+                            <td>
+                                <button class="table-btn" style="font-size: 12px; padding: 4px 8px;">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>25/01/2024</td>
+                            <td>Saque</td>
+                            <td>-</td>
+                            <td>R$ 2.000,00</td>
+                            <td><span class="status-badge status-pending">Processando</span></td>
+                            <td>
+                                <button class="table-btn" style="font-size: 12px; padding: 4px 8px;">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>22/01/2024</td>
+                            <td>Comissão</td>
+                            <td>Indicação</td>
+                            <td>R$ 150,00</td>
+                            <td><span class="status-badge status-completed">Creditado</span></td>
+                            <td>
+                                <button class="table-btn" style="font-size: 12px; padding: 4px 8px;">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20/01/2024</td>
+                            <td>Investimento</td>
+                            <td>Elite Invest</td>
+                            <td>R$ 10.000,00</td>
+                            <td><span class="status-badge status-active">Ativo</span></td>
+                            <td>
+                                <button class="table-btn" style="font-size: 12px; padding: 4px 8px;">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Change period
+        function changePeriod(period) {
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update charts with new data
+            updateCharts(period);
+        }
+
+        // Export report
+        function exportReport() {
+            // Simulate report generation
+            const btn = event.target;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner spinner"></i> Gerando...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                
+                // Create and download a fake PDF
+                const link = document.createElement('a');
+                link.href = 'data:text/plain;charset=utf-8,Relatório FinverPro - Gerado em ' + new Date().toLocaleDateString();
+                link.download = 'relatorio-finverpro-' + new Date().toISOString().split('T')[0] + '.txt';
+                link.click();
+            }, 2000);
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{
+                        label: 'Patrimônio Total',
+                        data: [25000, 28500, 32000, 35500, 38000, 41500, 43000, 46500, 48500, 50200, 51800, 52847],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Rendimentos',
+                        data: [0, 500, 1200, 2100, 2800, 3600, 4200, 5100, 5900, 6800, 7500, 8400],
+                        borderColor: '#059669',
+                        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Portfolio Chart
+            const portfolioCtx = document.getElementById('portfolioChart').getContext('2d');
+            new Chart(portfolioCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Renda Fixa Premium', 'Multi Plus', 'Elite Invest'],
+                    datasets: [{
+                        data: [35, 42, 23],
+                        backgroundColor: ['#3B82F6', '#8B5CF6', '#F97316'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update charts with new period data
+        function updateCharts(period) {
+            // This would normally fetch new data from API
+            console.log('Updating charts for period:', period);
+        }
+
+        // Animate numbers on page load
+        function animateNumbers() {
+            const numberElements = document.querySelectorAll('.overview-value, .performance-detail-value');
+            numberElements.forEach(element => {
+                const finalValue = element.textContent;
+                element.textContent = '0';
+                
+                // Extract number from text
+                const numericValue = parseFloat(finalValue.replace(/[^\d,.-]/g, '').replace(',', '.'));
+                if (isNaN(numericValue)) return;
+                
+                let currentValue = 0;
+                const increment = numericValue / 50;
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= numericValue) {
+                        element.textContent = finalValue;
+                        clearInterval(timer);
+                    } else {
+                        if (finalValue.includes('R$')) {
+                            element.textContent = 'R$ ' + Math.floor(currentValue).toLocaleString('pt-BR');
+                        } else if (finalValue.includes('%')) {
+                            element.textContent = currentValue.toFixed(1) + '%';
+                        } else {
+                            element.textContent = Math.floor(currentValue);
+                        }
+                    }
+                }, 20);
+            });
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const hamburger = document.querySelector('.hamburger');
+            
+            if (window.innerWidth <= 1024 && !sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Responsive handling
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Initialize page
+        window.addEventListener('load', function() {
+            initializeCharts();
+            setTimeout(animateNumbers, 500);
+        });
+    </script>
+</body>
+</html>

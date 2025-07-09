@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinverPro - Investimentos</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-sidebar: #1E293B;
+            --bg-card: #FFFFFF;
+            --bg-header: #FFFFFF;
+            
+            --primary: #0F172A;
+            --primary-light: #334155;
+            --accent: #3B82F6;
+            --success: #059669;
+            --warning: #D97706;
+            --danger: #DC2626;
+            --purple: #8B5CF6;
+            --pink: #EC4899;
+            --orange: #F97316;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --text-white: #FFFFFF;
+            
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-sidebar: #0F172A;
+            --bg-card: #1E293B;
+            --bg-header: #1E293B;
+            
+            --primary: #F8FAFC;
+            --primary-light: #E2E8F0;
+            --accent: #3B82F6;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --text-white: #FFFFFF;
+            
+            --border: #334155;
+            --border-light: #475569;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Fixed Header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hamburger {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            color: var(--text-white);
+            padding: 0;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 72px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding: 0 24px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-white);
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+            border-right-color: #3B82F6;
+        }
+
+        .nav-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            margin-top: 72px;
+            padding: 32px;
+            max-width: calc(100vw - 280px);
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .header-left p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .balance-main {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .balance-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .balance-item {
+            text-align: center;
+        }
+
+        .balance-item-value {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .balance-item-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 20px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .product-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .product-badge {
+            background: var(--success);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .product-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .product-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .product-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .product-stat {
+            text-align: center;
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+        }
+
+        .product-stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .product-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .product-progress {
+            margin-bottom: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .invest-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .invest-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* My Investments */
+        .my-investments {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .investment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .investment-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .investment-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .investment-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .investment-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .investment-details h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .investment-details p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .investment-right {
+            text-align: right;
+        }
+
+        .investment-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .investment-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success);
+        }
+
+        .status-completed {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            color: var(--text-primary);
+            background: var(--bg-card);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100vw;
+                padding: 20px;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .investment-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .investment-right {
+                text-align: left;
+                width: 100%;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px) scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fixed Header -->
+    <header class="fixed-header">
+        <div class="header-left">
+            <button class="hamburger" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-title">FinverPro</div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="nav-section">
+                <div class="nav-section-title">Básico</div>
+                <a href="../dashboard/" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Início
+                </a>
+                <a href="../equipe/" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    Equipe
+                </a>
+                <a href="../perfil/" class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    Perfil
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Investimentos</div>
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-coins"></i>
+                    Produtos
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    Meus Investimentos
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Diversão</div>
+                <a href="../roleta/" class="nav-item">
+                    <i class="fas fa-magic"></i>
+                    Roleta da Sorte
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Estatísticas</div>
+                <a href="../relatorios/" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Relatórios
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>💰 Investimentos</h1>
+                <p>Faça seu dinheiro trabalhar para você</p>
+            </div>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-main">Saldo Disponível</div>
+            <div class="balance-amount">R$ 12.547,89</div>
+            <div class="balance-details">
+                <div class="balance-item">
+                    <div class="balance-item-value">R$ 10.547,89</div>
+                    <div class="balance-item-label">Saldo Principal</div>
+                </div>
+                <div class="balance-item">
+                    <div class="balance-item-value">R$ 2.000,00</div>
+                    <div class="balance-item-label">Saldo Bônus</div>
+                </div>
+                <div class="balance-item">
+                    <div class="balance-item-value">R$ 45.280,00</div>
+                    <div class="balance-item-label">Total Investido</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-value">8</div>
+                <div class="stat-label">Investimentos Ativos</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="stat-value">R$ 3.842</div>
+                <div class="stat-label">Rendimento Mensal</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-value">15.2%</div>
+                <div class="stat-label">Rentabilidade</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <div class="stat-value">127</div>
+                <div class="stat-label">Dias Médios</div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <section>
+            <h2 class="section-title">
+                <i class="fas fa-gem"></i>
+                Produtos de Investimento
+            </h2>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="product-badge">15.2% a.a.</div>
+                    </div>
+                    
+                    <h3 class="product-title">Renda Fixa Premium</h3>
+                    <p class="product-description">
+                        Investimento conservador com retorno garantido. Ideal para quem busca segurança e previsibilidade nos ganhos.
+                    </p>
+                    
+                    <div class="product-stats">
+                        <div class="product-stat">
+                            <div class="product-stat-value">R$ 1.000</div>
+                            <div class="product-stat-label">Mínimo</div>
+                        </div>
+                        <div class="product-stat">
+                            <div class="product-stat-value">180 dias</div>
+                            <div class="product-stat-label">Duração</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-progress">
+                        <div class="progress-label">
+                            <span>Vendidos</span>
+                            <span>247/500</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 49.4%"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="invest-btn" onclick="openInvestModal('Renda Fixa Premium', 1000, 50000)">
+                        <i class="fas fa-plus-circle"></i>
+                        Investir Agora
+                    </button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-icon">
+                            <i class="fas fa-trending-up"></i>
+                        </div>
+                        <div class="product-badge">18.7% a.a.</div>
+                    </div>
+                    
+                    <h3 class="product-title">Multi Plus</h3>
+                    <p class="product-description">
+                        Carteira diversificada com foco em crescimento. Combina segurança com potencial de alto retorno.
+                    </p>
+                    
+                    <div class="product-stats">
+                        <div class="product-stat">
+                            <div class="product-stat-value">R$ 5.000</div>
+                            <div class="product-stat-label">Mínimo</div>
+                        </div>
+                        <div class="product-stat">
+                            <div class="product-stat-value">365 dias</div>
+                            <div class="product-stat-label">Duração</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-progress">
+                        <div class="progress-label">
+                            <span>Vendidos</span>
+                            <span>89/200</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 44.5%"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="invest-btn" onclick="openInvestModal('Multi Plus', 5000, 100000)">
+                        <i class="fas fa-plus-circle"></i>
+                        Investir Agora
+                    </button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="product-badge">22.1% a.a.</div>
+                    </div>
+                    
+                    <h3 class="product-title">Elite Invest</h3>
+                    <p class="product-description">
+                        Para investidores experientes. Alto potencial de retorno com estratégias avançadas de mercado.
+                    </p>
+                    
+                    <div class="product-stats">
+                        <div class="product-stat">
+                            <div class="product-stat-value">R$ 10.000</div>
+                            <div class="product-stat-label">Mínimo</div>
+                        </div>
+                        <div class="product-stat">
+                            <div class="product-stat-value">540 dias</div>
+                            <div class="product-stat-label">Duração</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-progress">
+                        <div class="progress-label">
+                            <span>Vendidos</span>
+                            <span>23/100</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 23%"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="invest-btn" onclick="openInvestModal('Elite Invest', 10000, 500000)">
+                        <i class="fas fa-plus-circle"></i>
+                        Investir Agora
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Investments Section -->
+        <section>
+            <h2 class="section-title">
+                <i class="fas fa-wallet"></i>
+                Meus Investimentos
+            </h2>
+            
+            <div class="my-investments">
+                <div class="investment-item">
+                    <div class="investment-left">
+                        <div class="investment-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="investment-details">
+                            <h4>Renda Fixa Premium</h4>
+                            <p>Investido em 15/01/2024 • 45 dias restantes</p>
+                        </div>
+                    </div>
+                    <div class="investment-right">
+                        <div class="investment-value">R$ 5.152,00</div>
+                        <span class="investment-status status-active">Ativo</span>
+                    </div>
+                </div>
+
+                <div class="investment-item">
+                    <div class="investment-left">
+                        <div class="investment-icon">
+                            <i class="fas fa-trending-up"></i>
+                        </div>
+                        <div class="investment-details">
+                            <h4>Multi Plus</h4>
+                            <p>Investido em 10/12/2023 • 182 dias restantes</p>
+                        </div>
+                    </div>
+                    <div class="investment-right">
+                        <div class="investment-value">R$ 12.935,00</div>
+                        <span class="investment-status status-active">Ativo</span>
+                    </div>
+                </div>
+
+                <div class="investment-item">
+                    <div class="investment-left">
+                        <div class="investment-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="investment-details">
+                            <h4>Elite Invest</h4>
+                            <p>Investido em 01/11/2023 • 298 dias restantes</p>
+                        </div>
+                    </div>
+                    <div class="investment-right">
+                        <div class="investment-value">R$ 22.210,00</div>
+                        <span class="investment-status status-active">Ativo</span>
+                    </div>
+                </div>
+
+                <div class="investment-item">
+                    <div class="investment-left">
+                        <div class="investment-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="investment-details">
+                            <h4>Renda Fixa Premium</h4>
+                            <p>Finalizado em 08/01/2024 • Rendimento: +15.2%</p>
+                        </div>
+                    </div>
+                    <div class="investment-right">
+                        <div class="investment-value">R$ 2.304,00</div>
+                        <span class="investment-status status-completed">Concluído</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Investment Modal -->
+    <div class="modal" id="investModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Realizar Investimento</h3>
+                <button class="close-btn" onclick="closeInvestModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="investForm">
+                <div class="form-group">
+                    <label class="form-label">Produto</label>
+                    <input type="text" class="form-input" id="productName" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Valor do Investimento</label>
+                    <input type="number" class="form-input" id="investAmount" 
+                           placeholder="Digite o valor..." step="0.01" min="0">
+                    <div class="form-info">
+                        Valor mínimo: R$ <span id="minAmount">0</span> | 
+                        Saldo disponível: R$ 12.547,89
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Resumo do Investimento</label>
+                    <div style="background: var(--bg-primary); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Valor investido:</span>
+                            <span id="summaryAmount">R$ 0,00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Rendimento estimado:</span>
+                            <span id="summaryReturn">R$ 0,00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                            <span>Total estimado:</span>
+                            <span id="summaryTotal">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeInvestModal()">
+                    Cancelar
+                </button>
+                <button class="btn btn-primary" onclick="confirmInvestment()">
+                    <i class="fas fa-check"></i>
+                    Confirmar Investimento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProduct = {};
+
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Open investment modal
+        function openInvestModal(productName, minAmount, maxAmount) {
+            currentProduct = { name: productName, min: minAmount, max: maxAmount };
+            
+            document.getElementById('modalTitle').textContent = `Investir em ${productName}`;
+            document.getElementById('productName').value = productName;
+            document.getElementById('investAmount').min = minAmount;
+            document.getElementById('investAmount').max = maxAmount;
+            document.getElementById('minAmount').textContent = minAmount.toLocaleString('pt-BR');
+            
+            // Set default amount to minimum
+            document.getElementById('investAmount').value = minAmount;
+            updateSummary();
+            
+            document.getElementById('investModal').classList.add('show');
+        }
+
+        // Close investment modal
+        function closeInvestModal() {
+            document.getElementById('investModal').classList.remove('show');
+            document.getElementById('investForm').reset();
+        }
+
+        // Update investment summary
+        function updateSummary() {
+            const amount = parseFloat(document.getElementById('investAmount').value) || 0;
+            const returnRate = getReturnRate(currentProduct.name);
+            const returnAmount = amount * (returnRate / 100);
+            const total = amount + returnAmount;
+            
+            document.getElementById('summaryAmount').textContent = `R$ ${amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('summaryReturn').textContent = `R$ ${returnAmount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('summaryTotal').textContent = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        }
+
+        // Get return rate by product name
+        function getReturnRate(productName) {
+            const rates = {
+                'Renda Fixa Premium': 15.2,
+                'Multi Plus': 18.7,
+                'Elite Invest': 22.1
+            };
+            return rates[productName] || 0;
+        }
+
+        // Confirm investment
+        function confirmInvestment() {
+            const amount = parseFloat(document.getElementById('investAmount').value);
+            
+            if (!amount || amount < currentProduct.min) {
+                alert(`Valor mínimo é R$ ${currentProduct.min.toLocaleString('pt-BR')}`);
+                return;
+            }
+            
+            if (amount > 12547.89) {
+                alert('Saldo insuficiente');
+                return;
+            }
+            
+            // Simulate API call
+            const btn = document.querySelector('.btn-primary');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                alert(`Investimento de R$ ${amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})} realizado com sucesso!`);
+                closeInvestModal();
+                btn.innerHTML = '<i class="fas fa-check"></i> Confirmar Investimento';
+                btn.disabled = false;
+                
+                // Simulate page refresh
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }, 2000);
+        }
+
+        // Event listeners
+        document.getElementById('investAmount').addEventListener('input', updateSummary);
+
+        // Close modal when clicking outside
+        document.getElementById('investModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeInvestModal();
+            }
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const hamburger = document.querySelector('.hamburger');
+            
+            if (window.innerWidth <= 1024 && !sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Responsive handling
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+:root {
+    --background-color: #121A1E;
+    --text-color: white;
+    --primary-color: #152731;
+    --secondary-color: #335D67;
+    --secondary-color-hover: #1a3e47;
+    --font-family: Arial, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.custom-swal-popup {
+    border-radius: 10px;
+    /* Bordas arredondadas */
+    background: var(--primary-color);
+    /* Um gradiente leve para o fundo */
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* Sombras suaves */
+}
+
+.custom-confirm-button {
+    background-color: var(--secondary-color) !important;
+    /* Cor personalizada */
+    border-radius: 5px !important;
+    /* Bordas arredondadas no botão */
+    color: #fff !important;
+    /* Texto branco */
+}
+
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 400px;
+    background-color: var(--primary-color);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    margin-top: -65px;
+}
+
+.image-container {
+    background-color: var(--background-color);
+    border-radius: 15px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.image-container img {
+    width: 60%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.product-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.product-description {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.details-container {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.details-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center; /* Centraliza o título */
+}
+
+.details-table {
+    width: 100%;
+    margin-bottom: 20px;
+    color: var(--text-color);
+    border-collapse: collapse; /* Remove o espaço entre bordas */
+}
+
+.details-table th, .details-table td {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.details-table th {
+    text-align: left;
+    width: 50%; /* Título alinhado à esquerda */
+}
+
+.details-table td {
+    text-align: right;
+    width: 50%; /* Valor alinhado à direita */
+}
+
+.confirm-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.confirm-btn:hover {
+    background-color: var(--secondary-color-hover);
+}
+
+.bottom-nav {
+display: flex;
+justify-content: space-around;
+background-color: var(--primary-color);
+padding: 10px;
+width: 100%;  /* Garante que a nav ocupe a largura total */
+position: fixed; /* Fixa a nav na parte inferior */
+bottom: 0;
+left: 0;
+right: 0;
+border-radius: 0; /* Remove borda arredondada para largura total */
+}
+
+.bottom-nav a {
+color: var(--text-color);
+text-decoration: none;
+font-size: 14px;
+display: flex;
+flex-direction: column;
+align-items: center;
+flex: 1; /* Garante que cada link ocupe espaço igual */
+}
+
+.bottom-nav a i {
+font-size: 20px;
+margin-bottom: 5px;
+}
+
+.mobile-only {
+display: block; /* Exibe o conteúdo por padrão */
+}
+
+/* Oculta o conteúdo em telas maiores que 768px */
+@media (min-width: 768px) {
+.mobile-only {
+display: none; /* Oculta o conteúdo em telas maiores */
+}
+}

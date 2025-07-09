@@ -1,0 +1,183 @@
+[2025-06-16 14:17:03] 🚀 INICIANDO SAQUE ID: 3
+[2025-06-16 14:17:03] ✅ Conexão com banco estabelecida
+[2025-06-16 14:17:03] 🔍 Buscando gateway ativo...
+[2025-06-16 14:17:03] ✅ Gateway encontrado: PixUP
+[2025-06-16 14:17:03]    - Client ID: Fernanda20...
+[2025-06-16 14:17:03]    - Client Secret: 51747b29e3...
+[2025-06-16 14:17:03]    - Status: true
+[2025-06-16 14:17:03] 🔍 Buscando dados do saque ID: 3
+[2025-06-16 14:17:03] ✅ Saque encontrado:
+[2025-06-16 14:17:03]    - Valor: R$ 92.00
+[2025-06-16 14:17:03]    - Nome: Kauan domingos hup
+[2025-06-16 14:17:03]    - Chave PIX: 704.944.371-97
+[2025-06-16 14:17:03]    - Tipo PIX: cpf
+[2025-06-16 14:17:03]    - Status atual: Pendente
+[2025-06-16 14:17:03] 🔧 Processando gateway: PIXUP
+[2025-06-16 14:17:03] 📡 Chamando processarSaquePixUp...
+[2025-06-16 14:17:03] 🔵 PIXUP - Iniciando processamento
+[2025-06-16 14:17:03] ✅ PIXUP - Credenciais encontradas
+[2025-06-16 14:17:03] 🔐 PIXUP - Iniciando autenticação...
+[2025-06-16 14:17:03] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/oauth/token
+[2025-06-16 14:17:03] 📥 cURL - HTTP Code: 200
+[2025-06-16 14:17:03] 📥 PIXUP - Resposta auth: {"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIyMmUyOTRjOWJiYjUzMjdkZDFjZGU1YjRjNWM2YzUwMCIsInN1YiI6ImM1NDQxZDA5NDdlMWIxNWMxOTJiNzEzNTdjZGQzYjRlIiwiaWF0IjoxNzUwMDgyODA4LCJleHAiOjE3NTAwODQ2MDh9.Yj7Rzwu6xZW1afjGM69JbFlb7s61-ijHkc4D6xepS6M","expires_in":1184}
+[2025-06-16 14:17:03] ✅ PIXUP - Token obtido: eyJ0eXAiOiJKV1QiLCJh...
+[2025-06-16 14:17:03] 📤 PIXUP - Dados do saque: {"amount":92,"description":"Saque PIX - ID 3","external_reference":"SAQUE_3","pix_key":"704.944.371-97","pix_key_type":"cpf","recipient_name":"Kauan domingos hup"}
+[2025-06-16 14:17:03] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/pix/cashout
+[2025-06-16 14:17:03] 📤 cURL - Data: {"amount":92,"description":"Saque PIX - ID 3","external_reference":"SAQUE_3","pix_key":"704.944.371-97","pix_key_type":"cpf","recipient_name":"Kauan domingos hup"}
+[2025-06-16 14:17:04] 📥 cURL - HTTP Code: 404
+[2025-06-16 14:17:04] 📥 PIXUP - Resposta saque: <html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.24.0 (Ubuntu)</center>
+</body>
+</html>
+
+[2025-06-16 14:17:04] ❌ PIXUP - Saque não aprovado. Status: N/A
+[2025-06-16 14:30:01] 🚀 INICIANDO SAQUE ID: 3
+[2025-06-16 14:30:01] ✅ Conexão com banco estabelecida
+[2025-06-16 14:30:01] 🔍 Buscando gateway ativo...
+[2025-06-16 14:30:01] ✅ Gateway encontrado: PixUP
+[2025-06-16 14:30:01]    - Client ID: Fernanda20...
+[2025-06-16 14:30:01]    - Client Secret: 51747b29e3...
+[2025-06-16 14:30:01]    - Status: true
+[2025-06-16 14:30:01] 🔍 Buscando dados do saque ID: 3
+[2025-06-16 14:30:01] ✅ Saque encontrado:
+[2025-06-16 14:30:01]    - Valor: R$ 92.00
+[2025-06-16 14:30:01]    - Nome: Kauan domingos hup
+[2025-06-16 14:30:01]    - Chave PIX: 704.944.371-97
+[2025-06-16 14:30:01]    - Tipo PIX: cpf
+[2025-06-16 14:30:01]    - Status atual: Pendente
+[2025-06-16 14:30:01] 🔧 Processando gateway: PIXUP
+[2025-06-16 14:30:01] 📡 Chamando processarSaquePixUp...
+[2025-06-16 14:30:01] 🔵 PIXUP - Iniciando processamento
+[2025-06-16 14:30:01] ✅ PIXUP - Credenciais encontradas
+[2025-06-16 14:30:01] 🔐 PIXUP - Iniciando autenticação...
+[2025-06-16 14:30:01] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/payment/token
+[2025-06-16 14:30:01] 📥 cURL - HTTP Code: 404
+[2025-06-16 14:30:01] 📥 PIXUP - Resposta auth: <html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.24.0 (Ubuntu)</center>
+</body>
+</html>
+
+[2025-06-16 14:30:01] ❌ PIXUP - Falha na autenticação
+[2025-06-16 14:30:11] 🚀 INICIANDO SAQUE ID: 3
+[2025-06-16 14:30:11] ✅ Conexão com banco estabelecida
+[2025-06-16 14:30:11] 🔍 Buscando gateway ativo...
+[2025-06-16 14:30:11] ✅ Gateway encontrado: PixUP
+[2025-06-16 14:30:11]    - Client ID: Fernanda20...
+[2025-06-16 14:30:11]    - Client Secret: 51747b29e3...
+[2025-06-16 14:30:11]    - Status: true
+[2025-06-16 14:30:11] 🔍 Buscando dados do saque ID: 3
+[2025-06-16 14:30:11] ✅ Saque encontrado:
+[2025-06-16 14:30:11]    - Valor: R$ 92.00
+[2025-06-16 14:30:11]    - Nome: Kauan domingos hup
+[2025-06-16 14:30:11]    - Chave PIX: 704.944.371-97
+[2025-06-16 14:30:11]    - Tipo PIX: cpf
+[2025-06-16 14:30:11]    - Status atual: Pendente
+[2025-06-16 14:30:11] 🔧 Processando gateway: PIXUP
+[2025-06-16 14:30:11] 📡 Chamando processarSaquePixUp...
+[2025-06-16 14:30:11] 🔵 PIXUP - Iniciando processamento
+[2025-06-16 14:30:11] ✅ PIXUP - Credenciais encontradas
+[2025-06-16 14:30:11] 🔐 PIXUP - Iniciando autenticação...
+[2025-06-16 14:30:11] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/payment/token
+[2025-06-16 14:30:12] 📥 cURL - HTTP Code: 404
+[2025-06-16 14:30:12] 📥 PIXUP - Resposta auth: <html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.24.0 (Ubuntu)</center>
+</body>
+</html>
+
+[2025-06-16 14:30:12] ❌ PIXUP - Falha na autenticação
+[2025-06-17 02:29:36] 🚀 INICIANDO SAQUE ID: 3
+[2025-06-17 02:29:37] ✅ Conexão com banco estabelecida
+[2025-06-17 02:29:37] 🔍 Buscando gateway ativo...
+[2025-06-17 02:29:37] ✅ Gateway encontrado: PixUP
+[2025-06-17 02:29:37]    - Client ID: Fernanda20...
+[2025-06-17 02:29:37]    - Client Secret: 51747b29e3...
+[2025-06-17 02:29:37]    - Status: true
+[2025-06-17 02:29:37] 🔍 Buscando dados do saque ID: 3
+[2025-06-17 02:29:37] ✅ Saque encontrado:
+[2025-06-17 02:29:37]    - Valor: R$ 92.00
+[2025-06-17 02:29:37]    - Nome: Kauan domingos hup
+[2025-06-17 02:29:37]    - Chave PIX: 704.944.371-97
+[2025-06-17 02:29:37]    - Tipo PIX: cpf
+[2025-06-17 02:29:37]    - Status atual: Pendente
+[2025-06-17 02:29:37] 🔧 Processando gateway: PIXUP
+[2025-06-17 02:29:37] 📡 Chamando processarSaquePixUp...
+[2025-06-17 02:29:37] 🔵 PIXUP - Iniciando processamento
+[2025-06-17 02:29:37] ✅ PIXUP - Credenciais encontradas
+[2025-06-17 02:29:37] 🔐 PIXUP - Iniciando autenticação...
+[2025-06-17 02:29:37] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/oauth/token
+[2025-06-17 02:29:37] 📥 cURL - HTTP Code: 200
+[2025-06-17 02:29:37] 📥 PIXUP - Resposta auth: {"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIyMmUyOTRjOWJiYjUzMjdkZDFjZGU1YjRjNWM2YzUwMCIsInN1YiI6ImM1NDQxZDA5NDdlMWIxNWMxOTJiNzEzNTdjZGQzYjRlIiwiaWF0IjoxNzUwMTI3Mzc4LCJleHAiOjE3NTAxMjkxNzh9.CgmXKvkntunwKwwDrn92GY0aOhp2SbZ6E8_WYi_VUWE","expires_in":1800}
+[2025-06-17 02:29:37] ✅ PIXUP - Token obtido: eyJ0eXAiOiJKV1QiLCJh...
+[2025-06-17 02:29:37] 📤 PIXUP - Dados do saque: {"amount":92,"description":"Saque PIX - ID 3","external_reference":"SAQUE_3","pix_key":"704.944.371-97","pix_key_type":"cpf","recipient_name":"Kauan domingos hup"}
+[2025-06-17 02:29:37] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/pix/payment
+[2025-06-17 02:29:37] 📤 cURL - Data: {"amount":92,"description":"Saque PIX - ID 3","external_reference":"SAQUE_3","pix_key":"704.944.371-97","pix_key_type":"cpf","recipient_name":"Kauan domingos hup"}
+[2025-06-17 02:29:37] 📥 cURL - HTTP Code: 401
+[2025-06-17 02:29:37] 📥 PIXUP - Resposta saque: {"statusCode":401,"message":"N\u00e3o autorizado"}
+[2025-06-17 02:29:37] ❌ PIXUP - Saque não aprovado. Status: N/A
+[2025-06-17 02:37:39] 🚀 INICIANDO SAQUE ID: 3
+[2025-06-17 02:37:39] ✅ Conexão com banco estabelecida
+[2025-06-17 02:37:39] 🔍 Buscando gateway ativo...
+[2025-06-17 02:37:39] ✅ Gateway encontrado: PixUP
+[2025-06-17 02:37:39]    - Client ID: Fernanda20...
+[2025-06-17 02:37:39]    - Client Secret: 51747b29e3...
+[2025-06-17 02:37:39]    - Status: true
+[2025-06-17 02:37:39] 🔍 Buscando dados do saque ID: 3
+[2025-06-17 02:37:39] ✅ Saque encontrado:
+[2025-06-17 02:37:39]    - Valor: R$ 92.00
+[2025-06-17 02:37:39]    - Nome: Kauan domingos hup
+[2025-06-17 02:37:39]    - Chave PIX: 704.944.371-97
+[2025-06-17 02:37:39]    - Tipo PIX: cpf
+[2025-06-17 02:37:39]    - Status atual: Pendente
+[2025-06-17 02:37:39] 🔧 Processando gateway: PIXUP
+[2025-06-17 02:37:39] 📡 Chamando processarSaquePixUp...
+[2025-06-17 02:37:39] 🔵 PIXUP - Iniciando processamento
+[2025-06-17 02:37:39] ✅ PIXUP - Credenciais encontradas
+[2025-06-17 02:37:39] 🔐 PIXUP - Iniciando autenticação...
+[2025-06-17 02:37:39] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/oauth/token
+[2025-06-17 02:37:39] 📥 cURL - HTTP Code: 200
+[2025-06-17 02:37:39] 📥 PIXUP - Resposta auth: {"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIyMmUyOTRjOWJiYjUzMjdkZDFjZGU1YjRjNWM2YzUwMCIsInN1YiI6ImM1NDQxZDA5NDdlMWIxNWMxOTJiNzEzNTdjZGQzYjRlIiwiaWF0IjoxNzUwMTI3Mzc4LCJleHAiOjE3NTAxMjkxNzh9.CgmXKvkntunwKwwDrn92GY0aOhp2SbZ6E8_WYi_VUWE","expires_in":1318}
+[2025-06-17 02:37:39] ✅ PIXUP - Token obtido: eyJ0eXAiOiJKV1QiLCJh...
+[2025-06-17 02:37:39] 📤 PIXUP - Dados do saque: {"amount":92,"description":"Saque PIX - ID 3","external_reference":"SAQUE_3","pix_key":"704.944.371-97","pix_key_type":"cpf","recipient_name":"Kauan domingos hup"}
+[2025-06-17 02:37:39] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/pix/payment
+[2025-06-17 02:37:39] 📤 cURL - Data: {"amount":92,"description":"Saque PIX - ID 3","external_reference":"SAQUE_3","pix_key":"704.944.371-97","pix_key_type":"cpf","recipient_name":"Kauan domingos hup"}
+[2025-06-17 02:37:40] 📥 cURL - HTTP Code: 401
+[2025-06-17 02:37:40] 📥 PIXUP - Resposta saque: {"statusCode":401,"message":"N\u00e3o autorizado"}
+[2025-06-17 02:37:40] ❌ PIXUP - Saque não aprovado. Status: N/A
+[2025-06-21 12:41:29] 🚀 INICIANDO SAQUE ID: 3
+[2025-06-21 12:41:29] ✅ Conexão com banco estabelecida
+[2025-06-21 12:41:29] 🔍 Buscando gateway ativo...
+[2025-06-21 12:41:29] ✅ Gateway encontrado: PixUP
+[2025-06-21 12:41:29]    - Client ID: Fernanda20...
+[2025-06-21 12:41:29]    - Client Secret: 51747b29e3...
+[2025-06-21 12:41:29]    - Status: true
+[2025-06-21 12:41:29] 🔍 Buscando dados do saque ID: 3
+[2025-06-21 12:41:29] ✅ Saque encontrado:
+[2025-06-21 12:41:29]    - Valor: R$ 92.00
+[2025-06-21 12:41:29]    - Nome: Kauan domingos hup
+[2025-06-21 12:41:29]    - Chave PIX: 704.944.371-97
+[2025-06-21 12:41:29]    - Tipo PIX: cpf
+[2025-06-21 12:41:29]    - Status atual: Pendente
+[2025-06-21 12:41:29] 🔧 Processando gateway: PIXUP
+[2025-06-21 12:41:29] 📡 Chamando processarSaquePixUp...
+[2025-06-21 12:41:29] 🔵 PIXUP - Iniciando processamento
+[2025-06-21 12:41:29] ✅ PIXUP - Credenciais encontradas
+[2025-06-21 12:41:29] 🔐 PIXUP - Iniciando autenticação...
+[2025-06-21 12:41:29] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/oauth/token
+[2025-06-21 12:41:29] 📥 cURL - HTTP Code: 200
+[2025-06-21 12:41:29] 📥 PIXUP - Resposta auth: {"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIyMmUyOTRjOWJiYjUzMjdkZDFjZGU1YjRjNWM2YzUwMCIsInN1YiI6ImM1NDQxZDA5NDdlMWIxNWMxOTJiNzEzNTdjZGQzYjRlIiwiaWF0IjoxNzUwNTA5NjkwLCJleHAiOjE3NTA1MTE0OTB9.Pv-eTkd2pqIHZBpLnM6bGjQRlAuxfer93F6MpoF2Z7k","expires_in":1800}
+[2025-06-21 12:41:29] ✅ PIXUP - Token obtido: eyJ0eXAiOiJKV1QiLCJh...
+[2025-06-21 12:41:29] 📤 PIXUP - Dados do saque: {"amount":92,"description":"Saque PIX - ID 3","external_reference":"SAQUE_3","pix_key":"704.944.371-97","pix_key_type":"cpf","recipient_name":"Kauan domingos hup"}
+[2025-06-21 12:41:29] 🌐 cURL - Enviando para: https://api.pixupbr.com/v2/pix/payment
+[2025-06-21 12:41:29] 📤 cURL - Data: {"amount":92,"description":"Saque PIX - ID 3","external_reference":"SAQUE_3","pix_key":"704.944.371-97","pix_key_type":"cpf","recipient_name":"Kauan domingos hup"}
+[2025-06-21 12:41:30] 📥 cURL - HTTP Code: 401
+[2025-06-21 12:41:30] 📥 PIXUP - Resposta saque: {"statusCode":401,"message":"N\u00e3o autorizado"}
+[2025-06-21 12:41:30] ❌ PIXUP - Saque não aprovado. Status: N/A
