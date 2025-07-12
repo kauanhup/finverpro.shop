@@ -1,0 +1,1281 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+   <title>Finver Pro - Dashboard Administrativo</title>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="author" content="Finver Pro" />
+   
+   <!-- CSS Libraries -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" />
+   
+   <style>
+      :root {
+         --primary: #6366f1;
+         --primary-light: #818cf8;
+         --primary-dark: #4f46e5;
+         --success: #10b981;
+         --danger: #ef4444;
+         --warning: #f59e0b;
+         --info: #3b82f6;
+         --purple: #8b5cf6;
+         --pink: #ec4899;
+         --orange: #f97316;
+         --emerald: #059669;
+         
+         /* Dark theme only */
+         --bg-primary: #0f172a;
+         --bg-secondary: #1e293b;
+         --bg-tertiary: #334155;
+         --text-primary: #f8fafc;
+         --text-secondary: #cbd5e1;
+         --text-muted: #94a3b8;
+         --border: #334155;
+         --border-light: #475569;
+         --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+         --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+         --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+         --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+         --gradient-success: linear-gradient(135deg, var(--success), #34d399);
+         --gradient-danger: linear-gradient(135deg, var(--danger), #f87171);
+         --gradient-warning: linear-gradient(135deg, var(--warning), #fbbf24);
+         --gradient-info: linear-gradient(135deg, var(--info), #60a5fa);
+      }
+
+      * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+      }
+
+      body {
+         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+         background: var(--bg-secondary);
+         color: var(--text-primary);
+         line-height: 1.6;
+         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+         overflow-x: hidden;
+      }
+
+      /* Loader */
+      .loader-container {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: var(--bg-primary);
+         z-index: 9999;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         flex-direction: column;
+      }
+
+      .loader {
+         width: 48px;
+         height: 48px;
+         border-radius: 50%;
+         background: conic-gradient(from 0deg, var(--primary), var(--primary-light), var(--primary));
+         animation: spin 1.5s linear infinite;
+         position: relative;
+      }
+
+      .loader::after {
+         content: '';
+         position: absolute;
+         top: 4px;
+         left: 4px;
+         right: 4px;
+         bottom: 4px;
+         background: var(--bg-primary);
+         border-radius: 50%;
+      }
+
+      @keyframes spin {
+         0% { transform: rotate(0deg); }
+         100% { transform: rotate(360deg); }
+      }
+
+      .loading-text {
+         color: var(--text-secondary);
+         font-size: 14px;
+         font-weight: 500;
+         margin-top: 16px;
+      }
+
+      /* Header */
+      .header {
+         position: fixed;
+         top: 0;
+         left: 0;
+         right: 0;
+         height: 64px;
+         background: var(--bg-primary);
+         border-bottom: 1px solid var(--border);
+         z-index: 1000;
+         display: flex;
+         align-items: center;
+         padding: 0 16px;
+         backdrop-filter: blur(16px);
+         box-shadow: var(--shadow);
+      }
+
+      .header-content {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         width: 100%;
+         max-width: 1400px;
+         margin: 0 auto;
+      }
+
+      .header-left {
+         display: flex;
+         align-items: center;
+         gap: 16px;
+      }
+
+      .logo {
+         font-size: 20px;
+         font-weight: 800;
+         background: var(--gradient-primary);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         background-clip: text;
+         text-decoration: none;
+         display: flex;
+         align-items: center;
+         gap: 8px;
+      }
+
+      .logo-icon {
+         width: 32px;
+         height: 32px;
+         background: var(--gradient-primary);
+         border-radius: 8px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         color: white;
+         font-size: 14px;
+         font-weight: 700;
+         box-shadow: var(--shadow-lg);
+      }
+
+      .menu-button {
+         background: none;
+         border: none;
+         color: var(--text-primary);
+         font-size: 20px;
+         cursor: pointer;
+         padding: 8px;
+         border-radius: 8px;
+         transition: all 0.2s ease;
+         display: none;
+      }
+
+      .menu-button:hover {
+         background: var(--bg-tertiary);
+         transform: scale(1.05);
+      }
+
+      .header-right {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+      }
+
+      .user-avatar {
+         width: 36px;
+         height: 36px;
+         border-radius: 8px;
+         background: var(--gradient-primary);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         color: white;
+         font-weight: 700;
+         font-size: 14px;
+         box-shadow: var(--shadow-lg);
+         cursor: pointer;
+         transition: all 0.3s ease;
+      }
+
+      .user-avatar:hover {
+         transform: scale(1.05);
+      }
+
+      /* Sidebar */
+      .sidebar {
+         position: fixed;
+         top: 64px;
+         left: 0;
+         width: 240px;
+         height: calc(100vh - 64px);
+         background: var(--bg-primary);
+         border-right: 1px solid var(--border);
+         z-index: 999;
+         overflow-y: auto;
+         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+         transform: translateX(0);
+         box-shadow: var(--shadow-lg);
+      }
+
+      .sidebar::-webkit-scrollbar {
+         width: 4px;
+      }
+
+      .sidebar::-webkit-scrollbar-track {
+         background: var(--bg-secondary);
+      }
+
+      .sidebar::-webkit-scrollbar-thumb {
+         background: var(--border);
+         border-radius: 2px;
+      }
+
+      .sidebar.hidden {
+         transform: translateX(-100%);
+      }
+
+      .sidebar-content {
+         padding: 20px;
+      }
+
+      .nav-section {
+         margin-bottom: 24px;
+      }
+
+      .nav-title {
+         font-size: 11px;
+         font-weight: 700;
+         color: var(--text-muted);
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+         margin-bottom: 12px;
+         padding-left: 12px;
+      }
+
+      .nav-item {
+         display: flex;
+         align-items: center;
+         padding: 12px 14px;
+         color: var(--text-secondary);
+         text-decoration: none;
+         border-radius: 8px;
+         transition: all 0.2s ease;
+         margin-bottom: 4px;
+         font-weight: 500;
+         font-size: 13px;
+         position: relative;
+         overflow: hidden;
+      }
+
+      .nav-item::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 3px;
+         height: 100%;
+         background: var(--primary);
+         transform: scaleY(0);
+         transition: transform 0.2s ease;
+      }
+
+      .nav-item:hover, .nav-item.active {
+         background: var(--bg-secondary);
+         color: var(--primary);
+         transform: translateX(3px);
+      }
+
+      .nav-item:hover::before, .nav-item.active::before {
+         transform: scaleY(1);
+      }
+
+      .nav-icon {
+         margin-right: 12px;
+         font-size: 16px;
+         min-width: 16px;
+         font-weight: 600;
+      }
+
+      /* Main Content */
+      .main-content {
+         margin-left: 240px;
+         margin-top: 64px;
+         padding: 20px;
+         min-height: calc(100vh - 64px);
+         transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+         background: var(--bg-secondary);
+      }
+
+      .main-content.sidebar-hidden {
+         margin-left: 0;
+      }
+
+      .container {
+         max-width: 1200px;
+         margin: 0 auto;
+      }
+
+      /* Welcome Section */
+      .welcome-section {
+         background: var(--gradient-primary);
+         border-radius: 16px;
+         padding: 24px;
+         margin-bottom: 24px;
+         color: white;
+         position: relative;
+         overflow: hidden;
+         box-shadow: var(--shadow-xl);
+      }
+
+      .welcome-section::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         right: 0;
+         width: 150px;
+         height: 150px;
+         background: rgba(255, 255, 255, 0.1);
+         border-radius: 50%;
+         transform: translate(50%, -50%);
+      }
+
+      .welcome-content {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         position: relative;
+         z-index: 1;
+      }
+
+      .welcome-text h1 {
+         font-size: 24px;
+         font-weight: 800;
+         margin-bottom: 6px;
+         line-height: 1.2;
+      }
+
+      .welcome-text p {
+         font-size: 14px;
+         opacity: 0.9;
+         margin-bottom: 16px;
+         font-weight: 400;
+      }
+
+      .welcome-button {
+         background: rgba(255, 255, 255, 0.2);
+         border: 2px solid rgba(255, 255, 255, 0.3);
+         color: white;
+         padding: 10px 20px;
+         border-radius: 8px;
+         text-decoration: none;
+         font-weight: 600;
+         transition: all 0.3s ease;
+         backdrop-filter: blur(10px);
+         font-size: 13px;
+      }
+
+      .welcome-button:hover {
+         background: rgba(255, 255, 255, 0.3);
+         border-color: rgba(255, 255, 255, 0.5);
+         transform: translateY(-2px);
+      }
+
+      .welcome-icon {
+         font-size: 40px;
+         opacity: 0.8;
+         font-weight: 700;
+      }
+
+      /* Date Selector */
+      .date-selector {
+         background: var(--bg-primary);
+         border: 1px solid var(--border);
+         border-radius: 12px;
+         padding: 20px;
+         margin-bottom: 24px;
+         box-shadow: var(--shadow);
+         transition: all 0.3s ease;
+      }
+
+      .date-selector:hover {
+         box-shadow: var(--shadow-lg);
+         transform: translateY(-2px);
+      }
+
+      .date-selector-title {
+         font-size: 16px;
+         font-weight: 700;
+         margin-bottom: 16px;
+         color: var(--text-primary);
+         display: flex;
+         align-items: center;
+         gap: 8px;
+      }
+
+      .date-inputs {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         flex-wrap: wrap;
+      }
+
+      .date-input {
+         padding: 10px 12px;
+         border: 2px solid var(--border);
+         border-radius: 8px;
+         background: var(--bg-secondary);
+         color: var(--text-primary);
+         font-size: 13px;
+         font-weight: 500;
+         transition: all 0.3s ease;
+         min-width: 130px;
+      }
+
+      .date-input:focus {
+         outline: none;
+         border-color: var(--primary);
+         box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+         background: var(--bg-primary);
+      }
+
+      .filter-button {
+         background: var(--gradient-primary);
+         color: white;
+         border: none;
+         padding: 10px 16px;
+         border-radius: 8px;
+         font-weight: 600;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         font-size: 13px;
+         display: flex;
+         align-items: center;
+         gap: 6px;
+         box-shadow: var(--shadow);
+      }
+
+      .filter-button:hover {
+         transform: translateY(-2px);
+         box-shadow: var(--shadow-lg);
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+         gap: 16px;
+         margin-bottom: 24px;
+      }
+
+      .stat-card {
+         background: var(--bg-primary);
+         border: 1px solid var(--border);
+         border-radius: 12px;
+         padding: 20px;
+         box-shadow: var(--shadow);
+         transition: all 0.3s ease;
+         position: relative;
+         overflow: hidden;
+      }
+
+      .stat-card::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 3px;
+         background: var(--gradient-primary);
+      }
+
+      .stat-card:hover {
+         box-shadow: var(--shadow-xl);
+         transform: translateY(-3px);
+      }
+
+      .stat-content {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+      }
+
+      .stat-info h3 {
+         font-size: 24px;
+         font-weight: 800;
+         margin-bottom: 3px;
+         color: var(--text-primary);
+         line-height: 1;
+      }
+
+      .stat-info p {
+         font-size: 12px;
+         color: var(--text-secondary);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+      }
+
+      .stat-icon {
+         width: 44px;
+         height: 44px;
+         border-radius: 12px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 14px;
+         font-weight: 700;
+         color: white;
+         box-shadow: var(--shadow-lg);
+      }
+
+      .stat-icon.success { background: var(--gradient-success); }
+      .stat-icon.danger { background: var(--gradient-danger); }
+      .stat-icon.warning { background: var(--gradient-warning); }
+      .stat-icon.info { background: var(--gradient-info); }
+      .stat-icon.purple { background: linear-gradient(135deg, var(--purple), #a78bfa); }
+      .stat-icon.pink { background: linear-gradient(135deg, var(--pink), #f472b6); }
+
+      /* Transactions */
+      .transactions-section {
+         background: var(--bg-primary);
+         border: 1px solid var(--border);
+         border-radius: 12px;
+         padding: 24px;
+         box-shadow: var(--shadow);
+         transition: all 0.3s ease;
+      }
+
+      .transactions-section:hover {
+         box-shadow: var(--shadow-lg);
+      }
+
+      .section-title {
+         font-size: 18px;
+         font-weight: 700;
+         margin-bottom: 20px;
+         color: var(--text-primary);
+         display: flex;
+         align-items: center;
+         gap: 8px;
+      }
+
+      .transaction-item {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         padding: 16px 0;
+         border-bottom: 1px solid var(--border-light);
+         transition: all 0.2s ease;
+      }
+
+      .transaction-item:hover {
+         background: var(--bg-secondary);
+         margin: 0 -12px;
+         padding: 16px 12px;
+         border-radius: 8px;
+      }
+
+      .transaction-item:last-child {
+         border-bottom: none;
+      }
+
+      .transaction-left {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+      }
+
+      .transaction-icon {
+         width: 36px;
+         height: 36px;
+         border-radius: 8px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 11px;
+         font-weight: 700;
+         color: white;
+         box-shadow: var(--shadow);
+      }
+
+      .transaction-info h4 {
+         font-size: 14px;
+         font-weight: 600;
+         margin-bottom: 3px;
+         color: var(--text-primary);
+      }
+
+      .transaction-info span {
+         font-size: 12px;
+         color: var(--text-secondary);
+         font-weight: 500;
+      }
+
+      .transaction-amount {
+         font-size: 15px;
+         font-weight: 700;
+         color: var(--text-primary);
+      }
+
+      .overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.6);
+         z-index: 998;
+         display: none;
+         backdrop-filter: blur(4px);
+      }
+
+      .overlay.show {
+         display: block;
+      }
+
+      /* Professional Icons */
+      .icon {
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         font-style: normal;
+         font-weight: 600;
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+         .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+         }
+         
+         .main-content {
+            padding: 16px;
+         }
+
+         .sidebar {
+            width: 220px;
+         }
+
+         .main-content {
+            margin-left: 220px;
+         }
+      }
+
+      @media (max-width: 768px) {
+         .menu-button {
+            display: block;
+         }
+
+         .sidebar {
+            transform: translateX(-100%);
+            z-index: 1001;
+            top: 64px;
+            width: 260px;
+         }
+
+         .sidebar.show {
+            transform: translateX(0);
+         }
+
+         .main-content {
+            margin-left: 0;
+            padding: 12px;
+         }
+
+         .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+         }
+
+         .welcome-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 16px;
+         }
+
+         .welcome-text h1 {
+            font-size: 20px;
+         }
+
+         .welcome-text p {
+            font-size: 13px;
+         }
+
+         .date-inputs {
+            flex-direction: column;
+            align-items: stretch;
+         }
+
+         .date-input {
+            min-width: unset;
+         }
+
+         .header {
+            padding: 0 12px;
+         }
+
+         .logo {
+            font-size: 18px;
+         }
+
+         .logo-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+         }
+
+         .user-avatar {
+            width: 32px;
+            height: 32px;
+            font-size: 12px;
+         }
+
+         .nav-section {
+            margin-bottom: 20px;
+         }
+
+         .sidebar-content {
+            padding: 16px;
+         }
+
+         .welcome-section {
+            padding: 20px;
+         }
+
+         .date-selector {
+            padding: 16px;
+         }
+
+         .transactions-section {
+            padding: 16px;
+         }
+
+         .stat-card {
+            padding: 16px;
+         }
+      }
+
+      @media (max-width: 480px) {
+         .header {
+            height: 56px;
+         }
+
+         .sidebar {
+            top: 56px;
+            height: calc(100vh - 56px);
+         }
+
+         .main-content {
+            margin-top: 56px;
+            min-height: calc(100vh - 56px);
+            padding: 10px;
+         }
+
+         .welcome-text h1 {
+            font-size: 18px;
+         }
+
+         .stats-grid {
+            gap: 10px;
+         }
+
+         .stat-card {
+            padding: 14px;
+         }
+
+         .stat-info h3 {
+            font-size: 20px;
+         }
+
+         .logo {
+            font-size: 16px;
+         }
+
+         .welcome-section {
+            padding: 16px;
+         }
+      }
+   </style>
+</head>
+
+<body>
+   <div class="loader-container" id="loader">
+      <div class="loader"></div>
+      <div class="loading-text">Carregando Dashboard...</div>
+   </div>
+
+   <div class="overlay" id="overlay"></div>
+
+   <!-- Header -->
+   <header class="header">
+      <div class="header-content">
+         <div class="header-left">
+            <button class="menu-button" id="menuButton">
+               <span class="icon">≡</span>
+            </button>
+            <a href="#" class="logo">
+               <div class="logo-icon">FP</div>
+               Finver Pro
+            </a>
+         </div>
+         <div class="header-right">
+            <div class="user-avatar">AD</div>
+         </div>
+      </div>
+   </header>
+
+   <!-- Sidebar -->
+   <aside class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+         <div class="nav-section">
+            <div class="nav-title">Principal</div>
+            <a href="#" class="nav-item active">
+               <span class="nav-icon icon">⊞</span>
+               Dashboard
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">◉</span>
+               Usuários
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">✎</span>
+               Cadastro
+            </a>
+         </div>
+
+         <div class="nav-section">
+            <div class="nav-title">Financeiro</div>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">↗</span>
+               Entradas Geral
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">↙</span>
+               Saídas
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">$</span>
+               Comissões
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">₹</span>
+               Salário
+            </a>
+         </div>
+
+         <div class="nav-section">
+            <div class="nav-title">Plataforma</div>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">📈</span>
+               Investidores
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">⧉</span>
+               Produtos
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">#</span>
+               Códigos
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">◯</span>
+               Roleta
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">✓</span>
+               Tarefas
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">☑</span>
+               Checklist
+            </a>
+         </div>
+
+         <div class="nav-section">
+            <div class="nav-title">Configurações</div>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">⚙</span>
+               Config de Pagamento
+            </a>
+         </div>
+
+         <div class="nav-section">
+            <div class="nav-title">Personalização</div>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">⬟</span>
+               Personalização de Cores
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">Tt</span>
+               Personalização de Textos
+            </a>
+            <a href="#" class="nav-item">
+               <span class="nav-icon icon">▦</span>
+               Personalizar Imagens
+            </a>
+         </div>
+      </div>
+   </aside>
+
+   <!-- Main Content -->
+   <main class="main-content" id="mainContent">
+      <div class="container">
+         <!-- Welcome Section -->
+         <section class="welcome-section">
+            <div class="welcome-content">
+               <div class="welcome-text">
+                  <h1>Bem-vindo, Administrador!</h1>
+                  <p>Gerencie sua plataforma Finver Pro com facilidade e eficiência.</p>
+                  <a href="#" class="welcome-button">
+                     <span class="icon">→</span>
+                     Acessar Plataforma
+                  </a>
+               </div>
+               <div class="welcome-icon">◉</div>
+            </div>
+         </section>
+
+         <!-- Date Selector -->
+         <section class="date-selector">
+            <h2 class="date-selector-title">
+               <span class="icon">◷</span>
+               Filtrar por Período
+            </h2>
+            <div class="date-inputs">
+               <input type="date" class="date-input" id="startDate" value="2025-01-01">
+               <span style="color: var(--text-secondary); font-weight: 600;">até</span>
+               <input type="date" class="date-input" id="endDate" value="2025-01-10">
+               <button class="filter-button" onclick="filterByDate()">
+                  <span class="icon">⊙</span>
+                  Filtrar Dados
+               </button>
+            </div>
+         </section>
+
+         <!-- Stats Grid -->
+         <section class="stats-grid">
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>R$ 12.450</h3>
+                     <p>Depósitos Hoje</p>
+                  </div>
+                  <div class="stat-icon success">
+                     <span class="icon">↗</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>R$ 485.230</h3>
+                     <p>Total Depósitos</p>
+                  </div>
+                  <div class="stat-icon success">
+                     <span class="icon">$</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>25</h3>
+                     <p>Cadastros Hoje</p>
+                  </div>
+                  <div class="stat-icon info">
+                     <span class="icon">◉</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>1.247</h3>
+                     <p>Total Cadastros</p>
+                  </div>
+                  <div class="stat-icon info">
+                     <span class="icon">⊞</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>R$ 128.750</h3>
+                     <p>Total Sacado</p>
+                  </div>
+                  <div class="stat-icon danger">
+                     <span class="icon">↙</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>R$ 2.580</h3>
+                     <p>Comissões Hoje</p>
+                  </div>
+                  <div class="stat-icon warning">
+                     <span class="icon">%</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>R$ 8.200</h3>
+                     <p>Salários Hoje</p>
+                  </div>
+                  <div class="stat-icon purple">
+                     <span class="icon">₹</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>R$ 311.160</h3>
+                     <p>Saldo Plataforma</p>
+                  </div>
+                  <div class="stat-icon success">
+                     <span class="icon">⊞</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>892</h3>
+                     <p>Investidores Ativos</p>
+                  </div>
+                  <div class="stat-icon pink">
+                     <span class="icon">△</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="stat-card">
+               <div class="stat-content">
+                  <div class="stat-info">
+                     <h3>156</h3>
+                     <p>Códigos Usados</p>
+                  </div>
+                  <div class="stat-icon info">
+                     <span class="icon">#</span>
+                  </div>
+               </div>
+            </div>
+         </section>
+
+         <!-- Transactions -->
+         <section class="transactions-section">
+            <h2 class="section-title">
+               <span class="icon">⟦</span>
+               Transações Recentes
+            </h2>
+            
+            <div class="transaction-item">
+               <div class="transaction-left">
+                  <div class="transaction-icon" style="background: var(--gradient-success);">
+                     <span class="icon">↗</span>
+                  </div>
+                  <div class="transaction-info">
+                     <h4>Depósito PIX</h4>
+                     <span>10/01/2025 - 14:30</span>
+                  </div>
+               </div>
+               <div class="transaction-amount" style="color: var(--success);">
+                  +R$ 2.500,00
+               </div>
+            </div>
+
+            <div class="transaction-item">
+               <div class="transaction-left">
+                  <div class="transaction-icon" style="background: var(--gradient-danger);">
+                     <span class="icon">↙</span>
+                  </div>
+                  <div class="transaction-info">
+                     <h4>Saque Investidor</h4>
+                     <span>09/01/2025 - 16:45</span>
+                  </div>
+               </div>
+               <div class="transaction-amount" style="color: var(--danger);">
+                  -R$ 1.200,00
+               </div>
+            </div>
+
+            <div class="transaction-item">
+               <div class="transaction-left">
+                  <div class="transaction-icon" style="background: var(--gradient-warning);">
+                     <span class="icon">%</span>
+                  </div>
+                  <div class="transaction-info">
+                     <h4>Comissão Afiliado</h4>
+                     <span>09/01/2025 - 12:15</span>
+                  </div>
+               </div>
+               <div class="transaction-amount" style="color: var(--warning);">
+                  -R$ 450,00
+               </div>
+            </div>
+
+            <div class="transaction-item">
+               <div class="transaction-left">
+                  <div class="transaction-icon" style="background: var(--gradient-success);">
+                     <span class="icon">↗</span>
+                  </div>
+                  <div class="transaction-info">
+                     <h4>Depósito TED</h4>
+                     <span>08/01/2025 - 10:20</span>
+                  </div>
+               </div>
+               <div class="transaction-amount" style="color: var(--success);">
+                  +R$ 800,00
+               </div>
+            </div>
+         </section>
+      </div>
+   </main>
+
+   <script>
+      // Remove loader after page load
+      window.addEventListener("load", function() {
+         setTimeout(() => {
+            document.getElementById('loader').style.display = 'none';
+         }, 1000);
+      });
+
+      // Mobile menu functionality
+      const menuButton = document.getElementById('menuButton');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const mainContent = document.getElementById('mainContent');
+
+      menuButton.addEventListener('click', function() {
+         sidebar.classList.toggle('show');
+         overlay.classList.toggle('show');
+         
+         if (sidebar.classList.contains('show')) {
+            document.body.style.overflow = 'hidden';
+         } else {
+            document.body.style.overflow = '';
+         }
+      });
+
+      overlay.addEventListener('click', function() {
+         sidebar.classList.remove('show');
+         overlay.classList.remove('show');
+         document.body.style.overflow = '';
+      });
+
+      // Date filter functionality
+      function filterByDate() {
+         const startDate = document.getElementById('startDate').value;
+         const endDate = document.getElementById('endDate').value;
+         
+         if (startDate && endDate) {
+            if (new Date(startDate) > new Date(endDate)) {
+               alert('⚠ A data inicial não pode ser maior que a data final!');
+               return;
+            }
+            
+            // Add loading effect
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="icon">⟳</span> Filtrando...';
+            button.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+               button.innerHTML = originalText;
+               button.disabled = false;
+               alert(`⊞ Dados filtrados de ${formatDate(startDate)} até ${formatDate(endDate)}`);
+            }, 1500);
+         } else {
+            alert('◷ Por favor, selecione ambas as datas para filtrar');
+         }
+      }
+
+      function formatDate(dateString) {
+         const date = new Date(dateString);
+         return date.toLocaleDateString('pt-BR');
+      }
+
+      // Set current date as default for end date
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('endDate').value = today;
+      
+      // Set start date to 30 days ago
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
+
+      // Handle window resize
+      window.addEventListener('resize', function() {
+         if (window.innerWidth > 768) {
+            sidebar.classList.remove('show');
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+         }
+      });
+
+      // Add smooth scrolling to navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
+         item.addEventListener('click', function(e) {
+            // Remove active class from all items
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            // Add active class to clicked item
+            this.classList.add('active');
+            
+            // Close mobile menu if open
+            if (window.innerWidth <= 768) {
+               sidebar.classList.remove('show');
+               overlay.classList.remove('show');
+               document.body.style.overflow = '';
+            }
+         });
+      });
+
+      // Add hover effects to stat cards
+      document.querySelectorAll('.stat-card').forEach(card => {
+         card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-6px)';
+         });
+         
+         card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+         });
+      });
+
+      // Add click animation to buttons
+      document.querySelectorAll('button, .welcome-button').forEach(button => {
+         button.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+               this.style.transform = '';
+            }, 150);
+         });
+      });
+
+      // Console log for debugging
+      console.log('→ Finver Pro Dashboard carregado com sucesso!');
+      console.log('◉ Responsivo para mobile e desktop');
+      console.log('⊞ Modo escuro ativo');
+   </script>
+</body>
+</html>

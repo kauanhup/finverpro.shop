@@ -1,0 +1,1385 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinverPro - Recuperação de Senha</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            
+            --primary: #0F172A;
+            --primary-light: #334155;
+            --accent: #3B82F6;
+            --success: #059669;
+            --warning: #D97706;
+            --danger: #DC2626;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --text-white: #FFFFFF;
+            
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #E2E8F0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .recovery-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+        }
+
+        /* Welcome Header */
+        .welcome-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .welcome-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 32px 24px;
+        }
+
+        /* Progress Steps */
+        .progress-container {
+            margin-bottom: 32px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #2563EB);
+            border-radius: 4px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 33%;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 1;
+        }
+
+        .step.active {
+            color: var(--accent);
+        }
+
+        .step.completed {
+            color: var(--success);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-light);
+        }
+
+        .step.active .step-number {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .step-text {
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* Form Styles */
+        .recovery-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-input.code-input {
+            text-align: center;
+            font-size: 24px;
+            font-family: 'Roboto', monospace;
+            letter-spacing: 8px;
+            font-weight: 600;
+        }
+
+        .error-message {
+            font-size: 13px;
+            color: var(--danger);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .form-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .sent-to {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Captcha */
+        .captcha-container {
+            background: var(--border-light);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .captcha-question {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .captcha-input {
+            width: 100px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-bars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            flex: 1;
+            background: var(--border-light);
+            border-radius: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .strength-bar.filled {
+            background: var(--success);
+        }
+
+        .strength-bar.filled.weak {
+            background: var(--danger);
+        }
+
+        .strength-bar.filled.medium {
+            background: var(--warning);
+        }
+
+        .strength-bar.filled.strong {
+            background: var(--success);
+        }
+
+        .strength-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Password visibility toggle */
+        .password-group {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--accent);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #2563EB);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-light);
+            border-color: var(--accent);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .btn-back {
+            flex: 1;
+        }
+
+        .btn-next {
+            flex: 2;
+        }
+
+        /* Resend code section */
+        .resend-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .resend-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .resend-button {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+
+        .resend-button:hover {
+            color: #2563EB;
+        }
+
+        .resend-button:disabled {
+            color: var(--text-muted);
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .resend-timer {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Success Screen */
+        .success-screen {
+            text-align: center;
+            padding: 48px 24px;
+            display: none;
+        }
+
+        .success-screen.show {
+            display: block !important;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--success), #047857);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(5, 150, 105, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .success-text {
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .success-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Back to login link */
+        .back-to-login {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .back-to-login a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .back-to-login a:hover {
+            color: var(--accent);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 16px;
+                min-height: calc(100vh - 80px);
+            }
+
+            .recovery-container {
+                max-width: 100%;
+            }
+
+            .welcome-header {
+                padding: 24px 20px;
+            }
+
+            .welcome-title {
+                font-size: 22px;
+            }
+
+            .welcome-subtitle {
+                font-size: 15px;
+            }
+
+            .form-section {
+                padding: 24px 20px;
+            }
+
+            .form-input {
+                padding: 14px;
+                font-size: 16px;
+            }
+
+            .btn {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                min-width: auto;
+            }
+
+            .progress-steps {
+                font-size: 12px;
+            }
+
+            .step-number {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+
+            .success-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+
+            .success-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 0 16px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .main-content {
+                padding: 16px 12px;
+            }
+
+            .form-section {
+                padding: 20px 16px;
+            }
+
+            .welcome-header {
+                padding: 20px 16px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.05); 
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="logo-text">FinverPro</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="recovery-container">
+            <!-- Welcome Header -->
+            <div class="welcome-header">
+                <div class="welcome-content">
+                    <div class="welcome-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h1 class="welcome-title">Recuperar Senha</h1>
+                    <p class="welcome-subtitle">Recupere o acesso à sua conta</p>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section" id="form-container">
+                <!-- Progress -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step active" id="step-1">
+                            <div class="step-number">1</div>
+                            <div class="step-text">Telefone</div>
+                        </div>
+                        <div class="step" id="step-2">
+                            <div class="step-number">2</div>
+                            <div class="step-text">Código</div>
+                        </div>
+                        <div class="step" id="step-3">
+                            <div class="step-number">3</div>
+                            <div class="step-text">Nova Senha</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recovery Form -->
+                <form class="recovery-form" id="recovery-form">
+                    <!-- Step 1: Phone Input -->
+                    <div class="form-step active" id="form-step-1">
+                        <div class="form-description">
+                            Digite seu número de telefone para enviarmos um código de verificação
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Número de Telefone</label>
+                            <input type="tel" class="form-input" name="phone" placeholder="(11) 99999-9999" required>
+                            <div class="error-message" id="error-phone"></div>
+                        </div>
+
+                        <!-- Captcha -->
+                        <div class="captcha-container">
+                            <div class="captcha-question" id="captcha-question">
+                                Quanto é 5 + 3?
+                            </div>
+                            <input type="number" class="form-input captcha-input" name="captcha" placeholder="?" required>
+                            <div class="error-message" id="error-captcha"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Verification Code -->
+                    <div class="form-step" id="form-step-2">
+                        <div class="form-description">
+                            Enviamos um código de 6 dígitos para <span class="sent-to" id="sent-to"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Código de Verificação</label>
+                            <input type="text" class="form-input code-input" name="verification_code" placeholder="000000" maxlength="6" required>
+                            <div class="error-message" id="error-verification_code"></div>
+                        </div>
+
+                        <div class="resend-section">
+                            <p class="resend-text">Não recebeu o código?</p>
+                            <button type="button" class="resend-button" id="resend-button" onclick="resendCode()">
+                                Reenviar código
+                            </button>
+                            <div class="resend-timer" id="resend-timer" style="display: none;">
+                                Reenviar em <span id="countdown">60</span>s
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: New Password -->
+                    <div class="form-step" id="form-step-3">
+                        <div class="form-description">
+                            Digite uma senha forte para proteger sua conta
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Nova Senha</label>
+                            <div class="password-group">
+                                <input type="password" class="form-input" name="new_password" placeholder="Digite sua nova senha" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('new_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-strength" id="password-strength">
+                                <div class="strength-bars">
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                </div>
+                                <div class="strength-text">A senha deve ter pelo menos 8 caracteres</div>
+                            </div>
+                            <div class="error-message" id="error-new_password"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Confirmar Senha</label>
+                            <div class="password-group">
+                                <input type="password" class="form-input" name="confirm_password" placeholder="Confirme sua nova senha" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="error-message" id="error-confirm_password"></div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary btn-back" onclick="previousStep()" style="display: none;">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                        <button type="button" class="btn btn-primary btn-next" onclick="nextStep()">
+                            Enviar Código
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Back to login link -->
+                <div class="back-to-login">
+                    <a href="login-page.html">
+                        <i class="fas fa-arrow-left"></i> Voltar ao login
+                    </a>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div class="success-screen" id="success-screen">
+                <div class="progress-container" style="margin-bottom: 40px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step completed">
+                            <div class="step-number"><i class="fas fa-check" style="font-size: 12px;"></i></div>
+                            <div class="step-text">Telefone</div>
+                        </div>
+                        <div class="step completed">
+                            <div class="step-number"><i class="fas fa-check" style="font-size: 12px;"></i></div>
+                            <div class="step-text">Código</div>
+                        </div>
+                        <div class="step completed">
+                            <div class="step-number"><i class="fas fa-check" style="font-size: 12px;"></i></div>
+                            <div class="step-text">Nova Senha</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2 class="success-title">Senha Alterada!</h2>
+                <p class="success-text">Sua senha foi alterada com sucesso! Agora você pode fazer login com sua nova senha.</p>
+                
+                <div class="success-actions">
+                    <a href="login-page.html" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Fazer Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ========================================
+        // CONFIGURAÇÕES GLOBAIS
+        // ========================================
+        let currentStep = 1;
+        const totalSteps = 3;
+        let userPhone = '';
+        let resendTimer = null;
+        let resendAttempts = 0;
+        let captchaAnswer = 0;
+
+        // ========================================
+        // CAPTCHA
+        // ========================================
+        function generateCaptcha() {
+            const operations = ['+', '-', '*'];
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+            let num1, num2, question, answer;
+
+            switch (operation) {
+                case '+':
+                    num1 = Math.floor(Math.random() * 20) + 1;
+                    num2 = Math.floor(Math.random() * 20) + 1;
+                    question = `Quanto é ${num1} + ${num2}?`;
+                    answer = num1 + num2;
+                    break;
+                case '-':
+                    num1 = Math.floor(Math.random() * 20) + 10;
+                    num2 = Math.floor(Math.random() * 10) + 1;
+                    question = `Quanto é ${num1} - ${num2}?`;
+                    answer = num1 - num2;
+                    break;
+                case '*':
+                    num1 = Math.floor(Math.random() * 10) + 1;
+                    num2 = Math.floor(Math.random() * 10) + 1;
+                    question = `Quanto é ${num1} × ${num2}?`;
+                    answer = num1 * num2;
+                    break;
+            }
+
+            document.getElementById('captcha-question').textContent = question;
+            captchaAnswer = answer;
+        }
+
+        function validateCaptcha() {
+            const userAnswer = parseInt(document.querySelector('input[name="captcha"]').value);
+            return userAnswer === captchaAnswer;
+        }
+
+        // ========================================
+        // NAVEGAÇÃO DE ETAPAS
+        // ========================================
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateStep();
+                    
+                    if (currentStep === 2) {
+                        startResendTimer();
+                        document.getElementById('sent-to').textContent = formatPhoneDisplay(userPhone);
+                        showToast('Código enviado com sucesso!', 'success');
+                    }
+                } else {
+                    submitForm();
+                }
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStep();
+                
+                if (currentStep === 1 && resendTimer) {
+                    clearInterval(resendTimer);
+                    resendTimer = null;
+                }
+            }
+        }
+
+        function updateStep() {
+            // Atualizar etapas do formulário
+            document.querySelectorAll('.form-step').forEach((step, index) => {
+                step.classList.toggle('active', index + 1 === currentStep);
+            });
+
+            // Atualizar indicadores de progresso
+            document.querySelectorAll('#form-container .step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                    step.querySelector('.step-number').innerHTML = '<i class="fas fa-check" style="font-size: 12px;"></i>';
+                } else if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                    step.querySelector('.step-number').textContent = index + 1;
+                } else {
+                    step.querySelector('.step-number').textContent = index + 1;
+                }
+            });
+
+            // Atualizar barra de progresso
+            const progressFill = document.querySelector('#form-container .progress-fill');
+            const progressPercentage = (currentStep / totalSteps) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
+
+            // Atualizar botões
+            const backBtn = document.querySelector('.btn-back');
+            const nextBtn = document.querySelector('.btn-next');
+            
+            backBtn.style.display = currentStep > 1 ? 'flex' : 'none';
+            
+            if (currentStep === 1) {
+                nextBtn.innerHTML = 'Enviar Código <i class="fas fa-arrow-right"></i>';
+            } else if (currentStep === 2) {
+                nextBtn.innerHTML = 'Verificar Código <i class="fas fa-arrow-right"></i>';
+            } else if (currentStep === 3) {
+                nextBtn.innerHTML = '<i class="fas fa-save"></i> Alterar Senha';
+            }
+        }
+
+        // ========================================
+        // VALIDAÇÃO
+        // ========================================
+        function validateCurrentStep() {
+            let isValid = true;
+            const currentFormStep = document.querySelector(`#form-step-${currentStep}`);
+            const inputs = currentFormStep.querySelectorAll('input[required]');
+
+            // Limpar erros anteriores
+            currentFormStep.querySelectorAll('.error-message').forEach(error => {
+                error.textContent = '';
+            });
+            currentFormStep.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+
+            // Validar campos obrigatórios
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isValid = false;
+                }
+            });
+
+            // Validações específicas por etapa
+            if (currentStep === 1) {
+                const phoneInput = currentFormStep.querySelector('input[name="phone"]');
+                if (phoneInput && !validatePhone(phoneInput.value)) {
+                    showFieldError(phoneInput, 'Digite um número de telefone válido');
+                    isValid = false;
+                } else if (phoneInput) {
+                    userPhone = phoneInput.value;
+                }
+
+                if (!validateCaptcha()) {
+                    const captchaInput = currentFormStep.querySelector('input[name="captcha"]');
+                    showFieldError(captchaInput, 'Resposta incorreta. Tente novamente.');
+                    generateCaptcha();
+                    captchaInput.value = '';
+                    isValid = false;
+                }
+            }
+
+            if (currentStep === 2) {
+                const codeInput = currentFormStep.querySelector('input[name="verification_code"]');
+                if (codeInput && !validateCode(codeInput.value)) {
+                    showFieldError(codeInput, 'Digite um código de 6 dígitos válido');
+                    isValid = false;
+                }
+            }
+
+            if (currentStep === 3) {
+                const passwordInput = currentFormStep.querySelector('input[name="new_password"]');
+                const confirmPasswordInput = currentFormStep.querySelector('input[name="confirm_password"]');
+                
+                if (passwordInput && !validatePassword(passwordInput.value)) {
+                    showFieldError(passwordInput, 'Senha deve ter pelo menos 8 caracteres');
+                    isValid = false;
+                }
+
+                if (confirmPasswordInput && passwordInput.value !== confirmPasswordInput.value) {
+                    showFieldError(confirmPasswordInput, 'As senhas não coincidem');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        function validateField(input) {
+            if (input.hasAttribute('required') && !input.value.trim()) {
+                showFieldError(input, 'Campo obrigatório');
+                return false;
+            }
+            return true;
+        }
+
+        function showFieldError(input, message) {
+            input.classList.add('error');
+            const errorElement = document.getElementById(`error-${input.name}`);
+            if (errorElement) {
+                errorElement.textContent = message;
+            }
+        }
+
+        function validatePhone(phone) {
+            const cleanPhone = phone.replace(/\D/g, '');
+            return cleanPhone.length === 10 || cleanPhone.length === 11;
+        }
+
+        function validateCode(code) {
+            return code.length === 6 && /^\d{6}$/.test(code);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        // ========================================
+        // FORMATAÇÃO
+        // ========================================
+        function formatPhone(input) {
+            let value = input.value.replace(/\D/g, '');
+            
+            if (value.length <= 10) {
+                value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+            } else {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            }
+            
+            input.value = value;
+        }
+
+        function formatPhoneDisplay(phone) {
+            const cleanPhone = phone.replace(/\D/g, '');
+            if (cleanPhone.length === 11) {
+                return `(${cleanPhone.substring(0, 2)}) ${cleanPhone.substring(2, 7)}-${cleanPhone.substring(7)}`;
+            } else if (cleanPhone.length === 10) {
+                return `(${cleanPhone.substring(0, 2)}) ${cleanPhone.substring(2, 6)}-${cleanPhone.substring(6)}`;
+            }
+            return phone;
+        }
+
+        // ========================================
+        // FUNCIONALIDADES ESPECIAIS
+        // ========================================
+        function updatePasswordStrength(password) {
+            const strengthBars = document.querySelectorAll('.strength-bar');
+            const strengthText = document.querySelector('.strength-text');
+            
+            let strength = 0;
+            const checks = {
+                length: password.length >= 8,
+                upper: /[A-Z]/.test(password),
+                lower: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            };
+            
+            strength = Object.values(checks).filter(Boolean).length;
+            
+            strengthBars.forEach(bar => {
+                bar.classList.remove('filled', 'weak', 'medium', 'strong');
+            });
+            
+            for (let i = 0; i < Math.min(strength, 4); i++) {
+                strengthBars[i].classList.add('filled');
+                if (strength <= 2) {
+                    strengthBars[i].classList.add('weak');
+                } else if (strength <= 3) {
+                    strengthBars[i].classList.add('medium');
+                } else {
+                    strengthBars[i].classList.add('strong');
+                }
+            }
+            
+            const strengthTexts = ['Muito fraca', 'Fraca', 'Regular', 'Boa', 'Muito forte'];
+            strengthText.textContent = `Força da senha: ${strengthTexts[Math.min(strength, 4)]}`;
+        }
+
+        function togglePassword(inputName) {
+            const input = document.querySelector(`input[name="${inputName}"]`);
+            const toggle = input.nextElementSibling;
+            const icon = toggle.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // ========================================
+        // REENVIO DE CÓDIGO
+        // ========================================
+        function resendCode() {
+            generateCaptcha();
+            showToast('Código reenviado!', 'info');
+            startResendTimer();
+        }
+
+        function startResendTimer() {
+            const resendButton = document.getElementById('resend-button');
+            const resendTimerDiv = document.getElementById('resend-timer');
+            const countdown = document.getElementById('countdown');
+            
+            resendAttempts++;
+            let timeLeft = 60 * resendAttempts; // 60s, 120s, 180s, etc.
+            
+            resendButton.disabled = true;
+            resendTimerDiv.style.display = 'block';
+            
+            if (resendTimer) {
+                clearInterval(resendTimer);
+            }
+            
+            resendTimer = setInterval(() => {
+                timeLeft--;
+                countdown.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(resendTimer);
+                    resendButton.disabled = false;
+                    resendTimerDiv.style.display = 'none';
+                    resendTimer = null;
+                }
+            }, 1000);
+        }
+
+        // ========================================
+        // SUBMISSÃO E SUCESSO
+        // ========================================
+        function submitForm() {
+            const formData = new FormData(document.getElementById('recovery-form'));
+            const data = Object.fromEntries(formData.entries());
+            
+            showToast('Alterando sua senha...', 'info');
+            
+            setTimeout(() => {
+                showSuccessScreen();
+            }, 2000);
+        }
+
+        function showSuccessScreen() {
+            const formContainer = document.getElementById('form-container');
+            formContainer.style.display = 'none';
+            
+            const successScreen = document.getElementById('success-screen');
+            successScreen.classList.add('show');
+            
+            showToast('Senha alterada com sucesso!', 'success');
+        }
+
+        // ========================================
+        // SISTEMA DE TOAST
+        // ========================================
+        function showToast(message, type = 'success', duration = 4000) {
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const iconMap = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle'
+            };
+            
+            const colorMap = {
+                success: 'var(--success)',
+                error: 'var(--danger)',
+                info: 'var(--accent)'
+            };
+            
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas ${iconMap[type]}" style="color: ${colorMap[type]};"></i>
+                    <span style="flex: 1; font-size: 14px; font-weight: 500;">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0; font-size: 16px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gerar captcha inicial
+            generateCaptcha();
+            
+            // Event listeners para formatação
+            const phoneInput = document.querySelector('input[name="phone"]');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function() {
+                    formatPhone(this);
+                });
+            }
+
+            const codeInput = document.querySelector('input[name="verification_code"]');
+            if (codeInput) {
+                codeInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/\D/g, '');
+                });
+            }
+
+            const passwordInput = document.querySelector('input[name="new_password"]');
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function() {
+                    updatePasswordStrength(this.value);
+                });
+            }
+
+            // Mensagem de boas-vindas
+            setTimeout(() => {
+                showToast('Digite seu telefone para recuperar sua senha', 'info');
+            }, 1000);
+        });
+
+        // Tecla Enter
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                event.preventDefault();
+                nextStep();
+            }
+        });
+    </script>
+</body>
+</html>

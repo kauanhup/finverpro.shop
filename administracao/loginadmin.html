@@ -1,0 +1,817 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinverPro - Login Administrador</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            
+            --primary: #0F172A;
+            --primary-light: #334155;
+            --accent: #DC2626;
+            --accent-light: #EF4444;
+            --success: #059669;
+            --warning: #D97706;
+            --danger: #DC2626;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --text-white: #FFFFFF;
+            
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #E2E8F0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(220, 38, 38, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .login-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+        }
+
+        /* Welcome Header */
+        .welcome-header {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .welcome-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 32px 24px;
+        }
+
+        .step-indicator {
+            text-align: center;
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .step-indicator .current-step {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Forms */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--accent);
+        }
+
+        .error-message {
+            font-size: 13px;
+            color: var(--danger);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Security Phrase */
+        .security-phrase-info {
+            background: rgba(220, 38, 38, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .security-phrase-info .icon {
+            color: var(--accent);
+            margin-right: 8px;
+        }
+
+        .security-phrase-info .title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .security-phrase-info .text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-light);
+            border-color: var(--accent);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .btn-back {
+            flex: 1;
+        }
+
+        .btn-next {
+            flex: 2;
+        }
+
+        /* Links */
+        .form-links {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .form-links a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .form-links a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 16px;
+            }
+
+            .login-container {
+                max-width: 100%;
+            }
+
+            .welcome-header {
+                padding: 24px 20px;
+            }
+
+            .form-section {
+                padding: 24px 20px;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                min-width: auto;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.05); 
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="logo-text">FinverPro</div>
+            </div>
+            <div class="admin-badge">
+                <i class="fas fa-shield-alt"></i>
+                Administrador
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="login-container">
+            <!-- Welcome Header -->
+            <div class="welcome-header">
+                <div class="welcome-content">
+                    <div class="admin-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h1 class="welcome-title">Acesso Administrativo</h1>
+                    <p class="welcome-subtitle">Área restrita para administradores</p>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <div class="step-indicator">
+                    Etapa <span class="current-step" id="current-step">1</span> de 2
+                </div>
+
+                <form class="login-form" id="admin-login-form">
+                    <!-- Step 1: Login Credentials -->
+                    <div class="form-step active" id="step-1">
+                        <div class="form-group">
+                            <label class="form-label">Email ou Telefone</label>
+                            <input type="text" class="form-input" name="emailOrPhone" id="emailOrPhone" placeholder="Digite seu email ou telefone" required>
+                            <div class="error-message" id="error-emailOrPhone"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Senha</label>
+                            <div class="password-wrapper">
+                                <input type="password" class="form-input" name="password" id="password" placeholder="Digite sua senha" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                                    <i class="fas fa-eye" id="password-icon"></i>
+                                </button>
+                            </div>
+                            <div class="error-message" id="error-password"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Security Phrase -->
+                    <div class="form-step" id="step-2">
+                        <div class="security-phrase-info">
+                            <div style="display: flex; align-items: flex-start; gap: 8px;">
+                                <i class="fas fa-shield-alt icon"></i>
+                                <div>
+                                    <div class="title">Verificação de Segurança</div>
+                                    <div class="text">Digite a frase de confirmação para acessar o painel administrativo</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Frase de Confirmação</label>
+                            <input type="password" class="form-input" name="securityPhrase" id="securityPhrase" placeholder="Digite a frase de segurança" required>
+                            <div class="error-message" id="error-securityPhrase"></div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary btn-back" id="btn-back" onclick="previousStep()" style="display: none;">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                        <button type="button" class="btn btn-primary btn-next" id="btn-next" onclick="nextStep()">
+                            <span id="btn-text">Continuar</span>
+                            <i class="fas fa-arrow-right" id="btn-icon"></i>
+                        </button>
+                    </div>
+
+                    <div class="form-links">
+                        <a href="/login.html">Voltar ao login normal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 2;
+
+        // Form navigation
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateStep();
+                } else {
+                    submitForm();
+                }
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStep();
+            }
+        }
+
+        function updateStep() {
+            // Update form steps
+            document.querySelectorAll('.form-step').forEach((step, index) => {
+                step.classList.toggle('active', index + 1 === currentStep);
+            });
+
+            // Update step indicator
+            document.getElementById('current-step').textContent = currentStep;
+
+            // Update buttons
+            const backBtn = document.getElementById('btn-back');
+            const nextBtn = document.getElementById('btn-next');
+            const btnText = document.getElementById('btn-text');
+            const btnIcon = document.getElementById('btn-icon');
+            
+            backBtn.style.display = currentStep > 1 ? 'flex' : 'none';
+            
+            if (currentStep === totalSteps) {
+                btnText.textContent = 'Acessar Painel';
+                btnIcon.className = 'fas fa-sign-in-alt';
+            } else {
+                btnText.textContent = 'Continuar';
+                btnIcon.className = 'fas fa-arrow-right';
+            }
+        }
+
+        // Form validation
+        function validateCurrentStep() {
+            let isValid = true;
+            const currentFormStep = document.querySelector(`#step-${currentStep}`);
+            const inputs = currentFormStep.querySelectorAll('input[required]');
+
+            // Clear previous errors
+            currentFormStep.querySelectorAll('.error-message').forEach(error => {
+                error.textContent = '';
+            });
+            currentFormStep.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isValid = false;
+                }
+            });
+
+            // Step specific validations
+            if (currentStep === 1) {
+                const emailOrPhone = document.getElementById('emailOrPhone');
+                if (emailOrPhone && !validateEmailOrPhone(emailOrPhone.value)) {
+                    showFieldError(emailOrPhone, 'Email ou telefone inválido');
+                    isValid = false;
+                }
+
+                const password = document.getElementById('password');
+                if (password && password.value.length < 6) {
+                    showFieldError(password, 'Senha deve ter pelo menos 6 caracteres');
+                    isValid = false;
+                }
+            }
+
+            if (currentStep === 2) {
+                const securityPhrase = document.getElementById('securityPhrase');
+                if (securityPhrase && securityPhrase.value.length < 3) {
+                    showFieldError(securityPhrase, 'Frase de segurança muito curta');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        function validateField(input) {
+            if (input.hasAttribute('required') && !input.value.trim()) {
+                showFieldError(input, 'Campo obrigatório');
+                return false;
+            }
+            return true;
+        }
+
+        function showFieldError(input, message) {
+            input.classList.add('error');
+            const errorElement = document.getElementById(`error-${input.name || input.id}`);
+            if (errorElement) {
+                errorElement.textContent = message;
+            }
+        }
+
+        function validateEmailOrPhone(value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            const cleanPhone = value.replace(/\D/g, '');
+            
+            return emailRegex.test(value) || phoneRegex.test(cleanPhone);
+        }
+
+        // Password toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + '-icon');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        // Form submission
+        function submitForm() {
+            const formData = new FormData(document.getElementById('admin-login-form'));
+            const data = Object.fromEntries(formData.entries());
+            
+            console.log('Admin login data:', data);
+            
+            // Simulate API call
+            showToast('Verificando credenciais...', 'info');
+            
+            // Disable button during submission
+            const submitBtn = document.getElementById('btn-next');
+            submitBtn.disabled = true;
+            document.getElementById('btn-text').textContent = 'Verificando...';
+            
+            setTimeout(() => {
+                // Simulate successful login
+                showToast('Login administrativo realizado com sucesso!', 'success');
+                
+                setTimeout(() => {
+                    showToast('Redirecionando para o painel...', 'info');
+                    // Here you would redirect to admin panel
+                    // window.location.href = '/admin';
+                    
+                    // Reset form for demo
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        document.getElementById('btn-text').textContent = 'Acessar Painel';
+                        showToast('Demo: Redirecionamento simulado', 'info');
+                    }, 2000);
+                }, 1000);
+            }, 2000);
+        }
+
+        // Toast notification system
+        function showToast(message, type = 'success', duration = 4000) {
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const iconClass = type === 'success' ? 'fa-check-circle' : 
+                             type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+            const iconColor = type === 'success' ? 'var(--success)' : 
+                             type === 'error' ? 'var(--danger)' : 'var(--accent)';
+            
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas ${iconClass}" style="color: ${iconColor};"></i>
+                    <span style="flex: 1; font-size: 14px; font-weight: 500;">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0; font-size: 16px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, duration);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Welcome message
+            setTimeout(() => {
+                showToast('Área restrita - Acesso administrativo', 'info');
+            }, 1000);
+        });
+
+        // Handle Enter key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                event.preventDefault();
+                if (currentStep < totalSteps) {
+                    nextStep();
+                } else {
+                    submitForm();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

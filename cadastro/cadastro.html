@@ -1,0 +1,1021 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinverPro - Criar Conta</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            
+            --primary: #0F172A;
+            --primary-light: #334155;
+            --accent: #3B82F6;
+            --success: #059669;
+            --warning: #D97706;
+            --danger: #DC2626;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --text-white: #FFFFFF;
+            
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #E2E8F0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .signup-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+        }
+
+        /* Welcome Header */
+        .welcome-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .welcome-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 32px 24px;
+        }
+
+        /* Progress Steps */
+        .progress-container {
+            margin-bottom: 32px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #2563EB);
+            border-radius: 4px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 33%;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 1;
+        }
+
+        .step.active {
+            color: var(--accent);
+        }
+
+        .step.completed {
+            color: var(--success);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-light);
+        }
+
+        .step.active .step-number {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .step-text {
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* Form Styles */
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .error-message {
+            font-size: 13px;
+            color: var(--danger);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #2563EB);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-light);
+            border-color: var(--accent);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .btn-back {
+            flex: 1;
+        }
+
+        .btn-next {
+            flex: 2;
+        }
+
+        /* Success Screen */
+        .success-screen {
+            text-align: center;
+            padding: 48px 24px;
+            display: none;
+        }
+
+        .success-screen.show {
+            display: block !important;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--success), #047857);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(5, 150, 105, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .success-text {
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .success-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 16px;
+                min-height: calc(100vh - 80px);
+            }
+
+            .signup-container {
+                max-width: 100%;
+            }
+
+            .welcome-header {
+                padding: 24px 20px;
+            }
+
+            .welcome-title {
+                font-size: 22px;
+            }
+
+            .welcome-subtitle {
+                font-size: 15px;
+            }
+
+            .form-section {
+                padding: 24px 20px;
+            }
+
+            .form-input {
+                padding: 14px;
+                font-size: 16px;
+            }
+
+            .btn {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                min-width: auto;
+            }
+
+            .progress-steps {
+                font-size: 12px;
+            }
+
+            .step-number {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+
+            .success-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+
+            .success-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 0 16px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .main-content {
+                padding: 16px 12px;
+            }
+
+            .form-section {
+                padding: 20px 16px;
+            }
+
+            .welcome-header {
+                padding: 20px 16px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.05); 
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="logo-text">FinverPro</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="signup-container">
+            <!-- Welcome Header -->
+            <div class="welcome-header">
+                <div class="welcome-content">
+                    <h1 class="welcome-title">Crie sua conta</h1>
+                    <p class="welcome-subtitle">Comece sua jornada de sucesso financeiro</p>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section" id="form-container">
+                <!-- Progress -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step active" id="step-1">
+                            <div class="step-number">1</div>
+                            <div class="step-text">Dados Pessoais</div>
+                        </div>
+                        <div class="step" id="step-2">
+                            <div class="step-number">2</div>
+                            <div class="step-text">Finalizar</div>
+                        </div>
+                        <div class="step" id="step-3">
+                            <div class="step-number">3</div>
+                            <div class="step-text">Sucesso</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signup Form -->
+                <form class="signup-form" id="signup-form">
+                    <!-- Step 1: Personal Data -->
+                    <div class="form-step active" id="form-step-1">
+                        <div class="form-group">
+                            <label class="form-label">Nome Completo</label>
+                            <input type="text" class="form-input" name="full_name" placeholder="Digite seu nome completo" required>
+                            <div class="error-message" id="error-full_name"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">E-mail</label>
+                            <input type="email" class="form-input" name="email" placeholder="seu@email.com" required>
+                            <div class="error-message" id="error-email"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Data de Nascimento</label>
+                            <input type="text" class="form-input" name="birth_date" placeholder="DD/MM/AAAA" required>
+                            <div class="error-message" id="error-birth_date"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Código de Referência (Opcional)</label>
+                            <input type="text" class="form-input" name="referral_code" placeholder="Digite o código do seu indicador">
+                            <div class="error-message" id="error-referral_code"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Finalization -->
+                    <div class="form-step" id="form-step-2">
+                        <div class="form-group">
+                            <label class="form-label">Telefone/WhatsApp</label>
+                            <input type="tel" class="form-input" name="phone" placeholder="(11) 99999-9999" required>
+                            <div class="error-message" id="error-phone"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Código de Verificação SMS</label>
+                            <input type="text" class="form-input" name="sms_code" placeholder="Digite o código recebido por SMS" required>
+                            <div class="error-message" id="error-sms_code"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Senha</label>
+                            <input type="password" class="form-input" name="password" placeholder="Mínimo 8 caracteres" required>
+                            <div class="error-message" id="error-password"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Confirmar Senha</label>
+                            <input type="password" class="form-input" name="confirm_password" placeholder="Digite a senha novamente" required>
+                            <div class="error-message" id="error-confirm_password"></div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary btn-back" onclick="previousStep()" style="display: none;">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                        <button type="button" class="btn btn-primary btn-next" onclick="nextStep()">
+                            Continuar
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Success Screen -->
+            <div class="success-screen" id="success-screen">
+                <!-- Progress Bar for Success Screen -->
+                <div class="progress-container" style="margin-bottom: 40px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step completed">
+                            <div class="step-number"><i class="fas fa-check" style="font-size: 12px;"></i></div>
+                            <div class="step-text">Dados Pessoais</div>
+                        </div>
+                        <div class="step completed">
+                            <div class="step-number"><i class="fas fa-check" style="font-size: 12px;"></i></div>
+                            <div class="step-text">Finalizar</div>
+                        </div>
+                        <div class="step active">
+                            <div class="step-number">3</div>
+                            <div class="step-text">Sucesso</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2 class="success-title">Parabéns!</h2>
+                <p class="success-text">Sua conta foi criada com sucesso! Agora você pode acessar a plataforma FinverPro e começar a investir com segurança e confiança.</p>
+                
+                <div class="success-actions">
+                    <button class="btn btn-primary" onclick="accessAccount()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Acessar Minha Conta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 2;
+
+        // Form navigation
+        function nextStep() {
+            console.log('NextStep chamado, currentStep:', currentStep);
+            
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateStep();
+                } else {
+                    submitForm();
+                }
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStep();
+            }
+        }
+
+        function updateStep() {
+            console.log('UpdateStep chamado, currentStep:', currentStep);
+            
+            // Update form steps
+            document.querySelectorAll('.form-step').forEach((step, index) => {
+                step.classList.toggle('active', index + 1 === currentStep);
+            });
+
+            // Update progress steps
+            document.querySelectorAll('#form-container .step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                    step.querySelector('.step-number').innerHTML = '<i class="fas fa-check" style="font-size: 12px;"></i>';
+                } else if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                    step.querySelector('.step-number').textContent = index + 1;
+                } else {
+                    step.querySelector('.step-number').textContent = index + 1;
+                }
+            });
+
+            // Update progress bar
+            const progressFill = document.querySelector('#form-container .progress-fill');
+            const progressPercentage = (currentStep / (totalSteps + 1)) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
+
+            // Update buttons
+            const backBtn = document.querySelector('.btn-back');
+            const nextBtn = document.querySelector('.btn-next');
+            
+            backBtn.style.display = currentStep > 1 ? 'flex' : 'none';
+            
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = '<i class="fas fa-check"></i> Criar Conta';
+            } else {
+                nextBtn.innerHTML = 'Continuar <i class="fas fa-arrow-right"></i>';
+            }
+        }
+
+        // Form validation
+        function validateCurrentStep() {
+            let isValid = true;
+            const currentFormStep = document.querySelector(`#form-step-${currentStep}`);
+            const inputs = currentFormStep.querySelectorAll('input[required]');
+
+            // Clear previous errors
+            currentFormStep.querySelectorAll('.error-message').forEach(error => {
+                error.textContent = '';
+            });
+            currentFormStep.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isValid = false;
+                }
+            });
+
+            // Special validations
+            if (currentStep === 1) {
+                // Email validation
+                const emailInput = currentFormStep.querySelector('input[name="email"]');
+                if (emailInput && !validateEmail(emailInput.value)) {
+                    showFieldError(emailInput, 'E-mail inválido');
+                    isValid = false;
+                }
+
+                // Birth date validation
+                const birthDateInput = currentFormStep.querySelector('input[name="birth_date"]');
+                if (birthDateInput && !validateBirthDate(birthDateInput.value)) {
+                    showFieldError(birthDateInput, 'Data de nascimento inválida');
+                    isValid = false;
+                }
+            }
+
+            if (currentStep === 2) {
+                // Phone validation
+                const phoneInput = currentFormStep.querySelector('input[name="phone"]');
+                if (phoneInput && !validatePhone(phoneInput.value)) {
+                    showFieldError(phoneInput, 'Telefone inválido');
+                    isValid = false;
+                }
+
+                // Password validation
+                const passwordInput = currentFormStep.querySelector('input[name="password"]');
+                const confirmPasswordInput = currentFormStep.querySelector('input[name="confirm_password"]');
+                
+                if (passwordInput && !validatePassword(passwordInput.value)) {
+                    showFieldError(passwordInput, 'Senha deve ter pelo menos 8 caracteres');
+                    isValid = false;
+                }
+
+                if (confirmPasswordInput && passwordInput.value !== confirmPasswordInput.value) {
+                    showFieldError(confirmPasswordInput, 'As senhas não coincidem');
+                    isValid = false;
+                }
+
+                // SMS code validation
+                const smsCodeInput = currentFormStep.querySelector('input[name="sms_code"]');
+                if (smsCodeInput && !validateSmsCode(smsCodeInput.value)) {
+                    showFieldError(smsCodeInput, 'Código de verificação inválido');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        function validateField(input) {
+            if (input.hasAttribute('required') && !input.value.trim()) {
+                showFieldError(input, 'Campo obrigatório');
+                return false;
+            }
+            return true;
+        }
+
+        function showFieldError(input, message) {
+            input.classList.add('error');
+            const errorElement = document.getElementById(`error-${input.name}`);
+            if (errorElement) {
+                errorElement.textContent = message;
+            }
+        }
+
+        // Validation helpers
+        function validateBirthDate(birthDate) {
+            const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            return dateRegex.test(birthDate);
+        }
+
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function validatePhone(phone) {
+            const cleanPhone = phone.replace(/\D/g, '');
+            return cleanPhone.length >= 10;
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function validateSmsCode(code) {
+            return code.length >= 4 && /^\d+$/.test(code);
+        }
+
+        // Form submission
+        function submitForm() {
+            console.log('SubmitForm chamado');
+            const formData = new FormData(document.getElementById('signup-form'));
+            const data = Object.fromEntries(formData.entries());
+            
+            console.log('Form data:', data);
+            
+            // Simulate API call
+            showToast('Criando sua conta...', 'info');
+            
+            setTimeout(() => {
+                showSuccessScreen();
+            }, 2000);
+        }
+
+        function showSuccessScreen() {
+            console.log('ShowSuccessScreen chamado');
+            
+            // Hide the form container completely
+            const formContainer = document.getElementById('form-container');
+            formContainer.style.display = 'none';
+            
+            // Show success screen
+            const successScreen = document.getElementById('success-screen');
+            successScreen.classList.add('show');
+            
+            showToast('Conta criada com sucesso!', 'success');
+        }
+
+        function accessAccount() {
+            showToast('Redirecionando para a página inicial...', 'info');
+            setTimeout(() => {
+                // Redireciona para a página inicial
+                window.location.href = '/';
+            }, 1500);
+        }
+
+        // Input formatting
+        function formatPhone(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = value.replace(/(\d{2})(\d)/, '($1) $2');
+            value = value.replace(/(\d{4,5})(\d{4})$/, '$1-$2');
+            input.value = value;
+        }
+
+        function formatBirthDate(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = value.replace(/(\d{2})(\d)/, '$1/$2');
+            value = value.replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
+            input.value = value;
+        }
+
+        // Toast notification system
+        function showToast(message, type = 'success', duration = 4000) {
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}" style="color: var(--${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'accent'});"></i>
+                    <span style="flex: 1; font-size: 14px; font-weight: 500;">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0; font-size: 16px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, duration);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Página carregada');
+            
+            // Add input event listeners for formatting
+            const phoneInput = document.querySelector('input[name="phone"]');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function() {
+                    formatPhone(this);
+                });
+            }
+
+            const birthDateInput = document.querySelector('input[name="birth_date"]');
+            if (birthDateInput) {
+                birthDateInput.addEventListener('input', function() {
+                    formatBirthDate(this);
+                });
+            }
+
+            // Welcome message
+            setTimeout(() => {
+                showToast('Bem-vindo ao FinverPro! Vamos criar sua conta.', 'success');
+            }, 1000);
+        });
+
+        // Handle Enter key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                event.preventDefault();
+                nextStep();
+            }
+        });
+    </script>
+</body>
+</html>
