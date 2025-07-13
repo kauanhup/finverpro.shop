@@ -336,312 +336,265 @@ ob_end_clean();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finver Pro - Dashboard Administrativo</title>
     <meta name="author" content="Finver Pro" />
-    
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- CSS -->
+
+    <!-- Core CSS -->
     <link rel="stylesheet" href="../../assets/css/reu-admin-dashboard.css">
-    
-    <style>
-        /* Estilos básicos caso o CSS não carregue */
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f5f5f5;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-        
-        .header p {
-            margin: 10px 0 0 0;
-            opacity: 0.9;
-        }
-        
-        .debug-panel {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .debug-panel h3 {
-            color: #333;
-            margin-top: 0;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-        }
-        
-        .debug-panel h4 {
-            color: #667eea;
-            margin-top: 20px;
-        }
-        
-        .debug-panel pre {
-            background: #f8f8f8;
-            padding: 15px;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-size: 12px;
-            border-left: 4px solid #667eea;
-        }
-        
-        .debug-logs {
-            background: #f0f7ff;
-            border: 1px solid #b3d9ff;
-            border-radius: 4px;
-            padding: 15px;
-            margin: 10px 0;
-        }
-        
-        .debug-logs ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-        
-        .debug-logs li {
-            padding: 2px 0;
-            font-family: monospace;
-            font-size: 12px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .stat-card {
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        
-        .stat-card h4 {
-            color: #667eea;
-            margin: 0 0 10px 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .stat-card .value {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 0;
-        }
-        
-        .stat-card .value.success { color: #059669; }
-        .stat-card .value.danger { color: #dc2626; }
-        .stat-card .value.info { color: #2563eb; }
-        .stat-card .value.warning { color: #d97706; }
-        
-        .transactions-section {
-            margin-top: 40px;
-        }
-        
-        .transaction-item {
-            background: #f8f9fa;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .transaction-item.deposito {
-            border-left-color: #059669;
-        }
-        
-        .transaction-item.saque {
-            border-left-color: #dc2626;
-        }
-        
-        .transaction-info strong {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        .transaction-info small {
-            color: #6b7280;
-        }
-        
-        .transaction-amount {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .transaction-amount.success { color: #059669; }
-        .transaction-amount.danger { color: #dc2626; }
-        
-        .success-badge {
-            background: #10b981;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .no-data {
-            text-align: center;
-            padding: 40px;
-            color: #6b7280;
-            font-style: italic;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🚀 Finver Pro Dashboard</h1>
-            <p>Bem-vindo, <strong><?php echo htmlspecialchars($admin['nome'] ?? 'Administrador'); ?></strong>!</p>
-            <span class="success-badge">Sistema Funcionando</span>
-        </div>
-        
-        <div class="debug-panel">
-            <h3>🔍 Logs de Debug</h3>
-            <div class="debug-logs">
-                <ul>
-                    <?php foreach ($debug_log as $log): ?>
-                        <li><?php echo htmlspecialchars($log); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="debug-panel">
-            <h3>👤 Informações do Admin</h3>
-            <p><strong>Nome:</strong> <?php echo htmlspecialchars($admin['nome'] ?? 'N/A'); ?></p>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars($admin['email'] ?? 'N/A'); ?></p>
-            <p><strong>ID:</strong> <?php echo htmlspecialchars($admin['id'] ?? 'N/A'); ?></p>
-            <p><strong>Tipo:</strong> <?php echo htmlspecialchars($admin['tipo_usuario'] ?? 'N/A'); ?></p>
-        </div>
-        
-        <div class="debug-panel">
-            <h3>📊 Estatísticas do Dashboard</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h4>💰 Depósitos Hoje</h4>
-                    <p class="value success"><?php echo formatCurrency($stats['depositos_hoje']); ?></p>
-                </div>
-                
-                <div class="stat-card">
-                    <h4>💎 Total Depósitos</h4>
-                    <p class="value success"><?php echo formatCurrency($stats['total_depositos']); ?></p>
-                </div>
-                
-                <div class="stat-card">
-                    <h4>👥 Cadastros Hoje</h4>
-                    <p class="value info"><?php echo formatNumber($stats['cadastros_hoje']); ?></p>
-                </div>
-                
-                <div class="stat-card">
-                    <h4>🎯 Total Cadastros</h4>
-                    <p class="value info"><?php echo formatNumber($stats['total_cadastros']); ?></p>
-                </div>
-                
-                <div class="stat-card">
-                    <h4>💸 Total Sacado</h4>
-                    <p class="value danger"><?php echo formatCurrency($stats['total_sacado']); ?></p>
-                </div>
-                
-                <div class="stat-card">
-                    <h4>📈 Comissões Hoje</h4>
-                    <p class="value warning"><?php echo formatCurrency($stats['comissoes_hoje']); ?></p>
-                </div>
-                
-                <div class="stat-card">
-                    <h4>🏆 Saldo Plataforma</h4>
-                    <p class="value success"><?php echo formatCurrency($stats['saldo_plataforma']); ?></p>
-                </div>
-                
-                <div class="stat-card">
-                    <h4>🔥 Investidores Ativos</h4>
-                    <p class="value info"><?php echo formatNumber($stats['investidores_ativos']); ?></p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="debug-panel">
-            <h3>💳 Transações Recentes</h3>
-            <?php if (empty($recentTransactions)): ?>
-                <div class="no-data">
-                    <p>📊 Nenhuma transação encontrada</p>
-                </div>
-            <?php else: ?>
-                <?php foreach ($recentTransactions as $transaction): ?>
-                    <div class="transaction-item <?php echo $transaction['tipo']; ?>">
-                        <div class="transaction-info">
-                            <strong><?php echo htmlspecialchars($transaction['descricao']); ?></strong>
-                            <small><?php echo formatDate($transaction['created_at']); ?></small>
-                            <?php if ($transaction['nome_titular']): ?>
-                                <small> - <?php echo htmlspecialchars($transaction['nome_titular']); ?></small>
-                            <?php endif; ?>
-                        </div>
-                        <div class="transaction-amount <?php echo $transaction['tipo'] === 'deposito' ? 'success' : 'danger'; ?>">
-                            <?php echo $transaction['tipo'] === 'deposito' ? '+' : '-'; ?><?php echo formatCurrency($transaction['valor']); ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-        
-        <div class="debug-panel">
-            <h3>🔧 Dados Técnicos</h3>
-            <h4>Estatísticas Brutas:</h4>
-            <pre><?php print_r($stats); ?></pre>
-            
-            <h4>Transações Brutas:</h4>
-            <pre><?php print_r($recentTransactions); ?></pre>
-        </div>
+    <!-- Loader -->
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+        <div class="loading-text">Carregando Dashboard...</div>
     </div>
-    
-    <script>
-        console.log('✅ Dashboard carregado com sucesso!');
-        console.log('📊 Stats:', <?php echo json_encode($stats); ?>);
-        console.log('💳 Transações:', <?php echo json_encode($recentTransactions); ?>);
-        console.log('🔍 Debug logs:', <?php echo json_encode($debug_log); ?>);
-        
-        // Auto-refresh a cada 5 minutos
-        setTimeout(() => {
-            console.log('🔄 Auto-refresh...');
-            window.location.reload();
-        }, 300000);
-    </script>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="menu-button" id="menuButton">
+                    <span class="icon">≡</span>
+                </button>
+                <a href="#" class="logo">
+                    <div class="logo-icon">FP</div>
+                    Finver Pro
+                </a>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <?php echo htmlspecialchars($admin['nome']); ?>
+                </div>
+                <div class="user-avatar">
+                    <?php
+                        $initials = '';
+                        if (!empty($admin['nome'])) {
+                            $parts = explode(' ', $admin['nome']);
+                            foreach ($parts as $p) {
+                                $initials .= mb_substr($p, 0, 1);
+                                if (mb_strlen($initials) >= 2) break;
+                            }
+                        } else {
+                            $initials = 'AD';
+                        }
+                        echo strtoupper($initials);
+                    ?>
+                </div>
+                <a href="../sair/" class="logout-btn"><span class="icon">↦</span> Sair</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <!-- Principal -->
+            <div class="nav-section">
+                <div class="nav-title">Principal</div>
+                <a href="#" class="nav-item active"><span class="nav-icon icon">⊞</span> Dashboard</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">◉</span> Usuários</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">✎</span> Cadastro</a>
+            </div>
+            <!-- Financeiro -->
+            <div class="nav-section">
+                <div class="nav-title">Financeiro</div>
+                <a href="#" class="nav-item"><span class="nav-icon icon">↗</span> Entradas Geral</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">↙</span> Saídas</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">$</span> Comissões</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">₹</span> Salário</a>
+            </div>
+            <!-- Plataforma -->
+            <div class="nav-section">
+                <div class="nav-title">Plataforma</div>
+                <a href="#" class="nav-item"><span class="nav-icon icon">📈</span> Investidores</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">⧉</span> Produtos</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">#</span> Códigos</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">◯</span> Roleta</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">✓</span> Tarefas</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">☑</span> Checklist</a>
+            </div>
+            <!-- Configurações -->
+            <div class="nav-section">
+                <div class="nav-title">Configurações</div>
+                <a href="#" class="nav-item"><span class="nav-icon icon">⚙</span> Config de Pagamento</a>
+            </div>
+            <!-- Personalização -->
+            <div class="nav-section">
+                <div class="nav-title">Personalização</div>
+                <a href="#" class="nav-item"><span class="nav-icon icon">⬟</span> Personalização de Cores</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">Tt</span> Personalização de Textos</a>
+                <a href="#" class="nav-item"><span class="nav-icon icon">▦</span> Personalizar Imagens</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="container">
+            <!-- Welcome -->
+            <section class="welcome-section">
+                <div class="welcome-content">
+                    <div class="welcome-text">
+                        <h1>Bem-vindo, <?php echo htmlspecialchars($admin['nome']); ?>!</h1>
+                        <p>Gerencie sua plataforma Finver Pro com facilidade e eficiência.</p>
+                        <a href="#" class="welcome-button"><span class="icon">→</span> Acessar Plataforma</a>
+                    </div>
+                    <div class="welcome-icon">◉</div>
+                </div>
+            </section>
+
+            <!-- Date Selector -->
+            <section class="date-selector">
+                <h2 class="date-selector-title"><span class="icon">◷</span> Filtrar por Período</h2>
+                <div class="date-inputs">
+                    <input type="date" class="date-input" id="startDate" value="<?php echo htmlspecialchars($startDate ?? ''); ?>">
+                    <span style="color: var(--text-secondary); font-weight: 600;">até</span>
+                    <input type="date" class="date-input" id="endDate" value="<?php echo htmlspecialchars($endDate ?? ''); ?>">
+                    <button class="filter-button" onclick="filterByDate()"><span class="icon">⊙</span> Filtrar Dados</button>
+                </div>
+            </section>
+
+            <!-- Stats Grid -->
+            <section class="stats-grid">
+                <!-- Depósitos Hoje -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="depositos-hoje"><?php echo formatCurrency($stats['depositos_hoje']); ?></h3>
+                            <p>Depósitos Hoje</p>
+                        </div>
+                        <div class="stat-icon success"><span class="icon">↗</span></div>
+                    </div>
+                </div>
+                <!-- Total Depósitos -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="total-depositos"><?php echo formatCurrency($stats['total_depositos']); ?></h3>
+                            <p>Total Depósitos</p>
+                        </div>
+                        <div class="stat-icon success"><span class="icon">$</span></div>
+                    </div>
+                </div>
+                <!-- Cadastros Hoje -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="cadastros-hoje"><?php echo formatNumber($stats['cadastros_hoje']); ?></h3>
+                            <p>Cadastros Hoje</p>
+                        </div>
+                        <div class="stat-icon info"><span class="icon">◉</span></div>
+                    </div>
+                </div>
+                <!-- Total Cadastros -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="total-cadastros"><?php echo formatNumber($stats['total_cadastros']); ?></h3>
+                            <p>Total Cadastros</p>
+                        </div>
+                        <div class="stat-icon info"><span class="icon">⊞</span></div>
+                    </div>
+                </div>
+                <!-- Total Sacado -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="total-sacado"><?php echo formatCurrency($stats['total_sacado']); ?></h3>
+                            <p>Total Sacado</p>
+                        </div>
+                        <div class="stat-icon danger"><span class="icon">↙</span></div>
+                    </div>
+                </div>
+                <!-- Comissões Hoje -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="comissoes-hoje"><?php echo formatCurrency($stats['comissoes_hoje']); ?></h3>
+                            <p>Comissões Hoje</p>
+                        </div>
+                        <div class="stat-icon warning"><span class="icon">%</span></div>
+                    </div>
+                </div>
+                <!-- Salários Hoje -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="salarios-hoje"><?php echo formatCurrency($stats['salarios_hoje']); ?></h3>
+                            <p>Salários Hoje</p>
+                        </div>
+                        <div class="stat-icon purple"><span class="icon">₹</span></div>
+                    </div>
+                </div>
+                <!-- Saldo Plataforma -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="saldo-plataforma"><?php echo formatCurrency($stats['saldo_plataforma']); ?></h3>
+                            <p>Saldo Plataforma</p>
+                        </div>
+                        <div class="stat-icon success"><span class="icon">⊞</span></div>
+                    </div>
+                </div>
+                <!-- Investidores Ativos -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="investidores-ativos"><?php echo formatNumber($stats['investidores_ativos']); ?></h3>
+                            <p>Investidores Ativos</p>
+                        </div>
+                        <div class="stat-icon pink"><span class="icon">△</span></div>
+                    </div>
+                </div>
+                <!-- Códigos Usados -->
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3 id="codigos-usados"><?php echo formatNumber($stats['codigos_usados']); ?></h3>
+                            <p>Códigos Usados</p>
+                        </div>
+                        <div class="stat-icon info"><span class="icon">#</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transações -->
+            <section class="transactions-section">
+                <h2 class="section-title"><span class="icon">⟦</span> Transações Recentes</h2>
+                <?php if (empty($recentTransactions)): ?>
+                    <div class="no-data"><p>📊 Nenhuma transação encontrada</p></div>
+                <?php else: ?>
+                    <?php foreach ($recentTransactions as $transaction): ?>
+                        <?php
+                            $tIcon = $transaction['tipo'] === 'deposito' ? '↗' : ($transaction['tipo'] === 'saque' ? '↙' : '%');
+                            $tGradient = $transaction['tipo'] === 'deposito' ? 'var(--gradient-success)' : ($transaction['tipo'] === 'saque' ? 'var(--gradient-danger)' : 'var(--gradient-warning)');
+                            $tColor = $transaction['tipo'] === 'deposito' ? 'success' : 'danger';
+                        ?>
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="transaction-icon" style="background: <?php echo $tGradient; ?>;">
+                                    <span class="icon"><?php echo $tIcon; ?></span>
+                                </div>
+                                <div class="transaction-info">
+                                    <h4><?php echo htmlspecialchars($transaction['descricao']); ?></h4>
+                                    <span><?php echo formatDate($transaction['created_at']); ?></span>
+                                </div>
+                            </div>
+                            <div class="transaction-amount" style="color: var(--<?php echo $tColor; ?>);">
+                                <?php echo $transaction['tipo'] === 'deposito' ? '+' : '-'; ?><?php echo formatCurrency($transaction['valor']); ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </section>
+        </div>
+    </main>
+
+    <!-- Core JS -->
+    <script src="../../assets/js/reu-admin-dashboard.js"></script>
 </body>
 </html>
